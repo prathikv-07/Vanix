@@ -1,36 +1,21 @@
 import 'package:flutter/material.dart';
 import '../theme/vanix_theme.dart';
-import '../widgets/graph_widgets.dart';
 
 /// One heat alert's data for the full-screen carousel.
 class _HeatAlertData {
-  final String name, farm, time, reason;
-  final List<double> temps;
-  final List<int> moves;
-  const _HeatAlertData({required this.name, required this.farm, required this.time, required this.reason, required this.temps, required this.moves});
+  final String name, breed, farm, time;
+  const _HeatAlertData({required this.name, required this.breed, required this.farm, required this.time});
 }
 
 /// Multiple cows in heat at once — same card design, different data.
-/// Mirrors FS_ALERTS in vanix_screens.html.
+/// Mirrors FS_ALERTS in vanix_screens.html. Only Gauri has a dedicated
+/// photo today — reused (`cows/nandini.jpg`) for all three as a
+/// placeholder pending real per-cow photos, matching the HTML's
+/// `a.photo || 'cows/nandini.jpg'` fallback.
 const List<_HeatAlertData> _kAlerts = [
-  _HeatAlertData(
-    name: 'Gauri', farm: 'Green Valley Farm · Belt 41', time: '04:30',
-    reason: 'Temperature crossed her 10-day baseline 4 times in 6h while activity doubled — classic heat signature.',
-    temps: [38.4, 38.5, 38.9, 38.6, 39.1, 38.7, 39.3, 38.8, 39.4, 39.2],
-    moves: [3, 4, 3, 6, 7, 6, 8, 9, 8, 9],
-  ),
-  _HeatAlertData(
-    name: 'Mohini', farm: 'Sunrise Dairy · Belt 91', time: '05:10',
-    reason: 'Restlessness overnight with a rising temperature trend since 05:10 — matches her last confirmed heat.',
-    temps: [38.3, 38.4, 38.6, 38.5, 38.8, 39.0, 38.9, 39.2, 39.1, 39.3],
-    moves: [2, 3, 4, 4, 5, 7, 7, 8, 9, 9],
-  ),
-  _HeatAlertData(
-    name: 'Dhauli', farm: 'Green Valley Farm · Belt 17', time: '05:45',
-    reason: 'Mounting behaviour flagged by the collar plus a temperature swing outside her normal band.',
-    temps: [38.5, 38.7, 38.6, 39.0, 38.8, 39.2, 39.0, 39.4, 39.1, 39.5],
-    moves: [4, 4, 5, 6, 6, 8, 7, 9, 9, 8],
-  ),
+  _HeatAlertData(name: 'Gauri', breed: 'Desi', farm: 'Green Valley Farm · Belt 41', time: '04:30'),
+  _HeatAlertData(name: 'Mohini', breed: 'Gir/Sahiwal', farm: 'Sunrise Dairy · Belt 91', time: '05:10'),
+  _HeatAlertData(name: 'Dhauli', breed: 'Sahiwal', farm: 'Green Valley Farm · Belt 17', time: '05:45'),
 ];
 
 /// Full-screen "push notification" heat alert carousel — the entry point of
