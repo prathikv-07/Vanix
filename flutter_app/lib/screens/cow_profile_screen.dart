@@ -548,21 +548,24 @@ class _CowProfileScreenState extends State<CowProfileScreen> {
     );
   }
 
-  // ── Overview tab (v2 — colourful) ─────────────────────────────────────
+  // ── Overview tab — the 4 stat cards' left-accent colors (warning/
+  // greenInk/danger/accentBlue) were removed in the current HTML (now a
+  // single neutral `var(--border)` accent on every card); mirror that
+  // here instead of the old per-card coloring. ─────────────────────────
   Widget _buildOverview() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(children: [
-          Expanded(child: _ovStatCard('19 Mar', 'ovLastHeat', VanixColors.warning)),
+          Expanded(child: _ovStatCard('19 Mar', 'ovLastHeat', VanixColors.border)),
           const SizedBox(width: VanixSpacing.sm),
-          Expanded(child: _ovStatCard('14 Apr', 'ovNextHeat', VanixColors.greenInk)),
+          Expanded(child: _ovStatCard('14 Apr', 'ovNextHeat', VanixColors.border)),
         ]),
         const SizedBox(height: VanixSpacing.sm),
         Row(children: [
-          Expanded(child: _ovStatCard('18 Jun', 'ovLastSpike', VanixColors.danger)),
+          Expanded(child: _ovStatCard('18 Jun', 'ovLastSpike', VanixColors.border)),
           const SizedBox(width: VanixSpacing.sm),
-          Expanded(child: _ovStatCard('1', 'ovNumCalving', VanixColors.accentBlue)),
+          Expanded(child: _ovStatCard('1', 'ovNumCalving', VanixColors.border)),
         ]),
         const SizedBox(height: VanixSpacing.xl),
         _sectionLabel('tempWord'),
