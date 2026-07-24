@@ -1766,6 +1766,254 @@ enum _Priority { p0, p1, p2, p3 }
 
 /// Filter button in the Events hero — funnel icon + "Filter" (mirrors
 /// #ev-filter-btn in the HTML).
+class _EventsFilterSheet extends StatefulWidget {
+  final EventsFilter initial;
+  final bool isDark;
+  const _EventsFilterSheet({required this.initial, required this.isDark});
+
+  @override
+  State<_EventsFilterSheet> createState() => _EventsFilterSheetState();
+}
+
+class _EventsFilterSheetState extends State<_EventsFilterSheet> {
+  late EventsFilter _draft;
+  String _cat = 'type';
+
+  static const _cats = [
+    ('type', Icons.grid_view_outlined, 'Type'),
+    ('crit', Icons.warning_amber_outlined, 'Criticality'),
+    ('status', Icons.access_time, 'Status'),
+    ('cat', Icons.sell_outlined, 'Category'),
+    ('farm', Icons.home_outlined, 'Farm'),
+  ];
+
+  static const _categories = [
+    'Fever', 'Heat', 'Pregnancy', 'Gestation', 'Milking', 'Lactation', 'Pregnancy loss',
+    'Fresh cow', 'Mastitis', 'Lameness', 'Ketosis', 'Heat stress', 'Calibration',
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _draft = widget.initial;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = widget.isDark;
+    final bg = isDark ? const Color(0xFF1C1C1C) : Colors.white;
+    final railBg = isDark ? VanixColors.darkPrimary : VanixColors.bgWarm;
+    final textColor = isDark ? Colors.white : VanixColors.textPrimary;
+
+    return Container(
+      decoration: BoxDecoration(color: bg, borderRadius: const BorderRadius.vertical(top: Radius.circular(24))),
+      padding: const EdgeInsets.fromLTRB(24, 8, 24, 12),
+      child: SafeArea(
+        top: false,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(width: 36, height: 4, margin: const EdgeInsets.only(bottom: 8), decoration: BoxDecoration(color: isDark ? const Color(0xFF3A3A3A) : VanixColors.border, borderRadius: BorderRadius.circular(2))),
+            Row(
+              children: [
+                Expanded(child: Text('Filter', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: textColor))),
+                TextButton(
+                  onPressed: () => setState(() => _draft = const EventsFilter()),
+                  child: const Text('Reset filters', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: VanixColors.greenInk)),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 300,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    width: 126,
+                    color: railBg,
+                    child: Column(
+                      children: [
+                        for (final c in _cats)
+                          _EvFsCat(icon: c.$2, label: c.$3, active: _cat == c.$1, isDark: isDark, onTap: () => setState(() => _cat = c.$1)),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      color: bg,
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: SingleChildScrollView(child: _buildPane(isDark)),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 14),
+            SizedBox(
+              width: double.infinity,
+              height: 52,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: VanixColors.greenInk, foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(26))),
+                onPressed: () => Navigator.of(context).pop(_draft),
+                child: const Text('Apply filters', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+              ),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel', style: TextStyle(fontSize: 14, color: VanixColors.textHint)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPane(bool isDark) {
+    switch (_cat) {
+      case 'type':
+        return Column(children: [
+          _EvFsRow(label: 'All types', active: _draft.type == 'all', isDark: isDark, onTap: () => setState(() => _draft = _draft.copyWith(type: 'all'))),
+          _EvFsRow(label: 'Needs action', active: _draft.type == 'action', isDark: isDark, onTap: () => setState(() => _draft = _draft.copyWith(type: 'action'))),
+          _EvFsRow(label: 'Warnings', active: _draft.type == 'warn', isDark: isDark, onTap: () => setState(() => _draft = _draft.copyWith(type: 'warn'))),
+          _EvFsRow(label: 'Reminder', active: _draft.type == 'rem', isDark: isDark, onTap: () => setState(() => _draft = _draft.copyWith(type: 'rem'))),
+        ]);
+      case 'crit':
+        return Column(children: [
+          _EvFsRow(label: 'All levels', active: _draft.criticality == 'all', isDark: isDark, onTap: () => setState(() => _draft = _draft.copyWith(criticality: 'all'))),
+          _EvFsRow(label: 'Critical', active: _draft.criticality == 'critical', isDark: isDark, onTap: () => setState(() => _draft = _draft.copyWith(criticality: 'critical'))),
+          _EvFsRow(label: 'Medium', active: _draft.criticality == 'medium', isDark: isDark, onTap: () => setState(() => _draft = _draft.copyWith(criticality: 'medium'))),
+          _EvFsRow(label: 'Low', active: _draft.criticality == 'low', isDark: isDark, onTap: () => setState(() => _draft = _draft.copyWith(criticality: 'low'))),
+        ]);
+      case 'status':
+        return Column(children: [
+          _EvFsRow(label: 'All', active: _draft.status == 'all', isDark: isDark, onTap: () => setState(() => _draft = _draft.copyWith(status: 'all'))),
+          _EvFsRow(label: 'Actioned', active: _draft.status == 'actioned', isDark: isDark, onTap: () => setState(() => _draft = _draft.copyWith(status: 'actioned'))),
+          _EvFsRow(label: 'Pending', active: _draft.status == 'pending', isDark: isDark, onTap: () => setState(() => _draft = _draft.copyWith(status: 'pending'))),
+        ]);
+      case 'cat':
+        return Column(children: [
+          _EvFsRow(label: 'All categories', active: _draft.categories.isEmpty, multi: true, isDark: isDark, onTap: () => setState(() => _draft = _draft.copyWith(categories: const {}))),
+          for (final c in _categories)
+            _EvFsRow(
+              label: c,
+              active: _draft.categories.contains(c),
+              multi: true,
+              isDark: isDark,
+              onTap: () => setState(() {
+                final next = {..._draft.categories};
+                if (next.contains(c)) {
+                  next.remove(c);
+                } else {
+                  next.add(c);
+                }
+                _draft = _draft.copyWith(categories: next);
+              }),
+            ),
+        ]);
+      case 'farm':
+        return Column(children: [
+          _EvFsRow(label: 'All Farms', active: _draft.farms.isEmpty, multi: true, isDark: isDark, onTap: () => setState(() => _draft = _draft.copyWith(farms: const {}))),
+          _EvFsRow(
+            label: 'Green Valley Farm',
+            active: _draft.farms.contains('greenvalley'),
+            multi: true,
+            isDark: isDark,
+            onTap: () => setState(() {
+              final next = {..._draft.farms};
+              if (next.contains('greenvalley')) {
+                next.remove('greenvalley');
+              } else {
+                next.add('greenvalley');
+              }
+              _draft = _draft.copyWith(farms: next);
+            }),
+          ),
+          _EvFsRow(
+            label: 'Sunrise Dairy',
+            active: _draft.farms.contains('sunrise'),
+            multi: true,
+            isDark: isDark,
+            onTap: () => setState(() {
+              final next = {..._draft.farms};
+              if (next.contains('sunrise')) {
+                next.remove('sunrise');
+              } else {
+                next.add('sunrise');
+              }
+              _draft = _draft.copyWith(farms: next);
+            }),
+          ),
+        ]);
+      default:
+        return const SizedBox.shrink();
+    }
+  }
+}
+
+class _EvFsCat extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final bool active;
+  final bool isDark;
+  final VoidCallback onTap;
+  const _EvFsCat({required this.icon, required this.label, required this.active, required this.isDark, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final textColor = isDark ? Colors.white : VanixColors.textPrimary;
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        decoration: BoxDecoration(
+          border: active ? const Border(left: BorderSide(color: VanixColors.greenInk, width: 3)) : null,
+        ),
+        child: Row(mainAxisSize: MainAxisSize.min, children: [
+          Icon(icon, size: 16, color: active ? VanixColors.greenInk : textColor),
+          const SizedBox(width: 8),
+          Flexible(child: Text(label, style: TextStyle(fontSize: 13, fontWeight: active ? FontWeight.w600 : FontWeight.w400, color: active ? VanixColors.greenInk : textColor))),
+        ]),
+      ),
+    );
+  }
+}
+
+class _EvFsRow extends StatelessWidget {
+  final String label;
+  final bool active;
+  final bool isDark;
+  final bool multi;
+  final VoidCallback onTap;
+  const _EvFsRow({required this.label, required this.active, required this.isDark, this.multi = false, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final textColor = isDark ? Colors.white : VanixColors.textPrimary;
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        constraints: const BoxConstraints(minHeight: 44),
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: Row(children: [
+          Container(
+            width: 20, height: 20,
+            decoration: BoxDecoration(
+              shape: multi ? BoxShape.rectangle : BoxShape.circle,
+              borderRadius: multi ? BorderRadius.circular(5) : null,
+              border: Border.all(color: active ? VanixColors.greenInk : VanixColors.border, width: 2),
+              color: active ? VanixColors.greenInk : Colors.transparent,
+            ),
+            child: active ? const Icon(Icons.check, size: 14, color: Colors.white) : null,
+          ),
+          const SizedBox(width: 12),
+          Expanded(child: Text(label, style: TextStyle(fontSize: 14, fontWeight: active ? FontWeight.w600 : FontWeight.w500, color: textColor))),
+        ]),
+      ),
+    );
+  }
+}
+
 class _FilterButton extends StatelessWidget {
   final bool isDark;
   final VoidCallback onTap;
