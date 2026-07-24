@@ -259,39 +259,6 @@ class _MilkLogScreenState extends State<MilkLogScreen> {
                   MilkSummaryContent(appState: widget.appState, padding: const EdgeInsets.fromLTRB(20, 16, 20, 0))
                 else ...[
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
-                  child: SizedBox(
-                    height: 92,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        for (final b in _banners.where((b) => !b.dismissed))
-                          Container(
-                            width: 262,
-                            margin: const EdgeInsets.only(right: 8),
-                            padding: const EdgeInsets.fromLTRB(14, 12, 8, 12),
-                            decoration: BoxDecoration(color: b.bg, border: Border.all(color: b.border), borderRadius: BorderRadius.circular(12)),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(b.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: VanixColors.textPrimary)),
-                                      Text(b.sub, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 12, color: VanixColors.textHint)),
-                                    ],
-                                  ),
-                                ),
-                                IconButton(iconSize: 15, onPressed: () => setState(() => b.dismissed = true), icon: const Icon(Icons.close), color: VanixColors.textHint),
-                              ],
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
                   padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
