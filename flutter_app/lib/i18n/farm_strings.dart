@@ -224,6 +224,7 @@ class FS {
       'selectCowsWord': 'गायें चुनें', 'fdHerdTitlePre': 'झुंड', 'fdHerdTitlePost': 'आज',
       'statusMilking': 'दूध दे रही', 'statusPregnant': 'गर्भवती', 'statusHeatCycle': 'हीट साइकिल', 'statusFeverAlert': 'बुखार अलर्ट',
       'cowTempCaption': 'पशु का तापमान', 'noCattleYet': 'इस खेत में अभी कोई पशु नहीं है।', 'tapAddCattle': 'शुरू करने के लिए "पशु जोड़ें" दबाएँ।',
+      'addCattle': 'पशु जोड़ें',
       'noCattleMatch': 'इस फ़िल्टर से कोई पशु नहीं मिला।', 'breedWord': 'नस्ल', 'ageWord': 'उम्र',
       'breedJersey': 'जर्सी', 'breedGir': 'गिर', 'breedSahiwal': 'साहीवाल', 'breedOngole': 'ओंगोल', 'breedDesi': 'देसी',
       'ageUnder2': '2 साल से कम', 'age2to4': '2 – 4 साल', 'ageOver4': '4 साल से अधिक',
