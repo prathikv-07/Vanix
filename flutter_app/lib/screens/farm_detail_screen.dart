@@ -670,15 +670,56 @@ class _FarmDetailScreenState extends State<FarmDetailScreen> {
     );
   }
 
-  // ── Herd Activity pane: filter + rumination graph + activity chips ─────
-  // Funnel sheet is Cows-only now (Activity category removed) — the 4
-  // activity chips render directly under the graph card instead. Mirrors
-  // renderFdRumination()/fdToggleActivity() in vanix_screens_preview.html.
+  // ── Herd Activity pane: 2x2 hour-summary tiles + rumination graph +
+  // activity chips. Funnel sheet is Cows-only now (Activity category
+  // removed) — the 4 activity chips render directly under the graph card
+  // instead. Mirrors renderFdHerdSummary()/renderFdRumination()/
+  // fdToggleActivity() in vanix_screens_preview.html.
   Widget _herdPane(bool isDark) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (widget.farm.cows.isNotEmpty) _ruminationCard(isDark),
+        if (widget.farm.cows.isNotEmpty) ...[
+          _herdSummaryGrid(isDark),
+          const SizedBox(height: 12),
+          _ruminationCard(isDark),
+        ],
+      ],
+    );
+  }
+
+  // Mirrors fdTile() — 22px bold value, 10px bold colored uppercase label,
+  // centered, in a 2x2 grid (FD_HERD_HOURS mock values).
+  Widget _herdSummaryGrid(bool isDark) {
+    final textColor = isDark ? Colors.white : VanixColors.textPrimary;
+    final tiles = <(String, String, Color)>[
+      ('7.2h', 'RUMINATION', VanixColors.greenInk),
+      ('3.6h', 'STANDING', const Color(0xFF2563EB)),
+      ('8.9h', 'RESTING', const Color(0xFF7C3AED)),
+      ('4.1h', 'FEEDING', VanixColors.warning),
+    ];
+    Widget tile((String, String, Color) t) => Container(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: isDark ? VanixColors.darkSecond : VanixColors.bgCard,
+            border: Border.all(color: isDark ? VanixColors.darkBorder : VanixColors.border),
+            borderRadius: BorderRadius.circular(VanixRadius.lg),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(t.$1, style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: textColor)),
+              const SizedBox(height: 5),
+              Text(t.$2, textAlign: TextAlign.center, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, letterSpacing: 0.3, color: t.$3)),
+            ],
+          ),
+        );
+    return Column(
+      children: [
+        Row(children: [Expanded(child: tile(tiles[0])), const SizedBox(width: 8), Expanded(child: tile(tiles[1]))]),
+        const SizedBox(height: 8),
+        Row(children: [Expanded(child: tile(tiles[2])), const SizedBox(width: 8), Expanded(child: tile(tiles[3]))]),
       ],
     );
   }
