@@ -632,7 +632,7 @@ class _EventsScreenState extends State<EventsScreen> {
           meta: 'Sunrise Dairy · Belt 91 · Day 48 of pregnancy',
           photoQuestion: 'Mohini at risk?',
           onPhotoNo: () => setState(() { _abort = _VetFlowState.falseAlarm; widget.appState.resolveEvent(); }),
-          onPhotoYes: () => setState(() => _abort = _VetFlowState.awaitingEmail),
+          onPhotoYes: () => _startAbortVetFlow(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
