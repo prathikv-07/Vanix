@@ -278,16 +278,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _statTile(String num, String labelKey, {VoidCallback? onInfo}) {
-    // labelKey text may contain literal '\n' for a 2-line label (matches the
-    // HTML's white-space:pre-line labels, e.g. "Cows\nPregnant").
+    // The HTML label is `white-space:nowrap` — always a single line, even
+    // for longer Hindi/Bhojpuri text — so force maxLines:1 here too rather
+    // than letting it wrap to 2 lines.
     final card = Container(
       decoration: BoxDecoration(color: _cardBg, borderRadius: BorderRadius.circular(16)),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 14),
       child: Column(
         children: [
           Text(num, textAlign: TextAlign.center, style: TextStyle(fontSize: 26, fontWeight: FontWeight.w700, height: 1, color: _text1)),
           const SizedBox(height: 7),
-          Text(_t(labelKey), textAlign: TextAlign.center, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, height: 1.3, color: _text1)),
+          Text(_t(labelKey),
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, height: 1.3, color: _text1)),
         ],
       ),
     );
