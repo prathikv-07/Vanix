@@ -814,6 +814,24 @@ class _EventsScreenState extends State<EventsScreen> {
     );
   }
 
+  // Card body shown while the vet sheet is (or was) open — a manual
+  // reopen affordance in case the farmer dismissed the sheet without
+  // picking a vet.
+  Widget _vetSheetPendingBody(VoidCallback onReopen) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 12),
+      child: SizedBox(
+        width: double.infinity,
+        child: OutlinedButton(onPressed: onReopen, child: const Text('Choose a vet')),
+      ),
+    );
+  }
+
+  void _startFeverVetFlow() {
+    setState(() => _fever = _VetFlowState.awaitingEmail);
+    _openVetSheet((vetName) => setState(() { _feverVetName = vetName; _fever = _VetFlowState.requested; widget.appState.resolveEvent(); }));
+  }
+
   Widget _vetRequestedMessage(String context, String vetName) {
     return Padding(
       padding: const EdgeInsets.only(top: 12),
