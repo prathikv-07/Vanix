@@ -255,6 +255,7 @@ class FS {
       'milkDataReadonly': 'केवल-पढ़ें — दूध टैब में लॉग या संपादित करें।',
       'cowActions': 'कार्रवाई', 'changeStatus': 'स्थिति बदलें', 'reqVetVisit': 'पशु चिकित्सक भेंट का अनुरोध',
       'addVetLog': 'पशु चिकित्सक लॉग जोड़ें', 'addDelivery': 'प्रसव जोड़ें',
+      'addIllness': 'बीमारी जोड़ें', 'illnessNoteTitle': 'उसमें कौन से लक्षण दिख रहे हैं?', 'illnessNotePh': 'बीमारी का विवरण लिखें (अनिवार्य)', 'illnessLogged': 'बीमारी दर्ज हुई',
       'addHeat': 'हीट जोड़ें', 'addInsem': 'गर्भाधान जोड़ें', 'addPreg': 'गर्भ जोड़ें',
       'stInHeat': 'हीट में', 'stInsem': 'गर्भाधान हुआ', 'stPreg': 'गर्भवती', 'stDelivered': 'प्रसव हुआ',
       'stCalvInt': 'ब्यांत अंतराल', 'stMilking': 'दूध दे रही', 'stDry': 'शुष्क अवस्था',
