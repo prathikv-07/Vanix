@@ -957,26 +957,31 @@ class _FarmDetailScreenState extends State<FarmDetailScreen> {
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsetsDirectional.only(end: 56),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Wrap(
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              spacing: 6,
-                              children: [
-                                Text(cow.nm(_lang), style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: textColor)),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
-                                  decoration: BoxDecoration(color: VanixColors.activeBg, borderRadius: BorderRadius.circular(8)),
-                                  child: Text(cow.bl(_lang), style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: VanixColors.greenInk)),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 3),
-                            Text(cow.br(_lang), style: TextStyle(fontSize: 12, color: subColor)),
-                            const SizedBox(height: 2),
-                            Text(cow.ag(_lang), style: TextStyle(fontSize: 12, color: subColor)),
-                          ],
+                        child: SizedBox(
+                          height: 64,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(cow.nm(_lang), style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: textColor)),
+                                  const SizedBox(height: 3),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                                    decoration: BoxDecoration(color: VanixColors.activeBg, borderRadius: BorderRadius.circular(8)),
+                                    child: Text(cow.bl(_lang), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: VanixColors.greenInk)),
+                                  ),
+                                ],
+                              ),
+                              // Breed | Age — bottom-aligned with the photo,
+                              // to its right (mirrors the HTML's cow row:
+                              // name stacked above belt, then breed|age
+                              // pinned to the photo's bottom edge).
+                              Text('${cow.br(_lang)} | ${cow.ag(_lang)}', style: TextStyle(fontSize: 12, color: subColor)),
+                            ],
+                          ),
                         ),
                       ),
                     ),
