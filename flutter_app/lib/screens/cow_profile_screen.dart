@@ -810,20 +810,20 @@ class _CowProfileScreenState extends State<CowProfileScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                padding: const EdgeInsetsDirectional.symmetric(horizontal: 12, vertical: 4),
-                decoration: BoxDecoration(color: VanixColors.activeBg, borderRadius: BorderRadius.circular(14)),
-                child: Row(mainAxisSize: MainAxisSize.min, children: [
-                  Container(width: 7, height: 7, decoration: const BoxDecoration(color: VanixColors.greenDeep, shape: BoxShape.circle)),
-                  const SizedBox(width: 6),
-                  Text(FS.t(_lang, 'tempNormal'), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: VanixColors.greenInk)),
-                ]),
-              ),
               Row(children: [
-                Text(widget.appState.fmtTemp('33°C'), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: textColor)),
+                Container(
+                  padding: const EdgeInsetsDirectional.symmetric(horizontal: 12, vertical: 4),
+                  decoration: BoxDecoration(color: VanixColors.activeBg, borderRadius: BorderRadius.circular(14)),
+                  child: Row(mainAxisSize: MainAxisSize.min, children: [
+                    Container(width: 7, height: 7, decoration: const BoxDecoration(color: VanixColors.greenDeep, shape: BoxShape.circle)),
+                    const SizedBox(width: 6),
+                    Text(FS.t(_lang, 'tempNormal'), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: VanixColors.greenInk)),
+                  ]),
+                ),
                 const SizedBox(width: 8),
-                _tempRangeDropdown(textColor),
+                Text(widget.appState.fmtTemp('33°C'), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: textColor)),
               ]),
+              _tempRangeDropdown(textColor),
             ],
           ),
           const SizedBox(height: VanixSpacing.md),
