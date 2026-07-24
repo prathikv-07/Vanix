@@ -2309,6 +2309,13 @@ class _ActionCard extends StatelessWidget {
   // Short CTA labels for the full-bleed photo card (default No / Yes).
   final String photoNoLabel;
   final String photoYesLabel;
+  // Once a Yes/No card is answered but still evolving (Heat's insemination
+  // window, Gestation's checkpoints), the card stays full-bleed instead of
+  // collapsing to the contained layout — the title changes (e.g. "Insemination
+  // window") and the Yes/No row is replaced by this custom body (segmented
+  // bar + button, form, etc). Takes over from the question/CTAs whenever set.
+  final String? photoTitleOverride;
+  final Widget? photoBodyOverride;
   final Widget child;
   final bool escalated;
   final bool isDark;
@@ -2340,6 +2347,8 @@ class _ActionCard extends StatelessWidget {
     this.onPhotoNo,
     this.photoNoLabel = 'No',
     this.photoYesLabel = 'Yes',
+    this.photoTitleOverride,
+    this.photoBodyOverride,
     required this.child,
     this.escalated = false,
     this.isDark = false,
@@ -2351,9 +2360,12 @@ class _ActionCard extends StatelessWidget {
     // whole card, cow name/breed top-left, severity badge top-right, short
     // question + No/Yes over the bottom scrim. Mirrors
     // #flow-root.display-fullbleed .ev-photo-card in prototype.html, capped at
-    // a compact ~300px height. Only the two-button question states use it;
-    // form/message states fall through to the contained-banner layout below.
-    if (imageMode && photoBg != null && photoQuestion != null && onPhotoYes != null && onPhotoNo != null) {
+    // a compact ~300px height. Once answered, an evolving card (Heat,
+    // Gestation) keeps this same full-bleed chrome via photoBodyOverride
+    // instead of collapsing to the contained layout below.
+    final hasQuestion = photoQuestion != null && onPhotoYes != null && onPhotoNo != null;
+    final hasOverride = photoTitleOverride != null && photoBodyOverride != null;
+    if (imageMode && photoBg != null && (hasQuestion || hasOverride)) {
       return _buildFullBleedPhotoCard();
     }
     final accentColor = leftAccentColor ?? border;
