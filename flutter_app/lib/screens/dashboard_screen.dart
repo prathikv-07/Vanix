@@ -99,6 +99,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
                           child: _statGrid(),
                         ),
+                        Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(16, 14, 16, 0),
+                          child: _aiChatBotBanner(),
+                        ),
                         if (widget.appState.isManager)
                           Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(16, 20, 16, 0),
