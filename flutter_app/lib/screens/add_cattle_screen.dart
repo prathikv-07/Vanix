@@ -25,7 +25,6 @@ class AddCattleScreen extends StatefulWidget {
 class _AddCattleScreenState extends State<AddCattleScreen> {
   String _tab = 'cow'; // cow | device
   bool _showHistory = false;
-  bool _fillHistory = true;
   int _lactation = 2;
 
   String get _lang => widget.appState.languageCode;
