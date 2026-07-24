@@ -3250,7 +3250,7 @@ class _FullCycleSheetState extends State<_FullCycleSheet> {
                     height: 50,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(backgroundColor: VanixColors.greenInk, foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25))),
-                      onPressed: () => setState(() => _heatFormStage = (h >= 6 && h < 18) ? 'vet' : 'confirm'),
+                      onPressed: () => (h >= 6 && h < 18) ? _openHeatVetSheet() : setState(() => _heatFormStage = 'confirm'),
                       child: const Text('Start Insemination', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
                     ),
                   )
@@ -3271,15 +3271,13 @@ class _FullCycleSheetState extends State<_FullCycleSheet> {
                         flex: 2,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(backgroundColor: VanixColors.greenInk, foregroundColor: Colors.white),
-                          onPressed: () => setState(() => _heatFormStage = 'vet'),
+                          onPressed: _openHeatVetSheet,
                           child: const Text('Continue'),
                         ),
                       ),
                     ],
                   ),
-                ] else if (_heatFormStage == 'vet')
-                  _VetPicker(onSent: (_) => setState(() => _heatFormStage = 'form'))
-                else ...[
+                ] else ...[
                   const Text('Log insemination', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.white)),
                   const SizedBox(height: 6),
                   _inseminationMethodGrid(_heatMethod, (m) => setState(() => _heatMethod = m), isDark: widget.isDark),
