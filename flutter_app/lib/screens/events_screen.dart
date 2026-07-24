@@ -769,7 +769,7 @@ class _EventsScreenState extends State<EventsScreen> {
           title: 'Fresh cow health dip — Ganga',
           sub: 'Calved 6 days ago and her health score has dropped — early days post-calving carry higher metabolic risk.',
           meta: 'Green Valley Farm · Belt 27 · Day 6 post-calving',
-          child: _vetPicker((vetName) => setState(() { _freshCowVetName = vetName; _freshCow = _VetFlowState.requested; widget.appState.resolveEvent(); })),
+          child: _vetSheetPendingBody(_startFreshCowVetFlow),
         );
       case _VetFlowState.requested:
         return _ActionCard(
