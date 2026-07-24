@@ -388,8 +388,6 @@ class _MilkLogScreenState extends State<MilkLogScreen> {
               Text('${total.toStringAsFixed(1)} L', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w700, color: textColor)),
               const SizedBox(width: 10),
               const Flexible(child: Text('▲ 8% vs yesterday', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: VanixColors.greenInk))),
-              const SizedBox(width: 10),
-              _IconCircle(icon: Icons.download_outlined, isDark: isDark, onTap: () {}),
             ],
           ),
           const SizedBox(height: 16),
