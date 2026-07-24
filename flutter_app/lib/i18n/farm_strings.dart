@@ -189,6 +189,7 @@ class FS {
     'hi': {
       'farmsTitle': 'खेत', 'farmsSubtitle': 'अपने सभी डेयरी फार्म एक जगह प्रबंधित करें',
       'statTotalFarms': 'कुल खेत', 'statTotalCattle': 'कुल पशु', 'statUnactionedAlerts': 'अनसुलझी चेतावनी',
+      'wordFarmsShort': 'खेत', 'wordCattleShort': 'पशु', 'wordAlertsShort': 'चेतावनी',
       'searchFarms': 'खेत खोजें', 'yourFarms': 'आपके खेत', 'wordCattle': 'पशु',
       'sevCritical': 'गंभीर', 'healthyWord': 'स्वस्थ', 'notSetUp': 'अभी सेट अप नहीं', 'setupFarm': 'फार्म सेट करें',
       'cattleHeat': 'हीट', 'cattleFever': 'बुखार', 'insemWord': 'गर्भाधान', 'statMilkToday': 'आज का दूध',
