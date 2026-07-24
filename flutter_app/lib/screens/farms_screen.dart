@@ -536,11 +536,24 @@ class _SetupFarmRow extends StatelessWidget {
 
 // ── Two-pane filter sheet ────────────────────────────────────
 
+// Mirrors the shared `wireFilterSheet()` two-pane bottom sheet used
+// app-wide (Milk Log / Events / Farm Detail / Farms): a white left rail
+// (Status single-select / Location multi-select) with a 5px greenInk
+// active-border + divider between categories, boxless option rows with a
+// left-side radio (single-select) or checkbox (multi-select) — both
+// greenInk — "Filter" flush left + "Reset" flush right on one header row,
+// and a greenInk Apply + a plain-text Cancel below it. Reset only clears
+// the sheet's own working selection (back to "all"); Cancel restores
+// whatever was last actually applied and closes without calling onApply
+// — exactly like the HTML's snapshot/restore behavior, since `_status`/
+// `_loc` here are always re-seeded from the last-applied widget.status/
+// location on open.
 class _FarmsFilterSheet extends StatefulWidget {
   final String lang;
   final bool isDark;
-  final String status, location;
-  final void Function(String status, String location) onApply;
+  final String status;
+  final List<String> location;
+  final void Function(String status, List<String> location) onApply;
   const _FarmsFilterSheet({
     required this.lang,
     required this.isDark,
@@ -556,13 +569,31 @@ class _FarmsFilterSheet extends StatefulWidget {
 class _FarmsFilterSheetState extends State<_FarmsFilterSheet> {
   int _cat = 0; // 0 status, 1 location
   late String _status;
-  late String _loc;
+  late List<String> _loc;
 
   @override
   void initState() {
     super.initState();
     _status = widget.status;
-    _loc = widget.location;
+    _loc = List.of(widget.location);
+  }
+
+  bool get _locFiltered => !(_loc.length == 1 && _loc.first == 'all');
+
+  void _selectLoc(String val) {
+    setState(() {
+      if (val == 'all') {
+        _loc = ['all'];
+        return;
+      }
+      final next = List.of(_loc)..remove('all');
+      if (next.contains(val)) {
+        next.remove(val);
+      } else {
+        next.add(val);
+      }
+      _loc = next.isEmpty ? ['all'] : next;
+    });
   }
 
   @override
@@ -570,60 +601,67 @@ class _FarmsFilterSheetState extends State<_FarmsFilterSheet> {
     final isDark = widget.isDark;
     final lang = widget.lang;
     final bg = isDark ? VanixColors.darkSecond : Colors.white;
-    final railBg = isDark ? VanixColors.darkPrimary : VanixColors.bgWarm;
+    final railBg = isDark ? const Color(0xFF1E1E1E) : VanixColors.bgCard;
+    final paneBg = isDark ? const Color(0xFF1E1E1E) : Colors.white;
     final textColor = isDark ? Colors.white : VanixColors.textPrimary;
 
     return Container(
       decoration: BoxDecoration(color: bg, borderRadius: const BorderRadius.vertical(top: Radius.circular(24))),
-      padding: const EdgeInsetsDirectional.fromSTEB(24, 0, 24, 28),
+      padding: const EdgeInsetsDirectional.fromSTEB(24, 0, 24, 12),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             width: 36,
             height: 4,
-            margin: const EdgeInsetsDirectional.only(top: 12),
-            decoration: BoxDecoration(color: VanixColors.greenInk, borderRadius: BorderRadius.circular(2)),
+            margin: const EdgeInsetsDirectional.only(top: 8, bottom: 2),
+            decoration: BoxDecoration(color: VanixColors.border, borderRadius: BorderRadius.circular(2)),
           ),
           Padding(
             padding: const EdgeInsetsDirectional.only(top: 10),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(FS.t(lang, 'filterWord'), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: textColor)),
-                IconButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  icon: Icon(Icons.close, size: 18, color: isDark ? const Color(0xA6FFFFFF) : VanixColors.textHint),
+                Expanded(child: Text(FS.t(lang, 'filterWord'), style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: textColor))),
+                TextButton(
+                  onPressed: () => setState(() {
+                    _status = 'all';
+                    _loc = ['all'];
+                  }),
+                  style: TextButton.styleFrom(padding: EdgeInsets.zero, minimumSize: const Size(0, 32), foregroundColor: VanixColors.greenInk),
+                  child: Text(FS.t(lang, 'resetFilters'), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
                 ),
               ],
             ),
           ),
-          SizedBox(
+          Container(
+            margin: const EdgeInsetsDirectional.only(top: 14),
             height: 260,
+            decoration: BoxDecoration(border: Border(top: BorderSide(color: isDark ? VanixColors.darkDivider : VanixColors.divider), bottom: BorderSide(color: isDark ? VanixColors.darkDivider : VanixColors.divider))),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
-                  width: 132,
+                  width: 126,
                   color: railBg,
                   child: Column(
                     children: [
-                      _CatTab(label: FS.t(lang, 'statusWord'), active: _cat == 0, isDark: isDark, onTap: () => setState(() => _cat = 0)),
-                      _CatTab(label: FS.t(lang, 'locationWord'), active: _cat == 1, isDark: isDark, onTap: () => setState(() => _cat = 1)),
+                      _CatTab(label: FS.t(lang, 'statusWord'), active: _cat == 0, filtered: _status != 'all', isDark: isDark, onTap: () => setState(() => _cat = 0)),
+                      _CatTab(label: FS.t(lang, 'locationWord'), active: _cat == 1, filtered: _locFiltered, isDark: isDark, onTap: () => setState(() => _cat = 1)),
                     ],
                   ),
                 ),
                 Expanded(
                   child: Container(
-                    color: isDark ? VanixColors.darkSubSurface : VanixColors.bgWarm,
-                    padding: const EdgeInsetsDirectional.all(12),
+                    color: paneBg,
+                    padding: const EdgeInsetsDirectional.symmetric(horizontal: 20, vertical: 12),
                     child: _cat == 0 ? _statusPane(isDark, lang) : _locationPane(isDark, lang),
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 14),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -634,6 +672,11 @@ class _FarmsFilterSheetState extends State<_FarmsFilterSheet> {
               child: Text(FS.t(lang, 'applyFilters')),
             ),
           ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            style: TextButton.styleFrom(minimumSize: const Size(double.infinity, 44), foregroundColor: VanixColors.textHint),
+            child: Text(FS.t(lang, 'cancelWord'), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+          ),
         ],
       ),
     );
@@ -642,10 +685,10 @@ class _FarmsFilterSheetState extends State<_FarmsFilterSheet> {
   Widget _statusPane(bool isDark, String lang) {
     return ListView(
       children: [
-        _OptRow(label: FS.t(lang, 'filterAllFarms'), active: _status == 'all', isDark: isDark, onTap: () => setState(() => _status = 'all')),
-        _OptRow(label: FS.t(lang, 'filterHealthy'), active: _status == 'healthy', isDark: isDark, onTap: () => setState(() => _status = 'healthy')),
-        _OptRow(label: FS.t(lang, 'filterAttention'), active: _status == 'attention', isDark: isDark, onTap: () => setState(() => _status = 'attention')),
-        _OptRow(label: FS.t(lang, 'filterSetup'), active: _status == 'setup', isDark: isDark, onTap: () => setState(() => _status = 'setup')),
+        _OptRow(label: FS.t(lang, 'filterAllFarms'), active: _status == 'all', multi: false, isDark: isDark, onTap: () => setState(() => _status = 'all')),
+        _OptRow(label: FS.t(lang, 'filterHealthy'), active: _status == 'healthy', multi: false, isDark: isDark, onTap: () => setState(() => _status = 'healthy')),
+        _OptRow(label: FS.t(lang, 'filterAttention'), active: _status == 'attention', multi: false, isDark: isDark, onTap: () => setState(() => _status = 'attention')),
+        _OptRow(label: FS.t(lang, 'filterSetup'), active: _status == 'setup', multi: false, isDark: isDark, onTap: () => setState(() => _status = 'setup')),
       ],
     );
   }
@@ -653,10 +696,10 @@ class _FarmsFilterSheetState extends State<_FarmsFilterSheet> {
   Widget _locationPane(bool isDark, String lang) {
     return ListView(
       children: [
-        _OptRow(label: FS.t(lang, 'allWord'), active: _loc == 'all', isDark: isDark, onTap: () => setState(() => _loc = 'all')),
-        _OptRow(label: FS.t(lang, 'locCoimbatore'), active: _loc == 'coimbatore', isDark: isDark, onTap: () => setState(() => _loc = 'coimbatore')),
-        _OptRow(label: FS.t(lang, 'locErode'), active: _loc == 'erode', isDark: isDark, onTap: () => setState(() => _loc = 'erode')),
-        _OptRow(label: FS.t(lang, 'locSalem'), active: _loc == 'salem', isDark: isDark, onTap: () => setState(() => _loc = 'salem')),
+        _OptRow(label: FS.t(lang, 'allWord'), active: _loc.contains('all'), multi: true, isDark: isDark, onTap: () => _selectLoc('all')),
+        _OptRow(label: FS.t(lang, 'locCoimbatore'), active: _loc.contains('coimbatore'), multi: true, isDark: isDark, onTap: () => _selectLoc('coimbatore')),
+        _OptRow(label: FS.t(lang, 'locErode'), active: _loc.contains('erode'), multi: true, isDark: isDark, onTap: () => _selectLoc('erode')),
+        _OptRow(label: FS.t(lang, 'locSalem'), active: _loc.contains('salem'), multi: true, isDark: isDark, onTap: () => _selectLoc('salem')),
       ],
     );
   }
