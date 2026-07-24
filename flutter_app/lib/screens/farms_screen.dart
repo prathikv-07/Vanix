@@ -749,45 +749,49 @@ class _CatTab extends StatelessWidget {
   }
 }
 
+// Mirrors `.s7-chip` — a boxless, full-width row (no background/border)
+// with a left-side 22px control: a filled greenInk circle with a white
+// inset ring for single-select ("radio"), or a rounded greenInk square
+// with a white checkmark for multi-select ("checkbox"). Label goes bold
+// when selected.
 class _OptRow extends StatelessWidget {
   final String label;
-  final bool active, isDark;
+  final bool active, multi, isDark;
   final VoidCallback onTap;
-  const _OptRow({required this.label, required this.active, required this.isDark, required this.onTap});
+  const _OptRow({required this.label, required this.active, required this.multi, required this.isDark, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    final rowBg = isDark ? VanixColors.darkSecond : VanixColors.bgCard;
     final borderCol = isDark ? VanixColors.darkBorder : VanixColors.border;
-    final textColor = active ? Colors.white : (isDark ? Colors.white : VanixColors.textPrimary);
-    return Padding(
-      padding: const EdgeInsetsDirectional.only(bottom: 8),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Container(
-          constraints: const BoxConstraints(minHeight: 44),
-          padding: const EdgeInsetsDirectional.symmetric(horizontal: 14),
-          decoration: BoxDecoration(
-            color: active ? VanixColors.greenInk : rowBg,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: active ? VanixColors.greenInk : borderCol),
-          ),
-          child: Row(
-            children: [
-              Expanded(child: Text(label, style: TextStyle(fontSize: 13, color: textColor))),
-              Container(
-                width: 20,
-                height: 20,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: active ? Colors.white : Colors.transparent,
-                  border: Border.all(color: active ? Colors.white : borderCol, width: 1.5),
-                ),
-                child: active ? const Icon(Icons.check, size: 13, color: VanixColors.greenInk) : null,
+    final textColor = isDark ? Colors.white : VanixColors.textPrimary;
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        constraints: const BoxConstraints(minHeight: 48),
+        padding: const EdgeInsetsDirectional.symmetric(horizontal: 4),
+        child: Row(
+          children: [
+            Container(
+              width: 22,
+              height: 22,
+              decoration: BoxDecoration(
+                shape: multi ? BoxShape.rectangle : BoxShape.circle,
+                borderRadius: multi ? BorderRadius.circular(6) : null,
+                border: Border.all(color: active ? VanixColors.greenInk : borderCol, width: 2),
+                color: active ? VanixColors.greenInk : Colors.transparent,
               ),
-            ],
-          ),
+              child: active
+                  ? (multi
+                      ? const Icon(Icons.check, size: 14, color: Colors.white)
+                      : Container(
+                          margin: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(shape: BoxShape.circle, color: isDark ? VanixColors.darkSecond : VanixColors.bgCard),
+                        ))
+                  : null,
+            ),
+            const SizedBox(width: 12),
+            Expanded(child: Text(label, style: TextStyle(fontSize: 14, fontWeight: active ? FontWeight.w600 : FontWeight.w500, color: textColor))),
+          ],
         ),
       ),
     );
