@@ -575,7 +575,7 @@ class _FarmDetailScreenState extends State<FarmDetailScreen> {
               padding: const EdgeInsets.fromLTRB(24, 8, 24, 28),
               child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Center(child: Container(width: 36, height: 4, margin: const EdgeInsets.only(bottom: 10), decoration: BoxDecoration(color: border, borderRadius: BorderRadius.circular(2)))),
-                Text(FS.t(_lang, 'fdReportTitle') == FS.t(_lang, 'fdReportTitle') ? 'Report period' : '', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700, color: text1)),
+                Text(FS.t(_lang, 'downloadReportTitle'), style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700, color: text1)),
                 const SizedBox(height: 4),
                 for (final p in const [('today', 'fdRangeToday'), ('week', 'fdRangeWeek'), ('month', 'fdRangeMonth'), ('custom', 'fdRangeCustom')])
                   RadioListTile<String>(
