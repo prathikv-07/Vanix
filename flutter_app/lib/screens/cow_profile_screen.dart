@@ -190,7 +190,19 @@ class _CowProfileScreenState extends State<CowProfileScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(widget.cow.nm(_lang), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white)),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(widget.cow.nm(_lang), style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white)),
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                            decoration: BoxDecoration(color: VanixColors.activeBg, borderRadius: BorderRadius.circular(8)),
+                            child: Text(widget.cow.bl(_lang), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: VanixColors.greenInk)),
+                          ),
+                        ],
+                      ),
                       const SizedBox(height: 5),
                       Wrap(
                         crossAxisAlignment: WrapCrossAlignment.center,
