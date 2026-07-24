@@ -1239,7 +1239,7 @@
               <div style="padding:calc(20px + env(safe-area-inset-top, 0px)) 16px 6px;">
                 <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
                   <img src="https://mybovine.ai/assets/logos/vanix-logo.svg" alt="MyBovine" style="height:32px; width:auto; display:block; flex-shrink:0;">
-                  <button id="dash-farmsel" style="display:inline-flex; align-items:center; gap:8px; height:38px; padding:0 14px; border-radius:19px; border:1px solid var(--border); background:var(--bgcard); font-size:14px; font-weight:600; color:var(--text1); font-family:var(--font-hi); cursor:pointer;"><span data-k="dashAllFarms">All Farms</span><span class="en">&nbsp;(3)</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+                  <button id="dash-farmsel" style="display:inline-flex; align-items:center; justify-content:center; gap:8px; height:38px; padding:0 14px; border-radius:19px; border:1px solid var(--border); background:var(--bgcard); font-size:14px; font-weight:600; color:var(--text1); font-family:var(--font-hi); cursor:pointer; line-height:1;"><span data-k="dashAllFarms" style="line-height:1;">All Farms</span><span class="en" style="line-height:1;">&nbsp;(3)</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="display:block; flex-shrink:0;"><path d="M6 9l6 6 6-6"/></svg></button>
                 </div>
               </div>
 
@@ -1372,9 +1372,9 @@
             <div id="dash-farmsel-backdrop" style="position:absolute; inset:0; background:rgba(0,0,0,0.35); opacity:0; pointer-events:none; transition:opacity 0.3s ease; z-index:46;"></div>
             <div id="dash-farmsel-sheet" style="position:absolute; left:0; right:0; bottom:0; max-height:78vh; background:#FFFFFF; border-radius:24px 24px 0 0; padding:8px 24px 24px; transform:translateY(100%); transition:transform 0.45s cubic-bezier(0.32,0.72,0,1); z-index:47; overflow-y:auto; box-shadow:0 -8px 32px rgba(0,0,0,0.18);">
               <div style="display:flex; justify-content:center; padding:6px 0 2px;"><div style="width:36px; height:4px; background:var(--border); border-radius:2px;"></div></div>
-              <div style="display:flex; align-items:center; margin-top:10px;">
-                <h3 data-k="dashAllFarms" style="font-size:18px; font-weight:700; color:var(--text1); margin:0; flex:1;">All Farms</h3>
-                <button id="dash-farmsel-close" style="width:36px; height:36px; border-radius:50%; border:none; background:var(--bgwarm); font-size:14px; color:var(--text1); cursor:pointer;">✕</button>
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-top:10px;">
+                <h3 data-k="dashAllFarms" style="font-size:18px; font-weight:700; color:var(--text1); margin:0; line-height:1;">All Farms</h3>
+                <button id="dash-farmsel-close" style="width:36px; height:36px; display:flex; align-items:center; justify-content:center; border-radius:0; border:none; background:transparent; font-size:16px; line-height:1; color:var(--text1); cursor:pointer;">✕</button>
               </div>
               <div style="display:flex; align-items:center; gap:8px; height:44px; margin-top:12px; padding:0 14px; border-radius:22px; background:var(--bgwarm);">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
@@ -3091,7 +3091,10 @@
                 <button id="grp-new-close" style="width:36px; height:36px; border-radius:50%; border:none; background:var(--bgwarm); font-size:14px; color:var(--text1); cursor:pointer;">✕</button>
               </div>
               <input type="text" id="grp-new-name" placeholder="Group name" data-k="groupNamePh" data-k-placeholder style="width:100%; min-height:44px; box-sizing:border-box; background:var(--bgwarm); border:1px solid var(--border); border-radius:10px; padding:0 12px; font-size:13px; color:var(--text1); margin-bottom:8px; margin-top:14px; font-family:var(--font-hi);">
-              <button id="grp-new-save" data-k="createGroup" style="width:100%; min-height:48px; margin-top:8px; border-radius:24px; border:none; background:var(--greenink); color:#FFFFFF; font-size:14px; font-weight:600; font-family:var(--font-hi); cursor:pointer;">Create group</button>
+              <div style="display:flex; gap:10px; margin-top:8px;">
+                <button id="grp-new-cancel" data-k="cancelWord" style="flex:1; min-height:48px; border-radius:24px; border:1px solid var(--border); background:var(--bgcard); color:var(--text1); font-size:14px; font-weight:600; font-family:var(--font-hi); cursor:pointer;">Cancel</button>
+                <button id="grp-new-save" data-k="createGroup" style="flex:1; min-height:48px; border-radius:24px; border:none; background:var(--greenink); color:#FFFFFF; font-size:14px; font-weight:600; font-family:var(--font-hi); cursor:pointer;">Create group</button>
+              </div>
             </div>
             <!-- Group detail sheet: cows in group + add cattle -->
             <div id="grp-detail-backdrop" style="position:absolute; inset:0; background:rgba(0,0,0,0.35); opacity:0; pointer-events:none; transition:opacity 0.3s ease; z-index:46;"></div>
@@ -3113,7 +3116,10 @@
                 <button id="grp-pick-close" style="width:36px; height:36px; border-radius:50%; border:none; background:var(--bgwarm); font-size:14px; color:var(--text1); cursor:pointer;">✕</button>
               </div>
               <div id="grp-pick-list" style="margin-top:12px; overflow-y:auto; flex:1;"></div>
-              <button id="grp-pick-save" data-k="saveWord" style="width:100%; min-height:48px; margin-top:12px; border-radius:24px; border:none; background:var(--greenink); color:#FFFFFF; font-size:14px; font-weight:600; font-family:var(--font-hi); cursor:pointer; flex-shrink:0;">Save</button>
+              <div style="display:flex; gap:10px; margin-top:12px; flex-shrink:0;">
+                <button id="grp-pick-cancel" data-k="cancelWord" style="flex:1; min-height:48px; border-radius:24px; border:1px solid var(--border); background:var(--bgcard); color:var(--text1); font-size:14px; font-weight:600; font-family:var(--font-hi); cursor:pointer;">Cancel</button>
+                <button id="grp-pick-save" data-k="saveWord" style="flex:1; min-height:48px; border-radius:24px; border:none; background:var(--greenink); color:#FFFFFF; font-size:14px; font-weight:600; font-family:var(--font-hi); cursor:pointer;">Save</button>
+              </div>
             </div>
           </div>
 
@@ -3178,7 +3184,7 @@
                 <button class="cow-tab" data-tab="vetlogs" data-k="tabVetLogs" style="flex:1; min-height:46px; border:none; background:transparent; font-size:13px; font-family:var(--font-hi); cursor:pointer; border-bottom:3px solid transparent; color:var(--text2); font-weight:500;">Vet Logs</button>
               </div>
 
-              <div style="padding:16px 16px 0;">
+              <div style="padding:8px 16px 0;">
                 <div id="cow-pane-timeline"></div>
                 <div id="cow-pane-overview" style="display:none;"></div>
                 <div id="cow-pane-activity" style="display:none;"></div>
@@ -4087,7 +4093,7 @@
             farmSelBtn.style.pointerEvents = '';
             farmSelBtn.style.cursor = 'pointer';
             var farmsAll = (window.FARMS || []).filter(function(f) { return f.status !== 'setup'; });
-            farmSelBtn.innerHTML = '<span data-k="dashAllFarms">' + (window.t ? window.t().dashAllFarms : 'All Farms') + '</span><span class="en">&nbsp;(' + farmsAll.length + ')</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
+            farmSelBtn.innerHTML = '<span data-k="dashAllFarms" style="line-height:1;">' + (window.t ? window.t().dashAllFarms : 'All Farms') + '</span><span class="en" style="line-height:1;">&nbsp;(' + farmsAll.length + ')</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="display:block; flex-shrink:0;"><path d="M6 9l6 6 6-6"/></svg>';
           }
         }
       }
@@ -6894,10 +6900,12 @@
             : '<div style="width:64px; height:64px; border-radius:14px; border:1.5px solid var(--border); display:flex; align-items:center; justify-content:center; color:var(--text2); font-size:16px; flex-shrink:0;">✕</div>';
           return '<div class="cow-row" data-cow="' + c.no + '" style="position:relative; background:var(--bgcard); border:1px solid var(--border); border-radius:18px; padding:12px 14px; margin-bottom:10px; cursor:pointer;">' + tag +
             '<div style="display:flex; gap:12px;">' + photo +
-              '<div style="flex:1; min-width:0; padding-inline-end:56px;">' +
-                '<p style="font-size:15px; font-weight:700; color:var(--text1); margin:0;">' + loc(c, 'name') + ' <span class="en" style="font-size:10px; font-weight:700; color:var(--greenink); background:var(--activebg); border-radius:8px; padding:1px 6px; vertical-align:2px;">' + loc(c, 'belt') + '</span></p>' +
-                '<p style="font-size:12px; color:var(--text2); margin:3px 0 0;">' + loc(c, 'breed') + '</p>' +
-                '<p style="font-size:12px; color:var(--text2); margin:2px 0 0;">' + loc(c, 'age') + '</p>' +
+              '<div style="flex:1; min-width:0; padding-inline-end:56px; display:flex; flex-direction:column; justify-content:space-between; min-height:64px;">' +
+                '<div>' +
+                  '<p style="font-size:15px; font-weight:700; color:var(--text1); margin:0;">' + loc(c, 'name') + '</p>' +
+                  '<p class="en" style="font-size:11px; font-weight:700; color:var(--greenink); background:var(--activebg); border-radius:8px; padding:1px 6px; display:inline-block; margin-top:3px;">' + loc(c, 'belt') + '</p>' +
+                '</div>' +
+                '<p style="font-size:12px; color:var(--text2); margin:0;">' + loc(c, 'breed') + ' | ' + loc(c, 'age') + '</p>' +
               '</div>' +
             '</div>' +
             '<div style="position:absolute; bottom:10px; inset-inline-end:10px;">' +
@@ -7037,10 +7045,10 @@
         var rangeLabel = cowTempRange === 'week' ? 'This week' : (cowTempRange === 'custom' ? (cowTempCustomLabel || 'Custom') : 'Today');
         document.getElementById('cow-pane-overview').innerHTML =
           '<div style="display:flex; gap:6px;">' +
-            ovStatCardNoIcon('19 Mar', 'ovLastHeat', 'var(--warning)') +
-            ovStatCardNoIcon('14 Apr', 'ovNextHeat', 'var(--greenink)') +
-            ovStatCardNoIcon('18 Jun', 'ovLastSpike', 'var(--danger)') +
-            ovStatCardNoIcon('1', 'ovNumCalving', '#2563EB') +
+            ovStatCardNoIcon('19 Mar', 'ovLastHeat', 'var(--border)') +
+            ovStatCardNoIcon('14 Apr', 'ovNextHeat', 'var(--border)') +
+            ovStatCardNoIcon('18 Jun', 'ovLastSpike', 'var(--border)') +
+            ovStatCardNoIcon('1', 'ovNumCalving', 'var(--border)') +
           '</div>' +
           '<p style="font-size:11px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:var(--text2); margin:20px 0 10px;">' + t.tempWord + '</p>' +
           '<div style="background:var(--bgcard); border:1px solid var(--border); border-radius:16px; padding:14px;">' +
@@ -8970,6 +8978,7 @@
         sh.style.transform = 'translateY(100%)'; sh.style.pointerEvents = 'none'; bd.style.opacity = '0'; bd.style.pointerEvents = 'none';
       }
       document.getElementById('grp-new-close').addEventListener('click', closeGrpNew);
+      document.getElementById('grp-new-cancel').addEventListener('click', closeGrpNew);
       document.getElementById('grp-new-backdrop').addEventListener('click', closeGrpNew);
       document.getElementById('grp-new-save').addEventListener('click', function() {
         var nm = (document.getElementById('grp-new-name').value || '').trim();
@@ -9001,6 +9010,7 @@
         sh.style.transform = 'translateY(100%)'; sh.style.pointerEvents = 'none'; bd.style.opacity = '0'; bd.style.pointerEvents = 'none';
       }
       document.getElementById('grp-pick-close').addEventListener('click', closeGrpPick);
+      document.getElementById('grp-pick-cancel').addEventListener('click', closeGrpPick);
       document.getElementById('grp-pick-backdrop').addEventListener('click', closeGrpPick);
       document.getElementById('grp-pick-save').addEventListener('click', function() {
         var g = groupById(grpDetailId);
@@ -9314,17 +9324,20 @@
         var search = document.getElementById('dash-farmsel-search');
         var list = document.getElementById('dash-farmsel-list');
         if (!btn || !sheet) return;
+        var selectedId = 'all';
         function renderList() {
           var q = (search.value || '').trim().toLowerCase();
           var allFarms = (window.FARMS || []).filter(function(f) { return f.status !== 'setup'; });
           var rows = [{ id: 'all', name: 'All Farms' }].concat(allFarms.map(function(f) { return { id: f.id, name: window.loc ? window.loc(f, 'name') : f.name }; }));
           rows = rows.filter(function(r) { return r.name.toLowerCase().indexOf(q) !== -1; });
           list.innerHTML = rows.map(function(r) {
-            return '<button class="dash-farmsel-row" data-id="' + r.id + '" style="width:100%; display:flex; align-items:center; justify-content:space-between; min-height:48px; padding:0 4px; border:none; border-bottom:1px solid var(--divider); background:transparent; font-size:15px; font-weight:600; color:var(--text1); font-family:var(--font-hi); text-align:start; cursor:pointer;">' + r.name + '</button>';
+            var sel = r.id === selectedId;
+            return '<button class="dash-farmsel-row" data-id="' + r.id + '" style="width:100%; display:flex; align-items:center; justify-content:space-between; min-height:48px; padding:0 4px; border:none; border-bottom:1px solid var(--divider); background:transparent; font-size:15px; font-weight:' + (sel ? '700' : '400') + '; color:var(--text1); font-family:var(--font-hi); text-align:start; cursor:pointer;"><span>' + r.name + '</span>' + (sel ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--greenink)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>' : '') + '</button>';
           }).join('');
           list.querySelectorAll('.dash-farmsel-row').forEach(function(row) {
             row.addEventListener('click', function() {
               var id = row.getAttribute('data-id');
+              selectedId = id;
               btn.querySelector('span[data-k="dashAllFarms"]') ? (btn.querySelector('span[data-k="dashAllFarms"]').textContent = (id === 'all' ? window.t().dashAllFarms : row.textContent)) : null;
               var countSpan = btn.querySelector('span.en');
               if (countSpan) countSpan.textContent = id === 'all' ? '\u00a0(' + allFarms.length + ')' : '';
