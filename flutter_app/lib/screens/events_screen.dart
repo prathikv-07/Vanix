@@ -3001,48 +3001,24 @@ class _FullCycleSheetState extends State<_FullCycleSheet> {
       color = VanixColors.danger;
     }
 
-    final restrictedNow = widget.restricted && !_heatConfirmed;
+    // "ask" stage (pre-Yes/No) is always a full-bleed photo card in
+    // prototype.html (imageMode is hardcoded true) — the "restricted" flag
+    // only trims the sub-line, both are photographic. Mirrors
+    // .ev-photo-step.ask in vanix_screens.html.
+    if (!_heatConfirmed) {
+      return _heatAskPhotoCard();
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Heat cycle detected — Gauri', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: textColor)),
-        if (restrictedNow)
-          const Padding(padding: EdgeInsets.only(top: 10), child: Text('Is Gauri in heat?', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500)))
-        else ...[
-          Padding(padding: const EdgeInsets.only(top: 3), child: Text('Temperature swinging up and down with high movement since 04:30 this morning.', style: TextStyle(fontSize: 12, color: hintColor, height: 1.5))),
-          const Padding(padding: EdgeInsets.only(top: 10), child: Text('Is Gauri in heat?', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500))),
-          const SizedBox(height: 8),
-          Text(label, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: color)),
-          const SizedBox(height: 6),
-          _HeatWindowBar(simHours: h, fillColor: color),
-        ],
-        if (!_heatConfirmed) ...[
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton(
-                  onPressed: () {
-                    _heatTimer?.cancel();
-                    setState(() {
-                      _interruptedMessage = 'Cycle interrupted — heat not confirmed. Closing walkthrough.';
-                      _step = _SeqStep.interrupted;
-                    });
-                  },
-                  child: const Text('No'),
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                flex: 2,
-                child: ElevatedButton(
-                  onPressed: () => setState(() => _heatConfirmed = true),
-                  child: const Text('Yes, in heat'),
-                ),
-              ),
-            ],
-          ),
-        ] else if (_heatFormStage == 'idle') ...[
+        Padding(padding: const EdgeInsets.only(top: 3), child: Text('Temperature swinging up and down with high movement since 04:30 this morning.', style: TextStyle(fontSize: 12, color: hintColor, height: 1.5))),
+        const Padding(padding: EdgeInsets.only(top: 10), child: Text('Is Gauri in heat?', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500))),
+        const SizedBox(height: 8),
+        Text(label, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: color)),
+        const SizedBox(height: 6),
+        _HeatWindowBar(simHours: h, fillColor: color),
+        if (_heatFormStage == 'idle') ...[
           const SizedBox(height: 10),
           SizedBox(
             width: double.infinity,
