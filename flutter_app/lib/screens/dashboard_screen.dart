@@ -308,44 +308,31 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  // ── Today / This week tabs above Needs Attention — purely a visual
-  // toggle now (mirrors the HTML's simplification): both tabs render the
-  // same Needs Attention list, they just reflect which window the farm
-  // owner is scoping to. ──
-  Widget _schTabBtn(String tab, String labelKey) {
-    final on = _schTab == tab;
-    return InkWell(
-      onTap: () => setState(() => _schTab = tab),
-      borderRadius: BorderRadius.circular(17),
-      child: Container(
-        constraints: const BoxConstraints(minHeight: 34),
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: on ? VanixColors.greenInk : _cardBg,
-          borderRadius: BorderRadius.circular(17),
-          border: Border.all(color: on ? VanixColors.greenInk : _border),
-        ),
-        child: Text(_t(labelKey),
-            style: TextStyle(fontSize: 13, fontWeight: on ? FontWeight.w600 : FontWeight.w500, color: on ? Colors.white : _text1)),
-      ),
+  // ── AI Chat Bot — coming soon banner. Mirrors the dark (#3A3A3A) pill
+  // between Farm Status and Needs Attention in #dash-scroll (Home r3):
+  // brandGreen chat-bubble icon + white text, solid fill, no border. ──
+  Widget _aiChatBotBanner() {
+    return Container(
+      decoration: BoxDecoration(color: const Color(0xFF3A3A3A), borderRadius: BorderRadius.circular(16)),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      child: Row(children: [
+        const Icon(Icons.chat_bubble_outline, size: 20, color: VanixColors.brandGreen),
+        const SizedBox(width: 10),
+        Expanded(child: Text(_t('aiChatComingSoon'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.white))),
+      ]),
     );
   }
 
-  // ── Needs Attention: Today/This-week tab row (visual only) + 3
-  // tappable "View All" rows — Pending Approvals / Milking Sessions
-  // Missed / Critical Alerts. Mirrors #dash-scroll's Needs Attention
-  // block (Home r3), replacing the old per-time schedule rows. ──
+  // ── Needs Attention: 3 tappable "View All" rows — Pending Approvals /
+  // Milking Sessions Missed / Critical Alerts. The Today/This-week tab
+  // row above it is `display:none` in the current HTML (Home r3), so it
+  // is intentionally NOT rendered here either — kept as dead state
+  // (_schTab) only in case it's ever un-hidden. Mirrors #dash-scroll's
+  // Needs Attention block. ──
   Widget _scheduleTabs() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(children: [
-          _schTabBtn('today', 'dashToday'),
-          const SizedBox(width: 8),
-          _schTabBtn('week', 'dashThisWeek'),
-        ]),
-        const SizedBox(height: 12),
         Padding(padding: const EdgeInsetsDirectional.only(bottom: 10), child: Text(_t('needsAttentionTitle').toUpperCase(), style: _secLbl)),
         Container(
           decoration: _cardDeco(),
