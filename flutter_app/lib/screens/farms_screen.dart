@@ -452,25 +452,35 @@ class _MetaLine extends StatelessWidget {
   }
 }
 
+// Mirrors `farmChip()` in prototype.html — the `bg`/`color` params that
+// function accepts are dead code there (never used in the returned
+// markup); every chip is actually plain `var(--bgcard)` with a
+// `var(--border)` outline, `text1` value, `text2` label. No per-chip
+// tinting — this matches the real current render exactly.
 class _Chip extends StatelessWidget {
-  final Color bg, ink;
+  final bool isDark;
   final String value, label;
-  const _Chip({required this.bg, required this.ink, required this.value, required this.label});
+  const _Chip({required this.isDark, required this.value, required this.label});
 
   @override
   Widget build(BuildContext context) {
+    final textColor = isDark ? Colors.white : VanixColors.textPrimary;
     return Expanded(
       child: Container(
         padding: const EdgeInsetsDirectional.symmetric(vertical: 8, horizontal: 4),
-        decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(12)),
+        decoration: BoxDecoration(
+          color: isDark ? VanixColors.darkSecond : VanixColors.bgCard,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: isDark ? VanixColors.darkBorder : VanixColors.border),
+        ),
         child: Column(
           children: [
-            Text(value, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: ink)),
+            Text(value, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: textColor)),
             const SizedBox(height: 2),
             Text(label,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: 9, fontWeight: FontWeight.w600, color: ink.withValues(alpha: 0.85))),
+                style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w600, color: VanixColors.textHint)),
           ],
         ),
       ),
