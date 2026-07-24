@@ -844,6 +844,13 @@ class _EventsScreenState extends State<EventsScreen> {
     _openVetSheet((vetName) => setState(() { _freshCowVetName = vetName; _freshCow = _VetFlowState.requested; widget.appState.resolveEvent(); }));
   }
 
+  // Heat's "Call vet"/"Continue" buttons open the shared dark sheet directly
+  // (skips the old inline-'vet'-stage render entirely) — picking a vet fills
+  // the technician field and advances straight to the insemination form.
+  void _openHeatVetSheet() {
+    _openVetSheet((vetName) => setState(() { _heatTechCtrl.text = vetName; _heatFormStage = 'form'; }));
+  }
+
   Widget _vetRequestedMessage(String context, String vetName) {
     return Padding(
       padding: const EdgeInsets.only(top: 12),
