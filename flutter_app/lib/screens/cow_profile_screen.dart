@@ -598,34 +598,69 @@ class _CowProfileScreenState extends State<CowProfileScreen> {
   // into its own tab). ──
   String _actlogDateKey(DateTime d) => '${d.year}-${d.month}-${d.day}';
 
+  // 7 days, today first, going back — matches actlogDayChips() in
+  // vanix_screens_preview.html exactly (today selected by default).
   List<DateTime> get _actlogChips {
     const today = 20; // fixed "today" reference (2026-07-20) per CLAUDE.md currentDate
-    return List.generate(14, (i) => DateTime(2026, 7, today - 13 + i));
+    return List.generate(7, (i) => DateTime(2026, 7, today - i));
   }
 
-  List<(String action, Color color, Color bg, IconData icon, String duration, String start)> _actlogRowsFor(DateTime d) {
+  // Mirrors cowActlogCards() — 4 activity-type sections, each expandable,
+  // showing merged time-range intervals (no per-row icon, matching HTML).
+  static const List<(String key, String labelKey, Color color)> _actlogActivities = [
+    ('standing', 'actStanding', Color(0xFF2563EB)),
+    ('resting', 'actResting', Color(0xFF7C3AED)),
+    ('feeding', 'actFeeding', VanixColors.warning),
+    ('rumination', 'actRumination', VanixColors.greenInk),
+  ];
+
+  List<(String action, String start)> _actlogRowsFor(DateTime d) {
     final seed = _hashStr(_actlogDateKey(d));
-    const actions = <(String, Color, Color, IconData)>[
-      ('Resting', Color(0xFF7C3AED), Color(0x1F7C3AED), Icons.bed_outlined),
-      ('Feeding', VanixColors.warning, Color(0x24E8A020), Icons.restaurant),
-      ('Ruminating', VanixColors.greenInk, VanixColors.activeBg, Icons.pets),
-      ('Standing', Color(0xFF2563EB), Color(0x1F2563EB), Icons.directions_walk),
-    ];
-    final rows = <(String, Color, Color, IconData, String, String)>[];
+    const actions = ['resting', 'feeding', 'rumination', 'standing'];
+    final rows = <(String, String)>[];
     var slot = 0, i = 0;
     while (slot < 24 * 60) {
       final pick = actions[(seed + i) % actions.length];
-      final h = slot ~/ 60, m = slot % 60;
-      rows.add((pick.$1, pick.$2, pick.$3, pick.$4, '30 min', '${h.toString().padLeft(2, '0')}:${m.toString().padLeft(2, '0')}'));
+      rows.add((pick, slot.toString()));
       slot += 30;
       i++;
     }
     return rows;
   }
 
+  String _actlogFormatTime(int min) {
+    final h = (min ~/ 60) % 24, m = min % 60;
+    return '${h.toString().padLeft(2, '0')}:${m.toString().padLeft(2, '0')}';
+  }
+
+  List<(int startMin, int endMin)> _actlogIntervalsFor(DateTime d, String activityKey) {
+    final rows = _actlogRowsFor(d);
+    final out = <(int, int)>[];
+    (int, int)? cur;
+    for (final r in rows) {
+      final startMin = int.parse(r.$2);
+      if (r.$1 != activityKey) {
+        if (cur != null) {
+          out.add(cur);
+          cur = null;
+        }
+        continue;
+      }
+      if (cur != null && cur.$2 == startMin) {
+        cur = (cur.$1, cur.$2 + 30);
+      } else {
+        if (cur != null) out.add(cur);
+        cur = (startMin, startMin + 30);
+      }
+    }
+    if (cur != null) out.add(cur);
+    return out;
+  }
+
+  final Set<String> _actlogExpanded = {'standing'};
+
   Widget _buildActivity() {
-    _actlogSelected ??= _actlogChips.last;
-    final rows = _actlogRowsFor(_actlogSelected!);
+    _actlogSelected ??= _actlogChips.first;
     final textColor = _isDark ? Colors.white : VanixColors.textPrimary;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -645,24 +680,51 @@ class _CowProfileScreenState extends State<CowProfileScreen> {
           ),
         ),
         const SizedBox(height: VanixSpacing.sm),
-        for (final r in rows)
+        for (final act in _actlogActivities)
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            decoration: BoxDecoration(border: Border(bottom: BorderSide(color: _isDark ? VanixColors.darkBorder : VanixColors.border))),
-            child: Row(children: [
-              Container(width: 32, height: 32, decoration: BoxDecoration(color: r.$3, borderRadius: BorderRadius.circular(10)), child: Icon(r.$4, size: 16, color: r.$2)),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(r.$1, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: textColor)),
-                    const SizedBox(height: 2),
-                    Text('${r.$5} · ${r.$6}', style: const TextStyle(fontSize: 12, color: VanixColors.textHint)),
-                  ],
+            margin: const EdgeInsets.only(top: 10),
+            decoration: BoxDecoration(
+              color: _isDark ? VanixColors.darkSecond : VanixColors.bgCard,
+              border: Border.all(color: _isDark ? VanixColors.darkBorder : VanixColors.border),
+              borderRadius: BorderRadius.circular(VanixRadius.lg),
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                InkWell(
+                  onTap: () => setState(() {
+                    if (_actlogExpanded.contains(act.$1)) {
+                      _actlogExpanded.remove(act.$1);
+                    } else {
+                      _actlogExpanded.add(act.$1);
+                    }
+                  }),
+                  child: Padding(
+                    padding: const EdgeInsets.all(14),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(FS.t(_lang, act.$2), style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: textColor)),
+                        Icon(_actlogExpanded.contains(act.$1) ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, size: 18, color: VanixColors.textHint),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ]),
+                if (_actlogExpanded.contains(act.$1))
+                  for (final iv in _actlogIntervalsFor(_actlogSelected!, act.$1))
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                      decoration: BoxDecoration(border: Border(top: BorderSide(color: _isDark ? VanixColors.darkBorder : VanixColors.border))),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('${_actlogFormatTime(iv.$1)}–${_actlogFormatTime(iv.$2)}', style: TextStyle(fontSize: 13, color: textColor)),
+                        ],
+                      ),
+                    ),
+              ],
+            ),
           ),
       ],
     );
