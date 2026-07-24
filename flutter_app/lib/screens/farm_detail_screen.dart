@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import '../i18n/farm_strings.dart';
-import '../i18n/strings.dart';
 import '../models/farm_models.dart';
 import '../state/app_state.dart';
 import '../theme/vanix_theme.dart';
 import '../widgets/vanix_bottom_nav.dart';
-import '../widgets/vanix_nav_items.dart';
-import 'milk_log_screen.dart';
-import 'events_screen.dart';
-import 'account_screen.dart';
 import 'cow_profile_screen.dart';
 import 'groups_screen.dart';
 import 'add_cattle_screen.dart';
