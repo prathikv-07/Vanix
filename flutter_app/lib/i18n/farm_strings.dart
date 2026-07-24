@@ -124,6 +124,7 @@ class FS {
       'mgrNamePh': 'Manager name', 'confirmAssign': 'Confirm & assign', 'legalUpdated': 'Last Updated: July 1, 2026',
       // Add Cattle
       'cancelWord': 'Cancel', 'saveWord': 'Save', 'selectWord': 'Select', 'selectDate': 'Select date',
+      'resetFilters': 'Reset filters',
       'genderWord': 'Gender', 'yearsWord': 'Years', 'monthsWord': 'Months', 'optionalWord': '(optional)',
       'acSubPre': 'Add a new cow to', 'acPhotoLabel': 'Cow Photo', 'acPhotoHint': 'Upload a PNG / JPG of the cow',
       'acCattleType': 'Cattle Type', 'acTypeCow': 'Cow', 'acTypeHint': 'Cow · Sheep · Goat — non-cow health scoring is flagged.',
