@@ -1503,31 +1503,31 @@ class _ActionsSheetState extends State<_ActionsSheet> {
     // "Request a vet visit". The statusList/statusNote flow code below is
     // left in place (unreferenced) — matches vanix_screens_preview.html
     // leaving its viewStatusList/statusNote view functions unused too.
-    final items = <(String, VoidCallback)>[
-      (_t('reqVetVisit'), () { _flow = 'visit'; _go('vetPick'); }),
-      (_t('addVetLog'), () { _flow = 'vetlog'; _attach = false; _go('vetPick'); }),
-      (_t('addIllness'), () => _go('illnessNote')),
-      (_t('addHeat'), () => _go('heatConfirm')),
-      (_t('addInsem'), () { _flow = 'insem'; _go('vetPick'); }),
-      (_t('addPreg'), () => _go('pregConfirm')),
-      (_t('addDelivery'), () => _go('deliveryConfirm')),
-      (_t('addVaccination'), () => _go('vaccineType')),
+    final items = <(IconData, String, VoidCallback)>[
+      (Icons.medical_services_outlined, _t('reqVetVisit'), () { _flow = 'visit'; _go('vetPick'); }),
+      (Icons.description_outlined, _t('addVetLog'), () { _flow = 'vetlog'; _attach = false; _go('vetPick'); }),
+      (Icons.sick_outlined, _t('addIllness'), () => _go('illnessNote')),
+      (Icons.favorite_border, _t('addHeat'), () => _go('heatConfirm')),
+      (Icons.colorize_outlined, _t('addInsem'), () { _flow = 'insem'; _go('vetPick'); }),
+      (Icons.pregnant_woman_outlined, _t('addPreg'), () => _go('pregConfirm')),
+      (Icons.child_friendly_outlined, _t('addDelivery'), () => _go('deliveryConfirm')),
+      (Icons.vaccines_outlined, _t('addVaccination'), () => _go('vaccineType')),
     ];
     return Column(
       children: [
         for (final it in items)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: InkWell(
-              onTap: it.$2,
-              borderRadius: BorderRadius.circular(14),
-              child: Container(
-                constraints: const BoxConstraints(minHeight: 48),
-                alignment: AlignmentDirectional.centerStart,
-                padding: const EdgeInsets.symmetric(horizontal: 14),
-                decoration: BoxDecoration(color: _fieldBg, borderRadius: BorderRadius.circular(14), border: Border.all(color: _border)),
-                child: Text(it.$1, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: _text1)),
-              ),
+          InkWell(
+            onTap: it.$3,
+            borderRadius: BorderRadius.circular(VanixRadius.md),
+            child: Container(
+              constraints: const BoxConstraints(minHeight: 48),
+              padding: const EdgeInsetsDirectional.symmetric(vertical: 6),
+              child: Row(children: [
+                Icon(it.$1, size: 20, color: VanixColors.greenInk),
+                const SizedBox(width: VanixSpacing.md),
+                Expanded(child: Text(it.$2, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: _text1))),
+                const Icon(Icons.chevron_right, size: 18, color: VanixColors.textHint),
+              ]),
             ),
           ),
       ],
