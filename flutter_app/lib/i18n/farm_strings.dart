@@ -81,6 +81,7 @@ class FS {
       'milkDataReadonly': 'Read-only — log or edit entries in the Milk tab.',
       'cowActions': 'Actions', 'changeStatus': 'Change status', 'reqVetVisit': 'Request a vet visit',
       'addVetLog': 'Add vet log', 'addDelivery': 'Add Delivery',
+      'addIllness': 'Add Illness', 'illnessNoteTitle': 'What symptoms is she showing?', 'illnessNotePh': 'Describe the illness (required)', 'illnessLogged': 'Illness logged',
       'addHeat': 'Add Heat', 'addInsem': 'Add Insemination', 'addPreg': 'Add Pregnancy',
       'stInHeat': 'In heat', 'stInsem': 'Inseminated', 'stPreg': 'Pregnant', 'stDelivered': 'Delivered',
       'stCalvInt': 'Calving Interval', 'stMilking': 'Milking', 'stDry': 'Dry State',
