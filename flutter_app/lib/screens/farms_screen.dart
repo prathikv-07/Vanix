@@ -272,25 +272,47 @@ class _StatTile extends StatelessWidget {
 
 // ── Filter button ───────────────────────────────────────────
 
+// Mirrors `.fs-trigger-dot` — a small greenInk dot overlaid on the filter
+// button once any filter (status or location) is active.
 class _FilterButton extends StatelessWidget {
   final bool isDark;
+  final bool active;
   final VoidCallback onTap;
-  const _FilterButton({required this.isDark, required this.onTap});
+  const _FilterButton({required this.isDark, required this.active, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
-      child: Container(
-        width: 48,
-        height: 48,
-        decoration: BoxDecoration(
-          color: isDark ? VanixColors.darkSecond : VanixColors.bgCard,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: isDark ? VanixColors.darkBorder : VanixColors.border),
-        ),
-        child: Icon(Icons.filter_list, size: 20, color: isDark ? Colors.white : VanixColors.textPrimary),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: isDark ? VanixColors.darkSecond : VanixColors.bgCard,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: isDark ? VanixColors.darkBorder : VanixColors.border),
+            ),
+            child: Icon(Icons.filter_list, size: 20, color: isDark ? Colors.white : VanixColors.textPrimary),
+          ),
+          if (active)
+            PositionedDirectional(
+              top: -2,
+              end: -2,
+              child: Container(
+                width: 10,
+                height: 10,
+                decoration: BoxDecoration(
+                  color: VanixColors.greenInk,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: isDark ? const Color(0xFF121212) : VanixColors.bgWarm, width: 2),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }
