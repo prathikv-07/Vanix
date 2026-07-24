@@ -1098,6 +1098,68 @@ class _EventsScreenState extends State<EventsScreen> {
     );
   }
 
+  // Post-Yes full-bleed body for the Heat card — segmented window bar +
+  // whatever the current _heatFormStage needs (Start Insemination button /
+  // outside-window confirm / vet picker / method+technician form). Keeps
+  // the card full-bleed (photoTitleOverride "Insemination window") instead
+  // of collapsing to the contained layout once answered.
+  Widget _heatEvolvingBody(double h, String label, Color color, bool isDark) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(label, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: color)),
+        const SizedBox(height: 6),
+        _HeatWindowBar(simHours: h, fillColor: color),
+        const SizedBox(height: 10),
+        if (_heatFormStage == 'idle')
+          SizedBox(
+            width: double.infinity,
+            height: 52,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: VanixColors.greenInk, foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14))),
+              onPressed: () => setState(() => _heatFormStage = (h >= 6 && h < 18) ? 'vet' : 'confirm'),
+              child: const Text('Start Insemination', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+            ),
+          )
+        else if (_heatFormStage == 'confirm') ...[
+          const Text("You're outside the optimal window (best results 6–18h after detection). Continue anyway?", style: TextStyle(fontSize: 12, height: 1.5, color: Color(0xE6FFFFFF))),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(backgroundColor: Colors.white.withValues(alpha: 0.12), foregroundColor: Colors.white, side: const BorderSide(color: Color(0x80FFFFFF))),
+                  onPressed: () => setState(() => _heatFormStage = 'idle'),
+                  child: const Text('Cancel'),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                flex: 2,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: VanixColors.greenInk, foregroundColor: Colors.white),
+                  onPressed: () => setState(() => _heatFormStage = 'vet'),
+                  child: const Text('Continue'),
+                ),
+              ),
+            ],
+          ),
+        ] else if (_heatFormStage == 'vet')
+          _vetPicker((vetName) => setState(() { _heatTechCtrl.text = vetName; _heatFormStage = 'form'; }))
+        else ...[
+          const Text('Log insemination', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.white)),
+          const SizedBox(height: 6),
+          _inseminationMethodGrid(_heatMethod, (m) => setState(() => _heatMethod = m), isDark: isDark),
+          const SizedBox(height: 8),
+          TextField(controller: _heatTechCtrl, style: const TextStyle(color: Colors.black), decoration: const InputDecoration(hintText: 'Technician / vet name (optional)')),
+          const SizedBox(height: 8),
+          SizedBox(width: double.infinity, height: 52, child: ElevatedButton(onPressed: () => setState(() { _heat = _HeatState.logged; widget.appState.resolveEvent(); }), child: const Text('Log insemination'))),
+        ],
+      ],
+    );
+  }
+
   // ── P1: Pregnancy check due ──
   Widget _buildPregCard(bool isDark) {
     const manager = 'Suresh Yadav';
