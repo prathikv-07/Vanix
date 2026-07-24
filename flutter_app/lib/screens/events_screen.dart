@@ -2953,6 +2953,22 @@ class _FullCycleSheetState extends State<_FullCycleSheet> {
     setState(() => _step = step);
   }
 
+  // Opens the shared dark "Call a vet" sheet instead of the old inline
+  // 'vet'-stage widget — matches the real card's fix (events_screen's
+  // _openHeatVetSheet) so the walkthrough's full-bleed card never overlaps
+  // a light inline picker on top of the photo.
+  void _openHeatVetSheet() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: const Color(0xFF1C1C1C),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (sheetContext) => _VetPickerSheet(onSent: (v) {
+        Navigator.of(sheetContext).pop();
+        setState(() => _heatFormStage = 'form');
+      }),
+    );
+  }
+
   int get _stepNumber {
     switch (_step) {
       case _SeqStep.heat: return 1;
