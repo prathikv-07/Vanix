@@ -11,9 +11,13 @@ List<VanixNavItem> buildVanixNavItems(VanixStrings t, AppState appState) {
   final count = appState.openEventsCount;
   return [
     VanixNavItem(icon: Icons.home_outlined, label: t.navHome, showDot: count > 0),
-    // Farms — custom cow-head line icon (no Material equivalent), matching the
-    // stroke SVG in prototype.html's nav.
-    VanixNavItem(iconBuilder: (color) => CowHeadIcon(color: color, size: 20), label: t.navFarms),
+    // Farms — the village/buildings glyph (assets/images/Farm_Icon.svg),
+    // matching the `fill="currentColor"` SVG in prototype.html's nav
+    // (viewBox 483.312×483.312) — not a cow-head icon.
+    VanixNavItem(
+      iconBuilder: (color) => SvgPicture.asset('assets/images/Farm_Icon.svg', width: 20, height: 20, colorFilter: ColorFilter.mode(color, BlendMode.srcIn)),
+      label: t.navFarms,
+    ),
     VanixNavItem(icon: Icons.water_drop_outlined, label: t.navMilk),
     VanixNavItem(icon: Icons.calendar_today_outlined, label: t.navEvents, badgeCount: count),
     // Plain person silhouette (head + shoulders, no outer ring) — matches the
