@@ -1113,31 +1113,38 @@ class _CattleFilterSheetState extends State<_CattleFilterSheet> {
   Widget build(BuildContext context) {
     final isDark = widget.isDark;
     final bg = isDark ? VanixColors.darkSecond : Colors.white;
-    final railBg = isDark ? VanixColors.darkPrimary : VanixColors.bgWarm;
+    final railBg = isDark ? const Color(0xFF1E1E1E) : VanixColors.bgCard;
+    final paneBg = isDark ? const Color(0xFF1E1E1E) : Colors.white;
     final textColor = isDark ? Colors.white : VanixColors.textPrimary;
 
     return Container(
       decoration: BoxDecoration(color: bg, borderRadius: const BorderRadius.vertical(top: Radius.circular(24))),
-      padding: const EdgeInsetsDirectional.fromSTEB(24, 8, 24, 28),
+      padding: const EdgeInsetsDirectional.fromSTEB(24, 0, 24, 12),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(width: 36, height: 4, margin: const EdgeInsets.only(top: 6), decoration: BoxDecoration(color: VanixColors.greenInk, borderRadius: BorderRadius.circular(2))),
+          Container(width: 36, height: 4, margin: const EdgeInsets.only(top: 8, bottom: 2), decoration: BoxDecoration(color: VanixColors.border, borderRadius: BorderRadius.circular(2))),
           Padding(
-            padding: const EdgeInsets.only(top: 12),
+            padding: const EdgeInsets.only(top: 10),
             child: Row(
               children: [
                 Expanded(child: Text(t('filterWord'), style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: textColor))),
-                IconButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  icon: Icon(Icons.close, size: 16, color: isDark ? const Color(0xA6FFFFFF) : VanixColors.textHint),
+                TextButton(
+                  onPressed: () => setState(() {
+                    _status = 'all';
+                    _breed = 'all';
+                    _age = 'all';
+                  }),
+                  style: TextButton.styleFrom(padding: EdgeInsets.zero, minimumSize: const Size(0, 32), foregroundColor: VanixColors.greenInk),
+                  child: Text(t('resetFilters'), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 14),
-          SizedBox(
+          Container(
+            margin: const EdgeInsets.only(top: 14),
             height: 260,
+            decoration: BoxDecoration(border: Border(top: BorderSide(color: isDark ? VanixColors.darkDivider : VanixColors.divider), bottom: BorderSide(color: isDark ? VanixColors.darkDivider : VanixColors.divider))),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -1146,23 +1153,23 @@ class _CattleFilterSheetState extends State<_CattleFilterSheet> {
                   color: railBg,
                   child: Column(
                     children: [
-                      _railTab(t('statusWord'), 0, isDark),
-                      _railTab(t('breedWord'), 1, isDark),
-                      _railTab(t('ageWord'), 2, isDark),
+                      _railTab(t('statusWord'), 0, isDark, _status != 'all'),
+                      _railTab(t('breedWord'), 1, isDark, _breed != 'all'),
+                      _railTab(t('ageWord'), 2, isDark, _age != 'all'),
                     ],
                   ),
                 ),
                 Expanded(
                   child: Container(
-                    color: isDark ? VanixColors.darkSubSurface : VanixColors.bgWarm,
-                    padding: const EdgeInsets.all(12),
+                    color: paneBg,
+                    padding: const EdgeInsetsDirectional.symmetric(horizontal: 20, vertical: 12),
                     child: _pane(isDark),
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 14),
           SizedBox(
             width: double.infinity,
             height: 52,
@@ -1175,27 +1182,36 @@ class _CattleFilterSheetState extends State<_CattleFilterSheet> {
               child: Text(t('applyFilters')),
             ),
           ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            style: TextButton.styleFrom(minimumSize: const Size(double.infinity, 44), foregroundColor: VanixColors.textHint),
+            child: Text(t('cancelWord'), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+          ),
         ],
       ),
     );
   }
 
-  Widget _railTab(String label, int idx, bool isDark) {
+  // Mirrors `.s7-cat` — transparent bg, 5px start border + rail-dot when
+  // active/filtered, bottom divider between rows (see farms_screen.dart's
+  // `_CatTab` for the identical pattern).
+  Widget _railTab(String label, int idx, bool isDark, bool filtered) {
     final active = _cat == idx;
-    final activeColor = isDark ? VanixColors.textOnDarkDim : Colors.white;
     final textColor = isDark ? Colors.white : VanixColors.textPrimary;
     return InkWell(
       onTap: () => setState(() => _cat = idx),
       child: Container(
         width: double.infinity,
-        constraints: const BoxConstraints(minHeight: 44),
-        alignment: AlignmentDirectional.centerStart,
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-        decoration: BoxDecoration(
-          color: active ? activeColor : Colors.transparent,
-          border: active ? const BorderDirectional(start: BorderSide(color: VanixColors.greenInk, width: 3)) : null,
+        constraints: const BoxConstraints(minHeight: 48),
+        padding: const EdgeInsetsDirectional.symmetric(horizontal: 14, vertical: 14),
+        decoration: BoxDecoration(border: Border(bottom: BorderSide(color: isDark ? VanixColors.darkDivider : VanixColors.divider))),
+        child: Row(
+          children: [
+            Container(width: 5, height: 20, margin: const EdgeInsetsDirectional.only(end: 9), color: active ? VanixColors.greenInk : Colors.transparent),
+            Expanded(child: Text(label, style: TextStyle(fontSize: 13, fontWeight: active ? FontWeight.w700 : FontWeight.w500, color: active ? VanixColors.greenInk : textColor))),
+            if (filtered) Container(width: 7, height: 7, decoration: const BoxDecoration(color: VanixColors.greenInk, shape: BoxShape.circle)),
+          ],
         ),
-        child: Text(label, style: TextStyle(fontSize: 13, fontWeight: active ? FontWeight.w600 : FontWeight.w400, color: active && isDark ? VanixColors.darkPrimary : textColor)),
       ),
     );
   }
@@ -1203,7 +1219,7 @@ class _CattleFilterSheetState extends State<_CattleFilterSheet> {
   Widget _pane(bool isDark) {
     switch (_cat) {
       case 0:
-        return _chipList([
+        return _optList([
           _Opt('all', t('allWord')),
           _Opt('Milking', t('statusMilking')),
           _Opt('Pregnant', t('statusPregnant')),
@@ -1211,7 +1227,7 @@ class _CattleFilterSheetState extends State<_CattleFilterSheet> {
           _Opt('Fever', t('cattleFever')),
         ], _status, (v) => setState(() => _status = v), isDark);
       case 1:
-        return _chipList([
+        return _optList([
           _Opt('all', t('allWord')),
           _Opt('Jersey', t('breedJersey')),
           const _Opt('HF Cross', 'HF Cross'),
@@ -1221,7 +1237,7 @@ class _CattleFilterSheetState extends State<_CattleFilterSheet> {
           _Opt('Desi', t('breedDesi')),
         ], _breed, (v) => setState(() => _breed = v), isDark);
       default:
-        return _chipList([
+        return _optList([
           _Opt('all', t('allWord')),
           _Opt('u2', t('ageUnder2')),
           _Opt('2to4', t('age2to4')),
@@ -1230,39 +1246,37 @@ class _CattleFilterSheetState extends State<_CattleFilterSheet> {
     }
   }
 
-  Widget _chipList(List<_Opt> opts, String current, ValueChanged<String> onTap, bool isDark) {
-    final activeBg = isDark ? VanixColors.textOnDarkDim : VanixColors.greenInk;
-    final activeText = isDark ? VanixColors.darkPrimary : Colors.white;
-    final inactiveText = isDark ? Colors.white : VanixColors.textPrimary;
+  // Mirrors `.s7-chip` — boxless row, left-side 22px radio circle (filled
+  // greenInk with a white inset ring when selected), bold label when
+  // selected. Same visual language as farms_screen.dart's `_OptRow`.
+  Widget _optList(List<_Opt> opts, String current, ValueChanged<String> onTap, bool isDark) {
+    final borderCol = isDark ? VanixColors.darkBorder : VanixColors.border;
+    final textColor = isDark ? Colors.white : VanixColors.textPrimary;
     return ListView(
       children: [
         for (final o in opts)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: InkWell(
-              onTap: () => onTap(o.value),
-              borderRadius: BorderRadius.circular(12),
-              child: Container(
-                constraints: const BoxConstraints(minHeight: 44),
-                padding: const EdgeInsetsDirectional.symmetric(horizontal: 14),
-                decoration: BoxDecoration(
-                  color: current == o.value ? activeBg : Colors.transparent,
-                  border: current == o.value ? null : Border.all(color: isDark ? VanixColors.darkBorder : VanixColors.border),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  children: [
-                    Expanded(child: Text(o.label, style: TextStyle(fontSize: 13, color: current == o.value ? activeText : inactiveText))),
-                    if (current == o.value)
-                      Container(
-                        width: 18,
-                        height: 18,
-                        decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.white),
-                        alignment: Alignment.center,
-                        child: const Icon(Icons.check, size: 12, color: VanixColors.greenInk),
-                      ),
-                  ],
-                ),
+          InkWell(
+            onTap: () => onTap(o.value),
+            child: Container(
+              constraints: const BoxConstraints(minHeight: 48),
+              padding: const EdgeInsetsDirectional.symmetric(horizontal: 4),
+              child: Row(
+                children: [
+                  Container(
+                    width: 22,
+                    height: 22,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: current == o.value ? VanixColors.greenInk : borderCol, width: 2),
+                      color: current == o.value ? VanixColors.greenInk : Colors.transparent,
+                    ),
+                    child: current == o.value
+                        ? Container(margin: const EdgeInsets.all(4), decoration: BoxDecoration(shape: BoxShape.circle, color: isDark ? VanixColors.darkSecond : VanixColors.bgCard))
+                        : null,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(child: Text(o.label, style: TextStyle(fontSize: 14, fontWeight: current == o.value ? FontWeight.w600 : FontWeight.w500, color: textColor))),
+                ],
               ),
             ),
           ),
