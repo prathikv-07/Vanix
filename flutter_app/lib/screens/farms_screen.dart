@@ -251,19 +251,19 @@ class _StatTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final textColor = isDark ? Colors.white : VanixColors.textPrimary;
     return Container(
-      padding: const EdgeInsetsDirectional.symmetric(vertical: 12, horizontal: 6),
+      padding: const EdgeInsetsDirectional.symmetric(vertical: 14, horizontal: 8),
       decoration: BoxDecoration(
         color: isDark ? VanixColors.darkSecond : VanixColors.bgCard,
-        borderRadius: BorderRadius.circular(14),
-        boxShadow: isDark ? VanixShadow.cardDark : VanixShadow.card,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: isDark ? VanixColors.darkBorder : VanixColors.border),
       ),
       child: Column(
         children: [
-          Text(value, style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: textColor)),
-          const SizedBox(height: 3),
+          Text(value, style: TextStyle(fontSize: 26, fontWeight: FontWeight.w700, color: textColor)),
+          const SizedBox(height: 4),
           Text(label,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: VanixColors.textHint)),
+              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600, letterSpacing: 0.5, color: VanixColors.textHint)),
         ],
       ),
     );
