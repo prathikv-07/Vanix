@@ -85,6 +85,50 @@ class _CowHeadPainter extends CustomPainter {
   bool shouldRepaint(_CowHeadPainter old) => old.color != color;
 }
 
+/// Funnel/filter icon — matches the stroked polygon SVG used for every
+/// filter button app-wide: `<polygon points="22 3 2 3 10 12.46 10 19 14 21
+/// 14 12.46 22 3"/>` (viewBox 24×24). Not the Material `Icons.filter_list`
+/// glyph (three horizontal bars), which reads differently.
+class FunnelIcon extends StatelessWidget {
+  final Color color;
+  final double size;
+  const FunnelIcon({super.key, required this.color, this.size = 15});
+
+  @override
+  Widget build(BuildContext context) => CustomPaint(size: Size.square(size), painter: _FunnelPainter(color));
+}
+
+class _FunnelPainter extends CustomPainter {
+  final Color color;
+  _FunnelPainter(this.color);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final s = size.width / 24.0; // SVG viewBox is 24×24
+    canvas.save();
+    canvas.scale(s);
+    final stroke = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.2
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+    final path = Path()
+      ..moveTo(22, 3)
+      ..lineTo(2, 3)
+      ..lineTo(10, 12.46)
+      ..lineTo(10, 19)
+      ..lineTo(14, 21)
+      ..lineTo(14, 12.46)
+      ..close();
+    canvas.drawPath(path, stroke);
+    canvas.restore();
+  }
+
+  @override
+  bool shouldRepaint(_FunnelPainter old) => old.color != color;
+}
+
 /// The frosted floating nav bar with the sliding "droplet" capsule.
 /// Mirrors .vnav / .vcap / .vtab in vanix_screens.html:
 ///   - capsule slide: 0.6s cubic-bezier(0.32, 1.04, 0.36, 1)
