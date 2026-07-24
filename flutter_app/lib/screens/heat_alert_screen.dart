@@ -119,8 +119,25 @@ class _HeatAlertScreenState extends State<HeatAlertScreen> {
   }
 }
 
-extension _Let<T> on T {
-  R let<R>(R Function(T) f) => f(this);
+class _CircleBtn extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onTap;
+  const _CircleBtn({required this.icon, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(16),
+      onTap: onTap,
+      child: Container(
+        width: 32,
+        height: 32,
+        decoration: const BoxDecoration(color: Color(0x66000000), shape: BoxShape.circle),
+        alignment: Alignment.center,
+        child: Icon(icon, color: Colors.white, size: 16),
+      ),
+    );
+  }
 }
 
 class _ArrowButton extends StatelessWidget {
