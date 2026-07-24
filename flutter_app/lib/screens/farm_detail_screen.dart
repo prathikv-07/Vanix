@@ -83,7 +83,6 @@ final Map<String, _FdActMeta> _kFdActMeta = {
 };
 
 class _FarmDetailScreenState extends State<FarmDetailScreen> {
-  final int _navIndex = 1;
   final TextEditingController _search = TextEditingController();
 
   String _statusFilter = 'all';
