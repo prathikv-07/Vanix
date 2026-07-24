@@ -1042,7 +1042,7 @@
               </div>
 
               <button id="s1-continue" style="width:100%; height:52px; background:var(--greenink); color:#FFFFFF; border:none; border-radius:26px; font-size:16px; font-weight:600; font-family:var(--font-hi); margin-top:44px; cursor:pointer;">Continue</button>
-              <p data-k="loginConsent" style="font-size:11px; color:var(--text2); text-align:center; margin:14px 0 0; line-height:1.5;">By continuing you are accepting the privacy policy and terms and conditions</p>
+              <p style="font-size:11px; color:var(--text2); text-align:center; margin:14px 0 0; line-height:1.5;"><span data-k="loginConsentPre">By continuing you are accepting the</span> <span id="s1-privacy-link" data-k="rowPrivacy" style="font-weight:700; text-decoration:underline; cursor:pointer; color:var(--text1);">Privacy Policy</span> <span data-k="loginConsentAnd">and</span> <span id="s1-terms-link" data-k="rowTerms" style="font-weight:700; text-decoration:underline; cursor:pointer; color:var(--text1);">Terms and Conditions</span></p>
             </div>
 
             <!-- ── PANEL B: OTP (hidden until Continue) ── -->
@@ -3519,7 +3519,7 @@
         en:  { title:'Login', email:'EMAIL', cont:'Continue',
                vtitle:'Verification', sent:'OTP was sent to', desc:'Enter the code to log in securely to your account.',
                enterotp:'ENTER OTP', timer:'Time Remaining', nootp:"Didn't receive OTP?", resend:'Resend', confirm:'Confirm',
-               phEmail:'you@example.com', loginConsent:'By continuing you are accepting the privacy policy and terms and conditions',
+               phEmail:'you@example.com', loginConsentPre:'By continuing you are accepting the', loginConsentAnd:'and',
                navHome:'Home', navFarms:'Farms', navMilk:'Milk', navEvents:'Events', navAccount:'Account',
                sevCritical:'CRITICAL', sevHigh:'HIGH', sevMedium:'MEDIUM', sevLow:'LOW',
                farmsTitle:'Farms', wordFarmsShort:'Farms', wordCattleShort:'Cattle', wordAlertsShort:'Alerts', statTotalFarms:'Total\nFarms', statMilkToday:'Milk Today', statUnactionedAlerts:'Unactioned Alerts',
@@ -3602,7 +3602,7 @@
         hi:  { title:'लॉगिन', email:'ईमेल', cont:'जारी रखें',
                vtitle:'सत्यापन', sent:'OTP भेजा गया', desc:'अपने खाते में सुरक्षित लॉगिन के लिए कोड डालें।',
                enterotp:'OTP डालें', timer:'समय शेष', nootp:'OTP नहीं मिला?', resend:'फिर से भेजें', confirm:'पुष्टि करें',
-               phEmail:'अपना ईमेल डालें', loginConsent:'जारी रखकर आप गोपनीयता नीति और नियम व शर्तें स्वीकार करते हैं',
+               phEmail:'अपना ईमेल डालें', loginConsentPre:'जारी रखकर आप स्वीकार करते हैं', loginConsentAnd:'और',
                navHome:'होम', navFarms:'खेत', navMilk:'दूध', navEvents:'कार्यक्रम', navAccount:'खाता',
                sevCritical:'गंभीर', sevHigh:'उच्च', sevMedium:'मध्यम', sevLow:'कम',
                farmsTitle:'खेत', wordFarmsShort:'खेत', wordCattleShort:'पशु', wordAlertsShort:'चेतावनी', statTotalFarms:'कुल\nखेत', statMilkToday:'आज का दूध', statUnactionedAlerts:'अनसुलझी चेतावनी',
@@ -3685,7 +3685,7 @@
         bho: { title:'लॉगिन', email:'ईमेल', cont:'आगे बढ़ीं',
                vtitle:'सत्यापन', sent:'OTP भेजल गइल', desc:'आपन खाता में सुरक्षित लॉगिन खातिर कोड डालीं।',
                enterotp:'OTP डालीं', timer:'समय बाकी', nootp:'OTP ना मिलल?', resend:'फिर से भेजीं', confirm:'पुष्टि करीं',
-               phEmail:'आपन ईमेल डालीं', loginConsent:'जारी राखे पर रउरा गोपनीयता नीति आ नियम व शर्त स्वीकार करत बानी',
+               phEmail:'आपन ईमेल डालीं', loginConsentPre:'जारी राखे पर रउरा स्वीकार करत बानी', loginConsentAnd:'आ',
                navHome:'होम', navFarms:'खेत', navMilk:'दूध', navEvents:'कार्यक्रम', navAccount:'खाता',
                sevCritical:'गंभीर', sevHigh:'उच्च', sevMedium:'मध्यम', sevLow:'कम',
                farmsTitle:'खेत', wordFarmsShort:'खेत', wordCattleShort:'पशु', wordAlertsShort:'चेतावनी', statTotalFarms:'कुल\nखेत', statMilkToday:'आज के दूध', statUnactionedAlerts:'ना सुलझल चेतावनी',
@@ -8327,6 +8327,15 @@
           document.getElementById(btn.getAttribute('data-close')).style.display = 'none';
         });
       });
+      // Login screen — "Privacy Policy" / "Terms and Conditions" links open
+      // the same pages Account uses, with the existing .acct-back button
+      // closing them and returning here.
+      (function() {
+        var pv = document.getElementById('s1-privacy-link');
+        var tm = document.getElementById('s1-terms-link');
+        if (pv) pv.addEventListener('click', function() { document.getElementById('page-privacy').style.display = 'block'; });
+        if (tm) tm.addEventListener('click', function() { document.getElementById('page-terms').style.display = 'block'; });
+      })();
       // Contact Us -> mailto with support@vanix.com prefilled
       var acctContactRow = document.getElementById('acct-contact-row');
       if (acctContactRow) acctContactRow.addEventListener('click', function() {

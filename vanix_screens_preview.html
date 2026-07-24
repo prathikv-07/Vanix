@@ -1127,16 +1127,26 @@
         <!-- ── Layer stack (sits below status bar, fills rest of phone) ── -->
         <div id="flow-root" style="position:relative; flex:1; overflow:hidden;">
 
+          <!-- Fake device status bar — carrier/time/wifi/battery, purely cosmetic (login screen only) -->
+          <div style="position:absolute; top:0; left:0; right:0; height:calc(28px + env(safe-area-inset-top, 0px)); padding-top:env(safe-area-inset-top, 0px); z-index:6; display:flex; align-items:center; justify-content:space-between; padding-inline:22px; pointer-events:none;">
+            <span class="en" style="font-size:13px; font-weight:600; color:#FFFFFF;">9:41</span>
+            <div style="display:flex; align-items:center; gap:5px;">
+              <svg width="16" height="11" viewBox="0 0 16 11" fill="none"><rect x="0" y="7" width="3" height="4" rx="0.5" fill="#FFFFFF"/><rect x="4.5" y="5" width="3" height="6" rx="0.5" fill="#FFFFFF"/><rect x="9" y="3" width="3" height="8" rx="0.5" fill="#FFFFFF"/><rect x="13" y="0" width="3" height="11" rx="0.5" fill="#FFFFFF"/></svg>
+              <svg width="15" height="11" viewBox="0 0 24 18" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"><path d="M2 6.5a15 15 0 0 1 20 0"/><path d="M5.5 10.5a10 10 0 0 1 13 0"/><path d="M9 14.5a5 5 0 0 1 6 0"/><circle cx="12" cy="17.5" r="1" fill="#FFFFFF" stroke="none"/></svg>
+              <svg width="24" height="12" viewBox="0 0 24 12" fill="none"><rect x="0.5" y="0.5" width="20" height="11" rx="2.5" stroke="#FFFFFF" opacity="0.5"/><rect x="2" y="2" width="17" height="8" rx="1.3" fill="#FFFFFF"/><rect x="21.5" y="4" width="1.5" height="4" rx="0.7" fill="#FFFFFF" opacity="0.5"/></svg>
+            </div>
+          </div>
+
           <!-- LANGUAGE PILL — top-right over video -->
-          <button id="s1-lang" style="position:absolute; top:calc(16px + env(safe-area-inset-top, 0px)); right:14px; z-index:5; display:flex; align-items:center; gap:6px; height:30px; border-radius:15px; border:1px solid rgba(255,255,255,0.35); background:rgba(0,0,0,0.28); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); color:#FFFFFF; font-size:12px; font-weight:600; padding:0 12px; font-family:var(--font-hi); cursor:pointer;">
-            <span id="s1-lang-cur">English</span>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          <button id="s1-lang" style="position:absolute; top:calc(44px + env(safe-area-inset-top, 0px)); right:14px; z-index:5; display:flex; align-items:center; justify-content:center; gap:6px; height:30px; line-height:1; border-radius:15px; border:1px solid rgba(255,255,255,0.35); background:rgba(0,0,0,0.28); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); color:#FFFFFF; font-size:12px; font-weight:600; padding:0 12px; font-family:var(--font-hi); cursor:pointer;">
+            <span id="s1-lang-cur" style="line-height:1;">English</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="display:block; flex-shrink:0;"><path d="M6 9l6 6 6-6"/></svg>
           </button>
 
           <!-- PERSONA TOGGLE (Owner / Farmer) — demo control, top-left -->
-          <button id="s1-persona" title="Switch persona (demo)" style="position:absolute; top:calc(16px + env(safe-area-inset-top, 0px)); left:14px; z-index:5; height:30px; border-radius:15px; border:1px solid rgba(255,255,255,0.35); background:rgba(0,0,0,0.28); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); padding:0 12px; display:flex; align-items:center; gap:6px; color:#FFFFFF; font-size:12px; font-weight:600; font-family:var(--font-hi); cursor:pointer;">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg>
-            <span id="s1-persona-label">Owner</span>
+          <button id="s1-persona" title="Switch persona (demo)" style="position:absolute; top:calc(44px + env(safe-area-inset-top, 0px)); left:14px; z-index:5; height:30px; line-height:1; border-radius:15px; border:1px solid rgba(255,255,255,0.35); background:rgba(0,0,0,0.28); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); padding:0 12px; display:flex; align-items:center; justify-content:center; gap:6px; color:#FFFFFF; font-size:12px; font-weight:600; font-family:var(--font-hi); cursor:pointer;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block; flex-shrink:0;"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg>
+            <span id="s1-persona-label" style="line-height:1;">Owner</span>
           </button>
 
           <!-- VIDEO LAYER — fades in during transition -->
@@ -1162,7 +1172,7 @@
               </div>
 
               <button id="s1-continue" style="width:100%; height:52px; background:var(--greenink); color:#FFFFFF; border:none; border-radius:26px; font-size:16px; font-weight:600; font-family:var(--font-hi); margin-top:44px; cursor:pointer;">Continue</button>
-              <p data-k="loginConsent" style="font-size:11px; color:var(--text2); text-align:center; margin:14px 0 0; line-height:1.5;">By continuing you are accepting the privacy policy and terms and conditions</p>
+              <p style="font-size:11px; color:var(--text2); text-align:center; margin:14px 0 0; line-height:1.5;"><span data-k="loginConsentPre">By continuing you are accepting the</span> <span id="s1-privacy-link" data-k="rowPrivacy" style="font-weight:700; text-decoration:underline; cursor:pointer; color:var(--text1);">Privacy Policy</span> <span data-k="loginConsentAnd">and</span> <span id="s1-terms-link" data-k="rowTerms" style="font-weight:700; text-decoration:underline; cursor:pointer; color:var(--text1);">Terms and Conditions</span></p>
             </div>
 
             <!-- ── PANEL B: OTP (hidden until Continue) ── -->
@@ -3592,7 +3602,7 @@
 
       // Tap Login → logo rises to the hero spot + sheet slides up.
       function openLoginSheet() {
-        logo.style.transform = 'translate(-50%, calc(-50% - 340px)) scale(0.78)';
+        logo.style.transform = 'translate(-50%, calc(-50% - 300px)) scale(0.78)';
         if (landingBtn) { landingBtn.style.opacity = '0'; landingBtn.style.pointerEvents = 'none'; }
         sheet.style.transform = 'translateY(0)';
       }
@@ -3642,7 +3652,7 @@
         en:  { title:'Login', email:'EMAIL', cont:'Continue',
                vtitle:'Verification', sent:'OTP was sent to', desc:'Enter the code to log in securely to your account.',
                enterotp:'ENTER OTP', timer:'Time Remaining', nootp:"Didn't receive OTP?", resend:'Resend', confirm:'Confirm',
-               phEmail:'you@example.com', loginConsent:'By continuing you are accepting the privacy policy and terms and conditions',
+               phEmail:'you@example.com', loginConsentPre:'By continuing you are accepting the', loginConsentAnd:'and',
                navHome:'Home', navFarms:'Farms', navMilk:'Milk', navEvents:'Events', navAccount:'Account',
                sevCritical:'CRITICAL', sevHigh:'HIGH', sevMedium:'MEDIUM', sevLow:'LOW',
                farmsTitle:'Farms', wordFarmsShort:'Farms', wordCattleShort:'Cattle', wordAlertsShort:'Alerts', statTotalFarms:'Total\nFarms', statMilkToday:'Milk Today', statUnactionedAlerts:'Unactioned Alerts',
@@ -3725,7 +3735,7 @@
         hi:  { title:'लॉगिन', email:'ईमेल', cont:'जारी रखें',
                vtitle:'सत्यापन', sent:'OTP भेजा गया', desc:'अपने खाते में सुरक्षित लॉगिन के लिए कोड डालें।',
                enterotp:'OTP डालें', timer:'समय शेष', nootp:'OTP नहीं मिला?', resend:'फिर से भेजें', confirm:'पुष्टि करें',
-               phEmail:'अपना ईमेल डालें', loginConsent:'जारी रखकर आप गोपनीयता नीति और नियम व शर्तें स्वीकार करते हैं',
+               phEmail:'अपना ईमेल डालें', loginConsentPre:'जारी रखकर आप स्वीकार करते हैं', loginConsentAnd:'और',
                navHome:'होम', navFarms:'खेत', navMilk:'दूध', navEvents:'कार्यक्रम', navAccount:'खाता',
                sevCritical:'गंभीर', sevHigh:'उच्च', sevMedium:'मध्यम', sevLow:'कम',
                farmsTitle:'खेत', wordFarmsShort:'खेत', wordCattleShort:'पशु', wordAlertsShort:'चेतावनी', statTotalFarms:'कुल\nखेत', statMilkToday:'आज का दूध', statUnactionedAlerts:'अनसुलझी चेतावनी',
@@ -3808,7 +3818,7 @@
         bho: { title:'लॉगिन', email:'ईमेल', cont:'आगे बढ़ीं',
                vtitle:'सत्यापन', sent:'OTP भेजल गइल', desc:'आपन खाता में सुरक्षित लॉगिन खातिर कोड डालीं।',
                enterotp:'OTP डालीं', timer:'समय बाकी', nootp:'OTP ना मिलल?', resend:'फिर से भेजीं', confirm:'पुष्टि करीं',
-               phEmail:'आपन ईमेल डालीं', loginConsent:'जारी राखे पर रउरा गोपनीयता नीति आ नियम व शर्त स्वीकार करत बानी',
+               phEmail:'आपन ईमेल डालीं', loginConsentPre:'जारी राखे पर रउरा स्वीकार करत बानी', loginConsentAnd:'आ',
                navHome:'होम', navFarms:'खेत', navMilk:'दूध', navEvents:'कार्यक्रम', navAccount:'खाता',
                sevCritical:'गंभीर', sevHigh:'उच्च', sevMedium:'मध्यम', sevLow:'कम',
                farmsTitle:'खेत', wordFarmsShort:'खेत', wordCattleShort:'पशु', wordAlertsShort:'चेतावनी', statTotalFarms:'कुल\nखेत', statMilkToday:'आज के दूध', statUnactionedAlerts:'ना सुलझल चेतावनी',
