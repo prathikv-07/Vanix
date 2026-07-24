@@ -1431,6 +1431,7 @@ class _ActionsSheetState extends State<_ActionsSheet> {
     final items = <(IconData, String, VoidCallback)>[
       (Icons.medical_services_outlined, _t('reqVetVisit'), () { _flow = 'visit'; _go('vetPick'); }),
       (Icons.description_outlined, _t('addVetLog'), () { _flow = 'vetlog'; _attach = false; _go('vetPick'); }),
+      (Icons.sick_outlined, _t('addIllness'), () => _go('illnessNote')),
       (Icons.favorite_border, _t('addHeat'), () => _go('heatConfirm')),
       (Icons.colorize_outlined, _t('addInsem'), () { _flow = 'insem'; _go('vetPick'); }),
       (Icons.pregnant_woman_outlined, _t('addPreg'), () => _go('pregConfirm')),
