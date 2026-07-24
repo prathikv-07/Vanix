@@ -208,6 +208,24 @@ class EventsScreen extends StatefulWidget {
 
 class _EventsScreenState extends State<EventsScreen> {
   final int _navIndex = 3;
+  EventsFilter _filter = const EventsFilter();
+
+  // Whether a card matching [category]/[priority]/[farmKey]/[actioned]
+  // should show under the current filter selection. Mirrors the JS
+  // ev-fs filter-apply logic (wireFilterSheet) operating on real card data
+  // instead of DOM show/hide.
+  bool _cardVisible({required String category, required _Priority priority, required String farmKey, required bool actioned}) {
+    if (_filter.criticality != 'all') {
+      final crit = priority == _Priority.p0 ? 'critical' : (priority == _Priority.p1 ? 'medium' : 'low');
+      if (crit != _filter.criticality) return false;
+    }
+    if (_filter.status != 'all') {
+      if ((_filter.status == 'actioned') != actioned) return false;
+    }
+    if (_filter.categories.isNotEmpty && !_filter.categories.contains(category)) return false;
+    if (_filter.farms.isNotEmpty && !_filter.farms.contains(farmKey)) return false;
+    return true;
+  }
 
   // P0 — critical
   _VetFlowState _fever = _VetFlowState.initial;
