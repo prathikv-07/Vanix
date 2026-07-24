@@ -486,8 +486,6 @@ class _EntryCard extends StatelessWidget {
                         child: Text(entry.session.label, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: textColor)),
                       ),
                       const SizedBox(width: 8),
-                      Text(entry.time.format(context), style: const TextStyle(fontSize: 13, color: VanixColors.textHint)),
-                      const SizedBox(width: 8),
                       if (entry.onTime) const Icon(Icons.check, size: 14, color: VanixColors.greenInk) else const Icon(Icons.schedule, size: 14, color: VanixColors.warningInk),
                       if (entry.updated) ...[
                         const SizedBox(width: 8),
