@@ -2986,6 +2986,96 @@ class _FullCycleSheetState extends State<_FullCycleSheet> {
     );
   }
 
+  // Full-bleed photo card for the heat step's pre-Yes/No "ask" stage —
+  // mirrors .ev-photo-step.ask in vanix_screens.html: photo media, title +
+  // "20 min ago" time row, "Gauri · Desi" caption row, No/Yes buttons.
+  // Bleeds to the sheet's edges via negative margins matching the sheet's
+  // own 20/8/20 padding.
+  Widget _heatAskPhotoCard() {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(-20, -8, -20, 0),
+      clipBehavior: Clip.antiAlias,
+      decoration: const BoxDecoration(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      child: Stack(
+        children: [
+          AspectRatio(
+            aspectRatio: 3 / 4,
+            child: Image.asset(
+              'assets/images/cows/nandini.jpg',
+              fit: BoxFit.cover,
+              alignment: const Alignment(0, -0.5),
+              errorBuilder: (context, error, stack) => const ColoredBox(color: Color(0xFF0A2318)),
+            ),
+          ),
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.transparent, Colors.black.withValues(alpha: 0.15), Colors.black.withValues(alpha: 0.88)],
+                  stops: const [0.0, 0.4, 1.0],
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            left: 16,
+            right: 16,
+            bottom: 16,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Expanded(child: Text('Gauri in heat?', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Colors.white))),
+                    Text('20 min ago', style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.75))),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                const Text('Gauri · Desi', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Color(0xCCFFFFFF))),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          minimumSize: const Size.fromHeight(50),
+                          backgroundColor: Colors.white.withValues(alpha: 0.12),
+                          side: const BorderSide(color: Color(0x80FFFFFF)),
+                          foregroundColor: Colors.white,
+                        ),
+                        onPressed: () {
+                          _heatTimer?.cancel();
+                          setState(() {
+                            _interruptedMessage = 'Cycle interrupted — heat not confirmed. Closing walkthrough.';
+                            _step = _SeqStep.interrupted;
+                          });
+                        },
+                        child: const Text('No'),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      flex: 2,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(minimumSize: const Size.fromHeight(50), backgroundColor: VanixColors.greenDeep, foregroundColor: Colors.white),
+                        onPressed: () => setState(() => _heatConfirmed = true),
+                        child: const Text('Yes, in heat', style: TextStyle(fontWeight: FontWeight.w700)),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _heatStepBody(Color textColor, Color hintColor) {
     final h = _heatElapsedSimHours;
     String label;
