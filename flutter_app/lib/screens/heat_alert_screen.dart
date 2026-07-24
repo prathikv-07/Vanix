@@ -168,6 +168,10 @@ class _ArrowButton extends StatelessWidget {
   }
 }
 
+// Full-bleed real cow photo, dark top/bottom gradient scrim, bottom-anchored
+// title/name-breed-belt/farm-time caption + stacked Yes/No — mirrors
+// `imageMode = true` in prototype.html's FS_ALERTS carousel (the only
+// variant reachable — the avatar+graphs layout is dead code there).
 class _AlertCard extends StatelessWidget {
   final bool isDark;
   final _HeatAlertData data;
@@ -177,86 +181,75 @@ class _AlertCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Content fills the remaining height and centers; the action buttons stay
-    // pinned at the bottom of the screen for easy thumb reach.
-    return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(48, 8, 48, 4),
-      child: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-          Text('${data.farm} · detected ${data.time}', textAlign: TextAlign.center, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: isDark ? Colors.white.withValues(alpha: 0.75) : VanixColors.textHint)),
-          const SizedBox(height: 12),
-          Container(
-            width: 84,
-            height: 84,
-            decoration: BoxDecoration(color: VanixColors.warningBg, shape: BoxShape.circle, border: Border.all(color: VanixColors.warning, width: 2)),
-            alignment: Alignment.center,
-            child: const Text('🐄', style: TextStyle(fontSize: 36)),
-          ),
-          const SizedBox(height: 12),
-          Text('Heat cycle detected — ${data.name}', textAlign: TextAlign.center, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: isDark ? Colors.white : VanixColors.textPrimary)),
-          const SizedBox(height: 6),
-          Text(data.reason, textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: isDark ? Colors.white.withValues(alpha: 0.75) : VanixColors.textHint, height: 1.6)),
-          const SizedBox(height: 12),
-          GraphPanel(
-            isDark: isDark,
-            label: 'TEMPERATURE — LAST 10 READINGS',
-            footer: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('${data.temps.reduce((a, b) => a < b ? a : b).toStringAsFixed(1)}°C', style: TextStyle(fontSize: 10, color: isDark ? Colors.white.withValues(alpha: 0.6) : VanixColors.textHint)),
-                Text('${data.temps.reduce((a, b) => a > b ? a : b).toStringAsFixed(1)}°C', style: TextStyle(fontSize: 10, color: isDark ? Colors.white.withValues(alpha: 0.6) : VanixColors.textHint)),
+    final farmParts = data.farm.split(' · ');
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Image.asset(
+          'assets/images/cows/nandini.jpg',
+          fit: BoxFit.cover,
+          alignment: const Alignment(0, -0.6),
+          errorBuilder: (context, error, stack) => const ColoredBox(color: Color(0xFF0A2318)),
+        ),
+        const DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0x99000000), Color(0x47000000), Color(0x00000000),
+                Color(0x00000000), Color(0xBF000000), Color(0xF7000000),
               ],
-            ),
-            child: SizedBox(
-              height: 34,
-              width: double.infinity,
-              child: CustomPaint(painter: SparklinePainter(data.temps, highlightLast: true)),
+              stops: [0.0, 0.20, 0.42, 0.58, 0.78, 1.0],
             ),
           ),
-          const SizedBox(height: 8),
-          GraphPanel(
-            isDark: isDark,
-            label: 'MOVEMENT — ACTIVITY INDEX',
-            child: MovementBars(values: data.moves, highlightLast: true),
+        ),
+        Positioned(
+          left: 24,
+          right: 24,
+          bottom: 40,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Heat Cycle Detected', style: TextStyle(fontSize: 23, fontWeight: FontWeight.w800, color: Colors.white, letterSpacing: -0.2)),
+              const SizedBox(height: 6),
+              Text('${data.name} · ${data.breed} · ${farmParts.length > 1 ? farmParts[1] : ''}', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white)),
+              const SizedBox(height: 3),
+              Text('${farmParts.first} · detected ${data.time}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Color(0xCCFFFFFF))),
+              const SizedBox(height: 16),
+              if (decision != null)
+                Text('Acknowledged ✓ — ${data.name} marked ${decision == 'yes' ? 'in heat' : 'not in heat'}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: VanixColors.greenDeep))
+              else ...[
+                SizedBox(
+                  width: double.infinity,
+                  height: 52,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(backgroundColor: VanixColors.greenInk, foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(26))),
+                    onPressed: onYes,
+                    child: const Text('Yes, in heat', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700)),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor: Colors.white.withValues(alpha: 0.14),
+                      side: const BorderSide(color: Color(0x99FFFFFF), width: 1.5),
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                    ),
+                    onPressed: onNo,
+                    child: const Text('No', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+                  ),
+                ),
+              ],
+            ],
           ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 14),
-          if (decision != null)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: Text('Acknowledged ✓ — ${data.name} marked ${decision == 'yes' ? 'in heat' : 'not in heat'}', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: isDark ? VanixColors.greenDeep : VanixColors.greenInk)),
-            )
-          else ...[
-            SizedBox(
-              width: double.infinity,
-              height: 52,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(minimumSize: const Size.fromHeight(52), backgroundColor: VanixColors.greenDeep, foregroundColor: Colors.white),
-                onPressed: onYes,
-                child: const Text('Yes, in heat', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700)),
-              ),
-            ),
-            const SizedBox(height: 8),
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton(
-                style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(48), side: BorderSide(color: isDark ? Colors.white.withValues(alpha: 0.4) : VanixColors.border), foregroundColor: isDark ? Colors.white : VanixColors.textPrimary),
-                onPressed: onNo,
-                child: const Text('No'),
-              ),
-            ),
-            const SizedBox(height: 6),
-          ],
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
