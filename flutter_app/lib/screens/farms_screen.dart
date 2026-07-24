@@ -197,9 +197,12 @@ class _FarmsScreenState extends State<FarmsScreen> {
     );
   }
 
+  // Mirrors the `.m-hero` block in #page-farms: title, then straight into
+  // the 3 stat tiles — no subtitle, no activity ticker (both removed from
+  // the current HTML).
   Widget _buildHero(bool isDark, String lang, Color textColor, int totalFarms, int totalCattle, int totalAlerts) {
     return Container(
-      padding: const EdgeInsetsDirectional.fromSTEB(16, 20, 16, 18),
+      padding: const EdgeInsetsDirectional.fromSTEB(16, 18, 16, 18),
       decoration: BoxDecoration(
         color: isDark ? VanixColors.darkPrimary : VanixColors.bgWarm,
         borderRadius: const BorderRadius.vertical(bottom: Radius.circular(24)),
@@ -209,20 +212,16 @@ class _FarmsScreenState extends State<FarmsScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(FS.t(lang, 'farmsTitle'), style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: textColor)),
-          const SizedBox(height: 4),
-          Text(FS.t(lang, 'farmsSubtitle'), style: const TextStyle(fontSize: 13, color: VanixColors.textHint)),
-          const SizedBox(height: 18),
+          const SizedBox(height: 14),
           Row(
             children: [
-              Expanded(child: _StatTile(value: '$totalFarms', label: FS.t(lang, 'statTotalFarms'), isDark: isDark)),
-              const SizedBox(width: 10),
-              Expanded(child: _StatTile(value: '$totalCattle', label: FS.t(lang, 'statTotalCattle'), isDark: isDark)),
-              const SizedBox(width: 10),
-              Expanded(child: _StatTile(value: '$totalAlerts', label: FS.t(lang, 'statUnactionedAlerts'), isDark: isDark)),
+              Expanded(child: _StatTile(value: '$totalFarms', label: FS.t(lang, 'wordFarmsShort'), isDark: isDark)),
+              const SizedBox(width: 8),
+              Expanded(child: _StatTile(value: '$totalCattle', label: FS.t(lang, 'wordCattleShort'), isDark: isDark)),
+              const SizedBox(width: 8),
+              Expanded(child: _StatTile(value: '$totalAlerts', label: FS.t(lang, 'wordAlertsShort'), isDark: isDark)),
             ],
           ),
-          const SizedBox(height: 16),
-          _Ticker(controller: _tickerCtrl, lang: lang, isDark: isDark),
         ],
       ),
     );
