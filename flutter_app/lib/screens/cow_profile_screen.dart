@@ -785,17 +785,18 @@ class _CowProfileScreenState extends State<CowProfileScreen> {
       borderRadius: BorderRadius.circular(VanixRadius.lg),
       child: Stack(children: [
         _card(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Text(big, style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: textColor)),
-              const SizedBox(height: 4),
-              Text(FS.t(_lang, labelKey).toUpperCase(),
-                  style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.4, color: VanixColors.textHint)),
+              Text(big, textAlign: TextAlign.center, maxLines: 1, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: textColor)),
+              const SizedBox(height: 5),
+              Text(FS.t(_lang, labelKey), textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w700, letterSpacing: 0.2, height: 1.25, color: VanixColors.textHint)),
             ],
           ),
         ),
-        PositionedDirectional(start: 0, top: 0, bottom: 0, child: Container(width: 4, color: accent)),
+        PositionedDirectional(start: 0, top: 0, bottom: 0, child: Container(width: 3, color: accent)),
       ]),
     );
   }
