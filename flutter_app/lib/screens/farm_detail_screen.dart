@@ -473,10 +473,7 @@ class _FarmDetailScreenState extends State<FarmDetailScreen> {
         onSelected: (v) {
           switch (v) {
             case 'download':
-              _openReportPreview(critical: false);
-              break;
-            case 'download-critical':
-              _openReportPreview(critical: true);
+              _openReportTypeSheet();
               break;
             case 'share':
               _openShareWithVetSheet();
@@ -488,8 +485,12 @@ class _FarmDetailScreenState extends State<FarmDetailScreen> {
           }
         },
         itemBuilder: (_) => [
+          // Single "Download Report" item — opens the type-chooser sheet
+          // (Full/Critical); there's no separate "Download Critical
+          // Report" menu item any more, and no full-screen Report Preview
+          // page — both paths resolve to a toast. Mirrors
+          // openFarmRepType()/openFarmReportSheet() in prototype.html.
           PopupMenuItem(value: 'download', height: 40, child: Text(FS.t(_lang, 'downloadReport'), style: TextStyle(fontSize: 13, color: textColor))),
-          PopupMenuItem(value: 'download-critical', height: 40, child: Text(FS.t(_lang, 'downloadCriticalReport'), style: TextStyle(fontSize: 13, color: textColor))),
           PopupMenuItem(value: 'share', height: 40, child: Text(FS.t(_lang, 'shareReportVet'), style: TextStyle(fontSize: 13, color: textColor))),
           // Manage Farm — owner-only; Manager/Farmer personas manage their
           // own assigned farm day-to-day, not reassign its manager.
@@ -500,12 +501,135 @@ class _FarmDetailScreenState extends State<FarmDetailScreen> {
     );
   }
 
-  // Download Report / Download Critical Report -> full-screen Report Preview.
-  // Mirrors openReportPreview() in vanix_screens_preview.html.
-  void _openReportPreview({required bool critical}) {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (_) => ReportPreviewScreen(appState: widget.appState, farm: widget.farm, critical: critical),
-    ));
+  // "Download Report" -> type-chooser sheet (Full report / Critical
+  // report). Critical downloads immediately (toast, no period to pick);
+  // Full opens the period sheet. Mirrors openFarmRepType() +
+  // .farm-reptype-opt click handler in prototype.html.
+  void _openReportTypeSheet() {
+    final isDark = widget.appState.isDark;
+    final bg = isDark ? VanixColors.darkSecond : Colors.white;
+    final border = isDark ? VanixColors.darkBorder : VanixColors.border;
+    final text1 = isDark ? Colors.white : VanixColors.textPrimary;
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (sheetCtx) {
+        return Container(
+          decoration: BoxDecoration(color: bg, borderRadius: const BorderRadius.vertical(top: Radius.circular(24))),
+          padding: const EdgeInsets.fromLTRB(24, 8, 24, 28),
+          child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Center(child: Container(width: 36, height: 4, margin: const EdgeInsets.only(bottom: 10), decoration: BoxDecoration(color: border, borderRadius: BorderRadius.circular(2)))),
+            Text(FS.t(_lang, 'reportTypeTitle'), style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700, color: text1)),
+            const SizedBox(height: 4),
+            InkWell(
+              onTap: () {
+                Navigator.of(sheetCtx).pop();
+                _openReportPeriodSheet();
+              },
+              child: Container(
+                constraints: const BoxConstraints(minHeight: 48),
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                decoration: BoxDecoration(border: Border(bottom: BorderSide(color: isDark ? VanixColors.darkDivider : VanixColors.divider))),
+                alignment: AlignmentDirectional.centerStart,
+                child: Text(FS.t(_lang, 'fullReport'), style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: text1)),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.of(sheetCtx).pop();
+                _snack(FS.t(_lang, 'reportDownloaded'));
+              },
+              child: Container(
+                constraints: const BoxConstraints(minHeight: 48),
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                alignment: AlignmentDirectional.centerStart,
+                child: Text(FS.t(_lang, 'criticalReport'), style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: VanixColors.danger)),
+              ),
+            ),
+          ]),
+        );
+      },
+    );
+  }
+
+  // Full report -> "Report period" sheet (Today/This week/This month/
+  // Custom + date range) -> Download report button -> toast. Mirrors
+  // openFarmReportSheet() in prototype.html.
+  void _openReportPeriodSheet() {
+    final isDark = widget.appState.isDark;
+    final bg = isDark ? VanixColors.darkSecond : Colors.white;
+    final border = isDark ? VanixColors.darkBorder : VanixColors.border;
+    final text1 = isDark ? Colors.white : VanixColors.textPrimary;
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (sheetCtx) {
+        return StatefulBuilder(builder: (sheetCtx, setSheetState) {
+          var period = 'today';
+          DateTime? from, to;
+          return Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(sheetCtx).viewInsets.bottom),
+            child: Container(
+              decoration: BoxDecoration(color: bg, borderRadius: const BorderRadius.vertical(top: Radius.circular(24))),
+              padding: const EdgeInsets.fromLTRB(24, 8, 24, 28),
+              child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Center(child: Container(width: 36, height: 4, margin: const EdgeInsets.only(bottom: 10), decoration: BoxDecoration(color: border, borderRadius: BorderRadius.circular(2)))),
+                Text(FS.t(_lang, 'fdReportTitle') == FS.t(_lang, 'fdReportTitle') ? 'Report period' : '', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700, color: text1)),
+                const SizedBox(height: 4),
+                for (final p in const [('today', 'fdRangeToday'), ('week', 'fdRangeWeek'), ('month', 'fdRangeMonth'), ('custom', 'fdRangeCustom')])
+                  RadioListTile<String>(
+                    value: p.$1,
+                    groupValue: period,
+                    onChanged: (v) => setSheetState(() => period = v!),
+                    activeColor: VanixColors.greenInk,
+                    contentPadding: EdgeInsets.zero,
+                    dense: true,
+                    title: Text(FS.t(_lang, p.$2), style: TextStyle(fontSize: 14, color: text1)),
+                  ),
+                if (period == 'custom')
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Row(children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () async {
+                            final d = await showDatePicker(context: sheetCtx, initialDate: DateTime.now(), firstDate: DateTime(2020), lastDate: DateTime(2100));
+                            if (d != null) setSheetState(() => from = d);
+                          },
+                          child: Text(from == null ? FS.t(_lang, 'fdFrom') : '${from!.day}/${from!.month}/${from!.year}'),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () async {
+                            final d = await showDatePicker(context: sheetCtx, initialDate: DateTime.now(), firstDate: DateTime(2020), lastDate: DateTime(2100));
+                            if (d != null) setSheetState(() => to = d);
+                          },
+                          child: Text(to == null ? FS.t(_lang, 'fdTo') : '${to!.day}/${to!.month}/${to!.year}'),
+                        ),
+                      ),
+                    ]),
+                  ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(backgroundColor: VanixColors.greenInk, foregroundColor: Colors.white, minimumSize: const Size(0, 48)),
+                    onPressed: () {
+                      Navigator.of(sheetCtx).pop();
+                      _snack(FS.t(_lang, 'reportDownloaded'));
+                    },
+                    child: Text(FS.t(_lang, 'downloadReportBtn')),
+                  ),
+                ),
+              ]),
+            ),
+          );
+        });
+      },
+    );
   }
 
   // Share Report with vet -> vet picker sheet -> toast. Mirrors
