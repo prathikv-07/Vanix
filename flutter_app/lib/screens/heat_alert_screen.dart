@@ -141,22 +141,21 @@ class _CircleBtn extends StatelessWidget {
 }
 
 class _ArrowButton extends StatelessWidget {
-  final bool isDark;
   final IconData icon;
   final VoidCallback onTap;
-  const _ArrowButton({required this.isDark, required this.icon, required this.onTap});
+  const _ArrowButton({required this.icon, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(17),
       onTap: onTap,
       child: Container(
-        width: 32,
-        height: 32,
-        decoration: BoxDecoration(color: isDark ? Colors.white.withValues(alpha: 0.14) : Colors.black.withValues(alpha: 0.08), shape: BoxShape.circle),
+        width: 34,
+        height: 34,
+        decoration: const BoxDecoration(color: Color(0x66000000), shape: BoxShape.circle),
         alignment: Alignment.center,
-        child: Icon(icon, color: isDark ? Colors.white : VanixColors.textPrimary, size: 20),
+        child: const Icon(Icons.chevron_left, color: Colors.white, size: 20),
       ),
     );
   }
