@@ -119,10 +119,11 @@ ThemeData vanixLightTheme({String languageCode = 'hi'}) {
       hintStyle: VanixTextTheme.small.copyWith(color: VanixColors.textHint, fontSize: 13),
       contentPadding: const EdgeInsetsDirectional.symmetric(horizontal: VanixSpacing.lg, vertical: VanixSpacing.md),
       constraints: const BoxConstraints(minHeight: VanixSpacing.touch),
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(VanixRadius.md), borderSide: const BorderSide(color: VanixColors.border, width: 1.5)),
-      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(VanixRadius.md), borderSide: const BorderSide(color: VanixColors.border, width: 1.5)),
-      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(VanixRadius.md), borderSide: const BorderSide(color: VanixColors.greenDeep, width: 1.5)),
-      errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(VanixRadius.md), borderSide: const BorderSide(color: VanixColors.danger, width: 1.5)),
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(VanixRadius.md), borderSide: const BorderSide(color: VanixColors.border, width: 1)),
+      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(VanixRadius.md), borderSide: const BorderSide(color: VanixColors.border, width: 1)),
+      disabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(VanixRadius.md), borderSide: const BorderSide(color: VanixColors.border, width: 1)),
+      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(VanixRadius.md), borderSide: const BorderSide(color: VanixColors.greenDeep, width: 1)),
+      errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(VanixRadius.md), borderSide: const BorderSide(color: VanixColors.danger, width: 1)),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
