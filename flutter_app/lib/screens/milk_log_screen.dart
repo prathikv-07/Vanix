@@ -29,13 +29,6 @@ class MilkLogScreen extends StatefulWidget {
   State<MilkLogScreen> createState() => _MilkLogScreenState();
 }
 
-class _Banner {
-  final String title, sub;
-  final Color bg, border, ink;
-  bool dismissed = false;
-  _Banner(this.title, this.sub, this.bg, this.border, this.ink);
-}
-
 class _MilkLogScreenState extends State<MilkLogScreen> {
   final int _navIndex = 2;
   final DateTime _today = DateTime(2026, 7, 3);
@@ -43,11 +36,6 @@ class _MilkLogScreenState extends State<MilkLogScreen> {
   String _period = 'Today';
   MilkFilter _filter = const MilkFilter();
   bool _showSummary = false;
-
-  final List<_Banner> _banners = [
-    _Banner('3 cows below 7-day average', 'Kajri, Dhauli and Mohini need attention', VanixColors.warningBg, VanixColors.warning, VanixColors.warningInk),
-    _Banner('Morning session complete', 'All 18 assigned cows logged before 09:00', VanixColors.activeBg, VanixColors.greenDeep, VanixColors.greenInk),
-  ];
 
   @override
   void initState() {
