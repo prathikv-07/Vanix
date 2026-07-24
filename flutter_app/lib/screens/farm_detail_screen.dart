@@ -202,15 +202,9 @@ class _FarmDetailScreenState extends State<FarmDetailScreen> {
                     child: const Icon(Icons.add, color: Colors.white),
                   ),
                 ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: VanixBottomNav(
-                    isDark: isDark,
-                    selectedIndex: _navIndex,
-                    onTap: _onNavTap,
-                    items: buildVanixNavItems(t, widget.appState),
-                  ),
-                ),
+                // No bottom nav on Farm Detail — `#farm-detail-nav {
+                // display:none !important; }` in prototype.html; back
+                // chevron in the hero is the only way out.
               ],
             ),
           ),
