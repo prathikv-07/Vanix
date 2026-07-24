@@ -182,6 +182,8 @@ class FS {
       // Milk-edit approval
       'mpPendingApproval': 'Pending owner approval', 'mpEditTo': 'Edit to', 'mpDeleteEntry': 'Delete entry',
       'mpApprove': 'Approve', 'mpUpdated': 'Updated', 'mpBy': 'By',
+      // Home — AI Chat Bot banner
+      'aiChatComingSoon': 'AI Chat Bot — coming soon',
     },
     'hi': {
       'farmsTitle': 'खेत', 'farmsSubtitle': 'अपने सभी डेयरी फार्म एक जगह प्रबंधित करें',
