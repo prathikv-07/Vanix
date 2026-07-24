@@ -3098,18 +3098,24 @@ class _FullCycleSheetState extends State<_FullCycleSheet> {
   Widget _heatAskPhotoCard() {
     // Container forbids negative margins (asserts margin.isNonNegative), so
     // bleeding past the sheet's 20px side padding uses OverflowBox + a
-    // SizedBox pinned to the full device width instead.
+    // SizedBox pinned to the full device width instead. OverflowBox must be
+    // given an explicit finite height (minHeight/maxHeight) — otherwise it
+    // inherits the unbounded height from the scroll view above it and
+    // Flutter refuses to lay it out at all (renders blank).
+    const cardHeight = 420.0;
     return OverflowBox(
       minWidth: 0,
       maxWidth: MediaQuery.of(context).size.width,
+      minHeight: cardHeight,
+      maxHeight: cardHeight,
       child: SizedBox(
         width: MediaQuery.of(context).size.width,
+        height: cardHeight,
         child: ClipRRect(
       borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       child: Stack(
         children: [
-          AspectRatio(
-            aspectRatio: 3 / 4,
+          Positioned.fill(
             child: Image.asset(
               'assets/images/cows/nandini.jpg',
               fit: BoxFit.cover,
