@@ -141,7 +141,6 @@ class _FarmDetailScreenState extends State<FarmDetailScreen> {
       animation: widget.appState,
       builder: (context, _) {
         final isDark = widget.appState.isDark;
-        final t = VanixStrings.of(_lang);
         final theme = isDark ? vanixDarkTheme(languageCode: _lang) : vanixLightTheme(languageCode: _lang);
         return Theme(
           data: theme,
