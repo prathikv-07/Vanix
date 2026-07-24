@@ -393,7 +393,9 @@ class _CowProfileScreenState extends State<CowProfileScreen> {
 
   // ── Tab bar — underline tabs flush at the hero's bottom edge ────────────
   Widget _buildTabBar() {
-    final labels = ['tabTimeline', 'tabOverview', 'tabActivity', 'tabMilkData', 'tabVetLogs'];
+    // Order + default-active tab must match the HTML exactly: Overview is
+    // first/default (not Timeline).
+    final labels = ['tabOverview', 'tabTimeline', 'tabActivity', 'tabMilkData', 'tabVetLogs'];
     return Container(
       color: _isDark ? VanixColors.darkSecond : VanixColors.bgCard,
       child: Row(
