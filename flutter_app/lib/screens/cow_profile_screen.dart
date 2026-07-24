@@ -128,8 +128,11 @@ class _CowProfileScreenState extends State<CowProfileScreen> {
           padding: EdgeInsets.zero,
           children: [
             _buildHero(),
+            // Top padding tightened to 8 (was 16) — the HTML reduced the gap
+            // between the Timeline/Overview/Milk-Data/Vet-Logs tab bar and
+            // the content below it.
             Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(VanixSpacing.lg, VanixSpacing.lg, VanixSpacing.lg, 40),
+              padding: const EdgeInsetsDirectional.fromSTEB(VanixSpacing.lg, 8, VanixSpacing.lg, 40),
               child: _buildTabBody(),
             ),
           ],
