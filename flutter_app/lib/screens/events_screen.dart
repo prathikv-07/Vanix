@@ -10,6 +10,31 @@ import 'milk_log_screen.dart';
 import 'farms_screen.dart';
 import 'account_screen.dart';
 
+/// Events filter state — mirrors #ev-fs-sheet in vanix_screens.html: a
+/// single-select "Type" (all/needs-action/warnings/reminder), single-select
+/// "Criticality" (all/critical/medium/low) and "Status" (all/actioned/
+/// pending), and multi-select "Category" + "Farm" (empty set == "all").
+class EventsFilter {
+  final String type; // 'all' | 'action' | 'warn' | 'rem'
+  final String criticality; // 'all' | 'critical' | 'medium' | 'low'
+  final String status; // 'all' | 'actioned' | 'pending'
+  final Set<String> categories; // empty == all
+  final Set<String> farms; // empty == all
+  const EventsFilter({this.type = 'all', this.criticality = 'all', this.status = 'all', this.categories = const {}, this.farms = const {}});
+
+  bool get isDefault => type == 'all' && criticality == 'all' && status == 'all' && categories.isEmpty && farms.isEmpty;
+
+  EventsFilter copyWith({String? type, String? criticality, String? status, Set<String>? categories, Set<String>? farms}) {
+    return EventsFilter(
+      type: type ?? this.type,
+      criticality: criticality ?? this.criticality,
+      status: status ?? this.status,
+      categories: categories ?? this.categories,
+      farms: farms ?? this.farms,
+    );
+  }
+}
+
 /// Onboarded vets — contacting a vet is a pick, not a manual email entry.
 /// Mirrors ONBOARDED_VETS in vanix_screens.html.
 const List<String> kOnboardedVets = ['Dr. Sharma', 'Dr. Rao', 'Dr. Iyer'];
