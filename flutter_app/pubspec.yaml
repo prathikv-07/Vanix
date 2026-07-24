@@ -41,6 +41,11 @@ flutter:
     - assets/images/milking_started_photo.jpg
     - assets/images/milking_ended_photo.jpg
     - assets/images/gestation_photo.jpg
+    - assets/images/vetcheck1_photo.jpg
+    - assets/images/entermilking_photo.jpg
+    - assets/images/drystate_photo.jpg
+    - assets/images/delivered_photo.jpg
+    - assets/images/pregnant_photo.jpg
     - assets/images/cows/
 
   fonts:
