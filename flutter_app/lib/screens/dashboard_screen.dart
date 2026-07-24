@@ -325,8 +325,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   // ── Needs Attention: 3 tappable "View All" rows — Pending Approvals /
   // Milking Sessions Missed / Critical Alerts. The Today/This-week tab
   // row above it is `display:none` in the current HTML (Home r3), so it
-  // is intentionally NOT rendered here either — kept as dead state
-  // (_schTab) only in case it's ever un-hidden. Mirrors #dash-scroll's
+  // is intentionally not rendered here either. Mirrors #dash-scroll's
   // Needs Attention block. ──
   Widget _scheduleTabs() {
     return Column(
