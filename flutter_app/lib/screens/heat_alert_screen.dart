@@ -69,81 +69,58 @@ class _HeatAlertScreenState extends State<HeatAlertScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: widget.isDark
-              ? const LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [VanixColors.darkPrimary, VanixColors.darkSecond])
-              : null,
-          color: widget.isDark ? null : VanixColors.bgWarm,
-        ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    InkWell(
-                      borderRadius: BorderRadius.circular(16),
-                      onTap: () => Navigator.of(context).pop(null),
-                      child: Container(
-                        width: 32,
-                        height: 32,
-                        decoration: BoxDecoration(color: widget.isDark ? Colors.white.withValues(alpha: 0.14) : Colors.black.withValues(alpha: 0.08), shape: BoxShape.circle),
-                        alignment: Alignment.center,
-                        child: Icon(Icons.close, color: widget.isDark ? Colors.white : VanixColors.textPrimary, size: 16),
-                      ),
-                    ),
-                    Text('${_index + 1} of ${_kAlerts.length}', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: widget.isDark ? Colors.white.withValues(alpha: 0.75) : VanixColors.textHint)),
-                  ],
-                ),
+      backgroundColor: Colors.black,
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: PageView.builder(
+              controller: _pageCtrl,
+              itemCount: _kAlerts.length,
+              onPageChanged: (i) => setState(() => _index = i),
+              itemBuilder: (context, i) => _AlertCard(
+                isDark: widget.isDark,
+                data: _kAlerts[i],
+                decision: _decisions[i],
+                onYes: () => _action(i, 'yes'),
+                // "No" defers the decision to the in-app card — pop
+                // null so the caller opens the restricted sheet view.
+                onNo: () => Navigator.of(context).pop(null),
               ),
-              Expanded(
-                child: Stack(
-                  children: [
-                    PageView.builder(
-                      controller: _pageCtrl,
-                      itemCount: _kAlerts.length,
-                      onPageChanged: (i) => setState(() => _index = i),
-                      itemBuilder: (context, i) => _AlertCard(
-                        isDark: widget.isDark,
-                        data: _kAlerts[i],
-                        decision: _decisions[i],
-                        onYes: () => _action(i, 'yes'),
-                        // "No" defers the decision to the in-app card — pop
-                        // null so the caller opens the restricted sheet view.
-                        onNo: () => Navigator.of(context).pop(null),
-                      ),
-                    ),
-                    PositionedDirectional(
-                      start: 8,
-                      top: 0,
-                      bottom: 0,
-                      child: Center(child: _ArrowButton(isDark: widget.isDark, icon: Icons.chevron_left, onTap: () => _goTo(_index - 1))),
-                    ),
-                    PositionedDirectional(
-                      end: 8,
-                      top: 0,
-                      bottom: 0,
-                      child: Center(child: _ArrowButton(isDark: widget.isDark, icon: Icons.chevron_right, onTap: () => _goTo(_index + 1))),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 6, bottom: 10),
-                child: TextButton(
-                  onPressed: () => Navigator.of(context).pop(null),
-                  child: Text('View in app instead ›', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: widget.isDark ? VanixColors.greenDeep : VanixColors.greenInk)),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+          SafeArea(
+            child: Text('${_index + 1} of ${_kAlerts.length}',
+                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.white, shadows: [Shadow(color: Colors.black54, blurRadius: 4, offset: Offset(0, 1))])),
+          ).let((child) => Padding(padding: const EdgeInsets.only(left: 22, top: 4), child: child)),
+          SafeArea(
+            child: Align(
+              alignment: AlignmentDirectional.topEnd,
+              child: Padding(
+                padding: const EdgeInsetsDirectional.only(end: 18, top: 0),
+                child: _CircleBtn(icon: Icons.close, onTap: () => Navigator.of(context).pop(null)),
+              ),
+            ),
+          ),
+          Positioned(
+            left: 10,
+            top: 0,
+            bottom: 60,
+            child: Center(child: _ArrowButton(onTap: () => _goTo(_index - 1), icon: Icons.chevron_left)),
+          ),
+          Positioned(
+            right: 10,
+            top: 0,
+            bottom: 60,
+            child: Center(child: _ArrowButton(onTap: () => _goTo(_index + 1), icon: Icons.chevron_right)),
+          ),
+        ],
       ),
     );
   }
+}
+
+extension _Let<T> on T {
+  R let<R>(R Function(T) f) => f(this);
 }
 
 class _ArrowButton extends StatelessWidget {
