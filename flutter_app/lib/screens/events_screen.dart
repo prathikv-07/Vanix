@@ -2518,10 +2518,11 @@ class _ActionCard extends StatelessWidget {
       ),
     );
 
+    final hasOverride = photoTitleOverride != null && photoBodyOverride != null;
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
       child: SizedBox(
-        height: 300,
+        height: hasOverride ? 360 : 300,
         width: double.infinity,
         child: Stack(
           fit: StackFit.expand,
