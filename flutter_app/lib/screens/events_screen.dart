@@ -3096,10 +3096,16 @@ class _FullCycleSheetState extends State<_FullCycleSheet> {
   // Bleeds to the sheet's edges via negative margins matching the sheet's
   // own 20/8/20 padding.
   Widget _heatAskPhotoCard() {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(-20, -8, -20, 0),
-      clipBehavior: Clip.antiAlias,
-      decoration: const BoxDecoration(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+    // Container forbids negative margins (asserts margin.isNonNegative), so
+    // bleeding past the sheet's 20px side padding uses OverflowBox + a
+    // SizedBox pinned to the full device width instead.
+    return OverflowBox(
+      minWidth: 0,
+      maxWidth: MediaQuery.of(context).size.width,
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: ClipRRect(
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       child: Stack(
         children: [
           AspectRatio(
@@ -3211,10 +3217,16 @@ class _FullCycleSheetState extends State<_FullCycleSheet> {
   // plain white sheet. Bleeds to the sheet's edges the same way
   // _heatAskPhotoCard does.
   Widget _heatInseminationPhotoCard(double h, String label, Color color) {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(-20, -8, -20, 0),
-      clipBehavior: Clip.antiAlias,
-      decoration: const BoxDecoration(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+    // Container forbids negative margins (asserts margin.isNonNegative), so
+    // bleeding past the sheet's 20px side padding uses OverflowBox + a
+    // SizedBox pinned to the full device width instead.
+    return OverflowBox(
+      minWidth: 0,
+      maxWidth: MediaQuery.of(context).size.width,
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: ClipRRect(
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       child: Stack(
         children: [
           AspectRatio(
