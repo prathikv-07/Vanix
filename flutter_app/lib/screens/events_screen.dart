@@ -791,9 +791,27 @@ class _EventsScreenState extends State<EventsScreen> {
     }
   }
 
-  // shared onboarded-vet picker + send button (P0 cards)
+  // shared onboarded-vet picker + send button (P0 cards) — inline fallback,
+  // used only inside the dark modal sheet now (see _openVetSheet).
   Widget _vetPicker(ValueChanged<String> onSent) {
     return _VetPicker(onSent: onSent);
+  }
+
+  // Opens the shared dark "Call a vet" bottom sheet — mirrors #vet-picker
+  // sheet in vanix_screens.html (dark bg, checkmark rows, "Send request").
+  // Every P0 vet-request card (Fever/Abortion/Fresh-Cow) auto-opens this the
+  // moment the farmer taps Yes, instead of embedding the picker inline in
+  // the card body.
+  void _openVetSheet(ValueChanged<String> onSent) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: const Color(0xFF1C1C1C),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (sheetContext) => _VetPickerSheet(onSent: (v) {
+        Navigator.of(sheetContext).pop();
+        onSent(v);
+      }),
+    );
   }
 
   Widget _vetRequestedMessage(String context, String vetName) {
