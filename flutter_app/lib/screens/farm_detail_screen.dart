@@ -759,7 +759,14 @@ class _FarmDetailScreenState extends State<FarmDetailScreen> {
       if (!noGraph)
         for (final key in _fdActiveSet)
           _FdActLine(
-            points: (key == 'rumination' ? ruminationPts : _kFdActMeta[key]!.pts!).sublist(windowLo, windowHi + 1),
+            points: () {
+              final pts = key == 'rumination' ? ruminationPts : _kFdActMeta[key]!.pts!;
+              // windowHi can legitimately be 24 (activity ranges reach up to
+              // midnight, e.g. [20, 24]) but pts only has 24 hourly entries
+              // (indices 0..23) — clamp the exclusive end to pts.length so
+              // this never throws a RangeError.
+              return pts.sublist(windowLo, (windowHi + 1).clamp(0, pts.length));
+            }(),
             color: _kFdActMeta[key]!.color,
             anomalySegment: key == 'rumination' && anomalyDrawn ? const (13, 17) : null,
           ),
