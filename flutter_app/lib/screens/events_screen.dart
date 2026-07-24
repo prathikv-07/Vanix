@@ -394,7 +394,7 @@ class _EventsScreenState extends State<EventsScreen> {
                     ],
                   ),
                 ),
-                if (true)
+                if (_filter.type == 'all' || _filter.type == 'action')
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 18, 16, 0),
                     child: Column(
@@ -402,35 +402,56 @@ class _EventsScreenState extends State<EventsScreen> {
                       children: [
                         const _SectionLabel('Needs action'),
                         const SizedBox(height: 10),
-                        _buildFeverCard(isDark),
-                        const SizedBox(height: 10),
-                        _buildAbortCard(isDark),
-                        const SizedBox(height: 10),
-                        _buildFreshCowCard(isDark),
-                        const SizedBox(height: 10),
-                        _buildHeatCard(isDark),
-                        const SizedBox(height: 10),
-                        _buildPregCard(isDark),
-                        const SizedBox(height: 10),
-                        _buildGestationCard(isDark),
-                        const SizedBox(height: 10),
-                        if (_milkingNotifShown) ...[
+                        if (_cardVisible(category: 'Fever', priority: _Priority.p0, farmKey: 'greenvalley', actioned: _fever != _VetFlowState.initial)) ...[
+                          _buildFeverCard(isDark),
+                          const SizedBox(height: 10),
+                        ],
+                        if (_cardVisible(category: 'Pregnancy loss', priority: _Priority.p0, farmKey: 'sunrise', actioned: _abort != _VetFlowState.initial)) ...[
+                          _buildAbortCard(isDark),
+                          const SizedBox(height: 10),
+                        ],
+                        if (_cardVisible(category: 'Fresh cow', priority: _Priority.p0, farmKey: 'greenvalley', actioned: _freshCow != _VetFlowState.initial)) ...[
+                          _buildFreshCowCard(isDark),
+                          const SizedBox(height: 10),
+                        ],
+                        if (_cardVisible(category: 'Heat', priority: _Priority.p1, farmKey: 'greenvalley', actioned: _heat != _HeatState.initial)) ...[
+                          _buildHeatCard(isDark),
+                          const SizedBox(height: 10),
+                        ],
+                        if (_cardVisible(category: 'Pregnancy', priority: _Priority.p1, farmKey: 'sunrise', actioned: _preg != _PregState.initial)) ...[
+                          _buildPregCard(isDark),
+                          const SizedBox(height: 10),
+                        ],
+                        if (_cardVisible(category: 'Gestation', priority: _Priority.p1, farmKey: 'greenvalley', actioned: _gestation == _GestationState.delivered)) ...[
+                          _buildGestationCard(isDark),
+                          const SizedBox(height: 10),
+                        ],
+                        if (_milkingNotifShown && _cardVisible(category: 'Milking', priority: _Priority.p1, farmKey: 'greenvalley', actioned: _milkingNotif == _MilkingNotifState.added)) ...[
                           _buildMilkingNotifCard(isDark),
                           const SizedBox(height: 10),
                         ],
-                        _buildLactationCheckCard(isDark),
-                        const SizedBox(height: 10),
-                        _buildMastitisCard(isDark),
-                        const SizedBox(height: 10),
-                        _buildLamenessCard(isDark),
-                        const SizedBox(height: 10),
-                        _buildKetosisCard(isDark),
-                        const SizedBox(height: 10),
-                        _buildVaccinationCard(isDark),
+                        if (_cardVisible(category: 'Lactation', priority: _Priority.p1, farmKey: 'greenvalley', actioned: _lactationCheck == _LactationCheckState.resting)) ...[
+                          _buildLactationCheckCard(isDark),
+                          const SizedBox(height: 10),
+                        ],
+                        if (_cardVisible(category: 'Mastitis', priority: _Priority.p2, farmKey: 'greenvalley', actioned: _mastitis != _InspectState.initial)) ...[
+                          _buildMastitisCard(isDark),
+                          const SizedBox(height: 10),
+                        ],
+                        if (_cardVisible(category: 'Lameness', priority: _Priority.p2, farmKey: 'greenvalley', actioned: _lameness != _InspectState.initial)) ...[
+                          _buildLamenessCard(isDark),
+                          const SizedBox(height: 10),
+                        ],
+                        if (_cardVisible(category: 'Ketosis', priority: _Priority.p2, farmKey: 'greenvalley', actioned: _ketosis != _InspectState.initial)) ...[
+                          _buildKetosisCard(isDark),
+                          const SizedBox(height: 10),
+                        ],
+                        if (_cardVisible(category: 'Vaccination', priority: _Priority.p2, farmKey: 'greenvalley', actioned: _vaccination != _InspectState.initial))
+                          _buildVaccinationCard(isDark),
                       ],
                     ),
                   ),
-                if (true)
+                if (_filter.type == 'all' || _filter.type == 'warn')
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 18, 16, 0),
                     child: Column(
@@ -438,15 +459,20 @@ class _EventsScreenState extends State<EventsScreen> {
                       children: [
                         const _SectionLabel('Warnings'),
                         const SizedBox(height: 10),
-                        _buildProestrusCard(isDark),
-                        const SizedBox(height: 10),
-                        _buildHerdStressCard(isDark),
-                        const SizedBox(height: 10),
-                        _buildCalibCard(isDark),
+                        if (_cardVisible(category: 'Proestrus', priority: _Priority.p3, farmKey: 'greenvalley', actioned: _proestrus != _AckState.initial)) ...[
+                          _buildProestrusCard(isDark),
+                          const SizedBox(height: 10),
+                        ],
+                        if (_cardVisible(category: 'Heat stress', priority: _Priority.p3, farmKey: 'greenvalley', actioned: _herdStress != _AckState.initial)) ...[
+                          _buildHerdStressCard(isDark),
+                          const SizedBox(height: 10),
+                        ],
+                        if (_cardVisible(category: 'Calibration', priority: _Priority.p3, farmKey: 'greenvalley', actioned: _calib != _AckState.initial))
+                          _buildCalibCard(isDark),
                       ],
                     ),
                   ),
-                if (true)
+                if (_filter.type == 'all' || _filter.type == 'rem')
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 18, 16, 0),
                     child: Column(
