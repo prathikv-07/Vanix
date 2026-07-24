@@ -63,7 +63,7 @@ class _FarmsScreenState extends State<FarmsScreen> {
       // the dashed "Setup Farm" row.
       if (widget.appState.isManager && f.status == FarmStatus.setup) return false;
       if (_statusFilter != 'all' && _statusKey(f.status) != _statusFilter) return false;
-      if (_locFilter != 'all' && f.locKey != _locFilter) return false;
+      if (!(_locFilter.length == 1 && _locFilter.first == 'all') && !_locFilter.contains(f.locKey)) return false;
       if (q.isNotEmpty && !('${f.name} ${f.nameHi}').toLowerCase().contains(q)) return false;
       return true;
     }).toList();
