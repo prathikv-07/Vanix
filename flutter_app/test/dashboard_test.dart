@@ -14,7 +14,7 @@ bool _hasText(WidgetTester tester, String needle) {
 }
 
 void main() {
-  testWidgets('Dashboard v2 renders (light) with no exceptions/overflow', (tester) async {
+  testWidgets('Owner dashboard renders (light) with no exceptions/overflow', (tester) async {
     tester.view.physicalSize = const Size(430, 932);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
@@ -22,26 +22,27 @@ void main() {
     await tester.pump();
     expect(tester.takeException(), isNull);
     expect(_hasText(tester, 'MyBovine'), isTrue);
-    expect(find.text('Unactioned Alerts'), findsOneWidget);
-    // bell + avatar removed
-    expect(find.byIcon(Icons.notifications_none), findsNothing);
-    // schedule tabs present
-    expect(find.text('Today'), findsWidgets);
-    expect(find.text('This Week'), findsWidgets);
-    // Gauri insemination window is folded into Today's schedule, not a separate card
-    expect(_hasText(tester, 'insemination window'), isTrue);
-    // info button (near top) opens the alerts sheet with the triage question
-    await tester.tap(find.byIcon(Icons.info_outline));
-    await tester.pumpAndSettle();
-    expect(_hasText(tester, 'Kajri'), isTrue);
-    expect(find.text('Yes, fever'), findsOneWidget);
-    await tester.tap(find.text('Yes, fever'));
-    await tester.pump();
-    expect(_hasText(tester, 'Logged'), isTrue);
-    expect(tester.takeException(), isNull);
-    // close the sheet, then scroll the dashboard → Updates section builds
-    await tester.tap(find.byIcon(Icons.close));
-    await tester.pumpAndSettle();
+    // Farm Status stat cards
+    expect(find.text('Total Cattle'), findsOneWidget);
+    expect(find.text('Cows Pregnant'), findsOneWidget);
+    expect(find.text('Cows in Heat'), findsOneWidget);
+    // AI Chat Bot banner
+    expect(_hasText(tester, 'AI Chat Bot'), isTrue);
+    // Owner-only Needs Attention rows
+    expect(find.text('NEEDS ATTENTION'), findsOneWidget);
+    expect(_hasText(tester, 'Pending Approvals'), isTrue);
+    expect(_hasText(tester, 'Milking Sessions Missed'), isTrue);
+    expect(_hasText(tester, 'Critical Alerts'), isTrue);
+    expect(find.text('View All ›'), findsNWidgets(3));
+    // Today/This-week tabs are `display:none` in the HTML — must not render
+    expect(find.text('Today'), findsNothing);
+    expect(find.text('This Week'), findsNothing);
+    // Cows in Fever / Cows in Heat rows
+    expect(find.text('COWS IN FEVER'), findsOneWidget);
+    expect(find.text('COWS IN HEAT'), findsOneWidget);
+    expect(_hasText(tester, 'Gauri'), isTrue);
+    expect(_hasText(tester, 'Lakshmi'), isTrue);
+    // scroll to Updates section
     await tester.dragUntilVisible(
       find.textContaining('Bhoori'),
       find.byType(Scrollable).first,
@@ -52,7 +53,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('Dashboard v2 renders (dark) with no exceptions', (tester) async {
+  testWidgets('Owner dashboard renders (dark) with no exceptions', (tester) async {
     tester.view.physicalSize = const Size(430, 932);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
@@ -60,5 +61,40 @@ void main() {
     await tester.pump();
     expect(tester.takeException(), isNull);
     expect(_hasText(tester, 'MyBovine'), isTrue);
+  });
+
+  testWidgets('Manager (multi-farm) dashboard shows Milking/Critical/Contact Vet block', (tester) async {
+    tester.view.physicalSize = const Size(430, 932);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    final appState = AppState()..setLanguage('en');
+    appState.cyclePersona(); // owner -> manager (multi-farm)
+    await tester.pumpWidget(MaterialApp(home: DashboardScreen(appState: appState)));
+    await tester.pump();
+    expect(tester.takeException(), isNull);
+    expect(_hasText(tester, 'Milking (Morning)'), isTrue);
+    expect(_hasText(tester, 'Critical Alerts'), isTrue);
+    expect(_hasText(tester, 'Contact Vet'), isTrue);
+    // Owner-only Needs Attention rows must not appear for Manager
+    expect(_hasText(tester, 'Pending Approvals'), isFalse);
+    // Cows in Fever / Cows in Heat still shown to Manager
+    expect(find.text('COWS IN FEVER'), findsOneWidget);
+    expect(find.text('COWS IN HEAT'), findsOneWidget);
+  });
+
+  testWidgets('Manager (single-farm) dashboard shows plain farm-name label', (tester) async {
+    tester.view.physicalSize = const Size(430, 932);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    final appState = AppState()..setLanguage('en');
+    appState.cyclePersona(); // owner -> manager (multi-farm)
+    appState.cyclePersona(); // manager (multi-farm) -> manager (single-farm)
+    await tester.pumpWidget(MaterialApp(home: DashboardScreen(appState: appState)));
+    await tester.pump();
+    expect(tester.takeException(), isNull);
+    expect(appState.isManager, isTrue);
+    expect(appState.isSingleFarm, isTrue);
+    // All-Farms dropdown chevron must not render for a single-farm Manager
+    expect(find.byIcon(Icons.keyboard_arrow_down), findsNothing);
   });
 }
