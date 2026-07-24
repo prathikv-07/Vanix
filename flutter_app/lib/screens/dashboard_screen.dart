@@ -14,18 +14,20 @@ import 'farm_detail_screen.dart';
 import 'account_screen.dart';
 import 'approvals_screen.dart';
 
-/// Home dashboard — Screen 03 (Farm Owner). Mirrors #s1-dash /
-/// #dash-scroll in vanix_screens_preview.html (Home r3): header (logo +
-/// farm selector), a "Farm Status" section with 3 compact stat cards
-/// (Total Cattle / Cows Pregnant / Cows in Heat), a Today/This-week tab
-/// row (now a purely visual toggle — both tabs show the same list) above
-/// a "Needs Attention" section with 3 tappable "View All" rows (Pending
-/// Approvals → [ApprovalsScreen], Milking Sessions Missed → Milk Log,
-/// Critical Alerts → Events), a horizontal "Cows in heat" row (tapping a
-/// card opens the same full-screen heat-alert carousel + walkthrough as
-/// Events' "View full cycle"), a horizontal "Cows in gestation" row
-/// (tapping a card opens the walkthrough sheet directly at its gestation
-/// step), and an icon-less Updates list.
+/// Home dashboard — Screen 03. Shared by Farm Owner, Manager (multi-farm)
+/// and Manager (single-farm) — mirrors #s1-dash / #dash-scroll in
+/// vanix_screens_preview.html (Home r3): header (logo + farm selector —
+/// a single-farm Manager sees a plain farm-name label instead of the
+/// interactive All-Farms picker), a "Farm Status" section with 3 compact
+/// stat cards (Total Cattle / Cows Pregnant / Cows in Heat), a dark
+/// "AI Chat Bot — coming soon" banner, then either an Owner-only "Needs
+/// Attention" section with 3 tappable "View All" rows (Pending Approvals
+/// → [ApprovalsScreen], Milking Sessions Missed → Milk Log, Critical
+/// Alerts → Events) or a Manager-only block (Milking (Morning) progress
+/// → Add Milk Entry, Critical Alerts → Events, Contact Vet card), then —
+/// shown to both personas — a horizontal "Cows in Fever" row and a
+/// horizontal "Cows in Heat" row (both open Events), and finally an
+/// icon-less Updates list.
 class DashboardScreen extends StatefulWidget {
   final AppState appState;
   const DashboardScreen({super.key, required this.appState});
