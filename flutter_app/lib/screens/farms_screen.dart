@@ -153,7 +153,7 @@ class _FarmsScreenState extends State<FarmsScreen> {
                           children: [
                             Expanded(child: _buildSearch(isDark, lang)),
                             const SizedBox(width: 10),
-                            _FilterButton(isDark: isDark, onTap: _openFilterSheet),
+                            _FilterButton(isDark: isDark, active: _hasActiveFilter, onTap: _openFilterSheet),
                           ],
                         ),
                       ),
