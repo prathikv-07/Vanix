@@ -131,21 +131,21 @@ class _SetupFarmScreenState extends State<SetupFarmScreen> {
                                 TextField(
                                   controller: _nameCtrl,
                                   style: TextStyle(fontSize: 15, color: textColor),
-                                  decoration: InputDecoration(hintText: FS.t(_lang, 'sfManagerNamePh')),
+                                  decoration: InputDecoration(border: InputBorder.none, isCollapsed: true, contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 14), filled: false, hintText: FS.t(_lang, 'sfManagerNamePh')),
                                 ),
-                                const SizedBox(height: 10),
+                                const Divider(height: 1),
                                 TextField(
                                   controller: _emailCtrl,
                                   keyboardType: TextInputType.emailAddress,
                                   style: TextStyle(fontSize: 15, color: textColor),
-                                  decoration: InputDecoration(hintText: FS.t(_lang, 'emailPh')),
+                                  decoration: InputDecoration(border: InputBorder.none, isCollapsed: true, contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 14), filled: false, hintText: FS.t(_lang, 'emailPh')),
                                 ),
-                                const SizedBox(height: 10),
+                                const Divider(height: 1),
                                 TextField(
                                   controller: _phoneCtrl,
                                   keyboardType: TextInputType.phone,
                                   style: TextStyle(fontSize: 15, color: textColor),
-                                  decoration: InputDecoration(hintText: FS.t(_lang, 'phonePh')),
+                                  decoration: InputDecoration(border: InputBorder.none, isCollapsed: true, contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 14), filled: false, hintText: FS.t(_lang, 'phonePh')),
                                 ),
                                 const SizedBox(height: 12),
                                 SizedBox(
