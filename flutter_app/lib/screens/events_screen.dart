@@ -2598,17 +2598,23 @@ class _ActionCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(photoQuestion!, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600, color: Colors.white, letterSpacing: -0.1)),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Expanded(child: noBtn),
-                      const SizedBox(width: 12),
-                      Expanded(child: yesBtn),
-                    ],
-                  ),
-                ],
+                children: hasOverride
+                    ? [
+                        Text(photoTitleOverride!, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600, color: Colors.white, letterSpacing: -0.1)),
+                        const SizedBox(height: 10),
+                        DefaultTextStyle.merge(style: const TextStyle(color: Colors.white), child: photoBodyOverride!),
+                      ]
+                    : [
+                        Text(photoQuestion!, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600, color: Colors.white, letterSpacing: -0.1)),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            Expanded(child: noBtn),
+                            const SizedBox(width: 12),
+                            Expanded(child: yesBtn),
+                          ],
+                        ),
+                      ],
               ),
             ),
           ],
