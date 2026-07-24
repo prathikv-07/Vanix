@@ -36,7 +36,6 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   int _navIndex = 0;
-  String _schTab = 'today';
   // Farm selector — 'all' or a FarmModel.id; label updates on selection.
   String _farmSel = 'all';
 
