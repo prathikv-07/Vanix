@@ -428,7 +428,7 @@
       width: 84px; height: 84px; border-radius: 12px;
       background-size: cover; background-repeat: no-repeat; background-position: center;
     }
-    #flow-root.display-image #ev-fever::before { background-image: url('assets/images/cows/gowri.jpg'); background-position: center 30%; }
+    #flow-root.display-image #ev-fever::before { background-image: url('assets/images/fever_photo.jpg'); background-position: center 30%; }
     #flow-root.display-image #ev-heat::before { background-image: url('assets/images/cows/nandini.jpg'); background-position: center 15%; }
     #flow-root.display-image #ev-heat.ev-heat-inseminating::before { background-image: url('assets/images/cows/chinnu.jpg'); background-position: center 25%; }
     #flow-root.display-image #ev-preg::before { background-image: url('assets/images/pregnant_photo.jpg'); }
@@ -605,7 +605,7 @@
       content: ""; position: absolute; inset: 0; z-index: 0;
       background-size: cover; background-repeat: no-repeat; background-position: center;
     }
-    .display-fullbleed #ev-fever::before { background-image: url('assets/images/cows/gowri.jpg'); background-position: center 30%; }
+    .display-fullbleed #ev-fever::before { background-image: url('assets/images/fever_photo.jpg'); background-position: center 30%; }
     .display-fullbleed #ev-heat::before { background-image: url('assets/images/cows/nandini.jpg'); background-position: center 15%; }
     .display-fullbleed #ev-heat.ev-heat-inseminating::before { background-image: url('assets/images/cows/chinnu.jpg'); background-position: center 25%; }
     .display-fullbleed #ev-preg::before { background-image: url('assets/images/pregnant_photo.jpg'); }
@@ -9055,7 +9055,7 @@
           document.getElementById('ev-cs-meta').textContent = meta ? meta.textContent : '';
           // Image mode (full-bleed toggle): show the cow photo banner instead of
           // the plain text block, so the slide-up matches the image alert card.
-          var EVCS_PHOTO = {'ev-fever':'cows/gowri.jpg','ev-heat':'cows/nandini.jpg','ev-preg':'pregnant_photo.jpg','ev-gestation':'vetcheck1_photo.jpg','ev-abort':'cows/gowri.jpg','ev-freshcow':'cows/gowri.jpg','ev-milk-notif':'entermilking_photo.jpg','ev-lactation-check':'drystate_photo.jpg'};
+          var EVCS_PHOTO = {'ev-fever':'fever_photo.jpg','ev-heat':'cows/nandini.jpg','ev-preg':'pregnant_photo.jpg','ev-gestation':'vetcheck1_photo.jpg','ev-abort':'cows/gowri.jpg','ev-freshcow':'cows/gowri.jpg','ev-milk-notif':'entermilking_photo.jpg','ev-lactation-check':'drystate_photo.jpg'};
           var evcsImg = document.getElementById('flow-root').classList.contains('display-fullbleed');
           var evcsFile = EVCS_PHOTO[cardId];
           if (cardId === 'ev-heat' && card.classList.contains('ev-heat-inseminating')) evcsFile = 'insemination_photo.jpg';
