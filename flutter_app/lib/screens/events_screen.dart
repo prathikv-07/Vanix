@@ -2052,6 +2052,9 @@ class _ActionCard extends StatelessWidget {
     final parts = cowBreed.split('·');
     final cowName = parts.first.trim();
     final breed = parts.length > 1 ? parts.sublist(1).join('·').trim() : '';
+    final beltMatch = meta == null ? null : RegExp(r'Belt\s*\S+').firstMatch(meta!);
+    final belt = beltMatch?.group(0);
+    final farmName = meta?.split('·').first.trim();
 
     final noBtn = SizedBox(
       height: 52,
