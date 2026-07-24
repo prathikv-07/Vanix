@@ -70,50 +70,59 @@ class _HeatAlertScreenState extends State<HeatAlertScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: PageView.builder(
-              controller: _pageCtrl,
-              itemCount: _kAlerts.length,
-              onPageChanged: (i) => setState(() => _index = i),
-              itemBuilder: (context, i) => _AlertCard(
-                isDark: widget.isDark,
-                data: _kAlerts[i],
-                decision: _decisions[i],
-                onYes: () => _action(i, 'yes'),
-                // "No" defers the decision to the in-app card — pop
-                // null so the caller opens the restricted sheet view.
-                onNo: () => Navigator.of(context).pop(null),
+      body: SizedBox.expand(
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Positioned.fill(
+              child: PageView.builder(
+                controller: _pageCtrl,
+                itemCount: _kAlerts.length,
+                onPageChanged: (i) => setState(() => _index = i),
+                itemBuilder: (context, i) => _AlertCard(
+                  isDark: widget.isDark,
+                  data: _kAlerts[i],
+                  decision: _decisions[i],
+                  onYes: () => _action(i, 'yes'),
+                  // "No" defers the decision to the in-app card — pop
+                  // null so the caller opens the restricted sheet view.
+                  onNo: () => Navigator.of(context).pop(null),
+                ),
               ),
             ),
-          ),
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(22, 4, 18, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('${_index + 1} of ${_kAlerts.length}',
-                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.white, shadows: [Shadow(color: Colors.black54, blurRadius: 4, offset: Offset(0, 1))])),
-                  _CircleBtn(icon: Icons.close, onTap: () => Navigator.of(context).pop(null)),
-                ],
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: SafeArea(
+                bottom: false,
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(22, 4, 18, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('${_index + 1} of ${_kAlerts.length}',
+                          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.white, shadows: [Shadow(color: Colors.black54, blurRadius: 4, offset: Offset(0, 1))])),
+                      _CircleBtn(icon: Icons.close, onTap: () => Navigator.of(context).pop(null)),
+                    ],
+                  ),
+                ),
               ),
             ),
-          ),
-          Positioned(
-            left: 10,
-            top: 0,
-            bottom: 60,
-            child: Center(child: _ArrowButton(onTap: () => _goTo(_index - 1), icon: Icons.chevron_left)),
-          ),
-          Positioned(
-            right: 10,
-            top: 0,
-            bottom: 60,
-            child: Center(child: _ArrowButton(onTap: () => _goTo(_index + 1), icon: Icons.chevron_right)),
-          ),
-        ],
+            Positioned(
+              left: 10,
+              top: 0,
+              bottom: 60,
+              child: Center(child: _ArrowButton(onTap: () => _goTo(_index - 1), icon: Icons.chevron_left)),
+            ),
+            Positioned(
+              right: 10,
+              top: 0,
+              bottom: 60,
+              child: Center(child: _ArrowButton(onTap: () => _goTo(_index + 1), icon: Icons.chevron_right)),
+            ),
+          ],
+        ),
       ),
     );
   }
