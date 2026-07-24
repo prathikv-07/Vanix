@@ -2133,6 +2133,77 @@ class _VetPickerState extends State<_VetPicker> {
   }
 }
 
+/// Dark "Call a vet" bottom sheet — mirrors #vet-picker-sheet in
+/// vanix_screens.html: title, subtitle, dark rows w/ checkmark on the
+/// selected vet, green "Send request" button.
+class _VetPickerSheet extends StatefulWidget {
+  final ValueChanged<String> onSent;
+  const _VetPickerSheet({required this.onSent});
+
+  @override
+  State<_VetPickerSheet> createState() => _VetPickerSheetState();
+}
+
+class _VetPickerSheetState extends State<_VetPickerSheet> {
+  String _selected = kOnboardedVets.first;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      top: false,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(width: 36, height: 4, margin: const EdgeInsets.only(bottom: 14), alignment: Alignment.center, decoration: BoxDecoration(color: const Color(0xFF3A3A3A), borderRadius: BorderRadius.circular(2))),
+            const Text('Call a vet', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white)),
+            const SizedBox(height: 6),
+            const Text("Pick a vet — they'll be sent the details.", style: TextStyle(fontSize: 13, color: Color(0xFFB0B0B0))),
+            const SizedBox(height: 16),
+            for (final name in kOnboardedVets)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(14),
+                  onTap: () => setState(() => _selected = name),
+                  child: Container(
+                    width: double.infinity,
+                    constraints: const BoxConstraints(minHeight: 52),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(color: name == _selected ? VanixColors.greenDeep : const Color(0xFF3A3A3A)),
+                      color: const Color(0xFF262626),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(name, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white)),
+                        if (name == _selected) const Icon(Icons.check, size: 18, color: VanixColors.greenDeep),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            const SizedBox(height: 4),
+            SizedBox(
+              width: double.infinity,
+              height: 52,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: VanixColors.greenInk, foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(26))),
+                onPressed: () => widget.onSent(_selected),
+                child: const Text('Send request', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _SectionLabel extends StatelessWidget {
   final String text;
   const _SectionLabel(this.text);
