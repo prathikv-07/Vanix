@@ -434,7 +434,7 @@ class _CowProfileScreenState extends State<CowProfileScreen> {
   Widget _buildTabBody() {
     switch (_tab) {
       case 1:
-        return _buildOverview();
+        return _buildTimeline();
       case 2:
         return _buildActivity();
       case 3:
@@ -443,7 +443,7 @@ class _CowProfileScreenState extends State<CowProfileScreen> {
         return _buildVetLogs();
       case 0:
       default:
-        return _buildTimeline();
+        return _buildOverview();
     }
   }
 
