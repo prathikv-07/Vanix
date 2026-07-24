@@ -431,12 +431,13 @@
     #flow-root.display-image #ev-fever::before { background-image: url('assets/images/cows/gowri.jpg'); background-position: center 30%; }
     #flow-root.display-image #ev-heat::before { background-image: url('assets/images/cows/nandini.jpg'); background-position: center 15%; }
     #flow-root.display-image #ev-heat.ev-heat-inseminating::before { background-image: url('assets/images/cows/chinnu.jpg'); background-position: center 25%; }
-    #flow-root.display-image #ev-preg::before { background-image: url('assets/images/cows/kaveri.jpg'); }
-    #flow-root.display-image #ev-gestation::before { background-image: url('assets/images/cows/kaveri.jpg'); }
+    #flow-root.display-image #ev-preg::before { background-image: url('assets/images/pregnant_photo.jpg'); }
+    #flow-root.display-image #ev-gestation::before { background-image: url('assets/images/vetcheck1_photo.jpg'); }
+    #flow-root.display-image #ev-gestation.ev-gestation-delivered::before { background-image: url('assets/images/delivered_photo.jpg'); }
     #flow-root.display-image #ev-abort::before { background-image: url('assets/images/cows/gowri.jpg'); }
     #flow-root.display-image #ev-freshcow::before { background-image: url('assets/images/cows/gowri.jpg'); }
-    #flow-root.display-image #ev-milk-notif::before { background-image: url('assets/images/cows/ramya.jpg'); }
-    #flow-root.display-image #ev-lactation-check::before { background-image: url('assets/images/cows/giri.jpg'); }
+    #flow-root.display-image #ev-milk-notif::before { background-image: url('assets/images/entermilking_photo.jpg'); }
+    #flow-root.display-image #ev-lactation-check::before { background-image: url('assets/images/drystate_photo.jpg'); }
     /* hide text-mode-only bits */
     #flow-root.display-image .ev-photo-card .ev-title,
     #flow-root.display-image .ev-photo-card .ev-manager,
@@ -607,12 +608,13 @@
     .display-fullbleed #ev-fever::before { background-image: url('assets/images/cows/gowri.jpg'); background-position: center 30%; }
     .display-fullbleed #ev-heat::before { background-image: url('assets/images/cows/nandini.jpg'); background-position: center 15%; }
     .display-fullbleed #ev-heat.ev-heat-inseminating::before { background-image: url('assets/images/cows/chinnu.jpg'); background-position: center 25%; }
-    .display-fullbleed #ev-preg::before { background-image: url('assets/images/cows/kaveri.jpg'); }
-    .display-fullbleed #ev-gestation::before { background-image: url('assets/images/cows/kaveri.jpg'); }
+    .display-fullbleed #ev-preg::before { background-image: url('assets/images/pregnant_photo.jpg'); }
+    .display-fullbleed #ev-gestation::before { background-image: url('assets/images/vetcheck1_photo.jpg'); }
+    .display-fullbleed #ev-gestation.ev-gestation-delivered::before { background-image: url('assets/images/delivered_photo.jpg'); }
     .display-fullbleed #ev-abort::before { background-image: url('assets/images/cows/gowri.jpg'); }
     .display-fullbleed #ev-freshcow::before { background-image: url('assets/images/cows/gowri.jpg'); }
-    .display-fullbleed #ev-milk-notif::before { background-image: url('assets/images/cows/ramya.jpg'); }
-    .display-fullbleed #ev-lactation-check::before { background-image: url('assets/images/cows/giri.jpg'); }
+    .display-fullbleed #ev-milk-notif::before { background-image: url('assets/images/entermilking_photo.jpg'); }
+    .display-fullbleed #ev-lactation-check::before { background-image: url('assets/images/drystate_photo.jpg'); }
     /* dark scrim: two darker bands — top wash behind the name/breed caption,
        clear middle, heavy band from where the question starts to the bottom. */
     .display-fullbleed .ev-photo-card::after {
@@ -5297,6 +5299,7 @@
               document.getElementById('ev-gestation-deliver').addEventListener('click', function() {
                 closeEvForm();
                 evSetTint(card, 'var(--activebg)', 'var(--greendeep)');
+                card.classList.add('ev-gestation-delivered');
                 body.innerHTML = '<p style="font-size:13px; font-weight:600; color:var(--greenink); margin:12px 0 0;">Delivery logged ✓</p>' +
                   '<p style="font-size:12px; color:var(--text2); margin:4px 0 0;">Lakshmi has moved to Calved. She\'ll appear in the Milk Log once you add her from the new lactation notification.</p>';
                 evResolve();
@@ -9052,10 +9055,11 @@
           document.getElementById('ev-cs-meta').textContent = meta ? meta.textContent : '';
           // Image mode (full-bleed toggle): show the cow photo banner instead of
           // the plain text block, so the slide-up matches the image alert card.
-          var EVCS_PHOTO = {'ev-fever':'cows/gowri.jpg','ev-heat':'cows/nandini.jpg','ev-preg':'cows/kaveri.jpg','ev-gestation':'cows/kaveri.jpg','ev-abort':'cows/gowri.jpg','ev-freshcow':'cows/gowri.jpg','ev-milk-notif':'cows/ramya.jpg','ev-lactation-check':'cows/giri.jpg'};
+          var EVCS_PHOTO = {'ev-fever':'cows/gowri.jpg','ev-heat':'cows/nandini.jpg','ev-preg':'pregnant_photo.jpg','ev-gestation':'vetcheck1_photo.jpg','ev-abort':'cows/gowri.jpg','ev-freshcow':'cows/gowri.jpg','ev-milk-notif':'entermilking_photo.jpg','ev-lactation-check':'drystate_photo.jpg'};
           var evcsImg = document.getElementById('flow-root').classList.contains('display-fullbleed');
           var evcsFile = EVCS_PHOTO[cardId];
           if (cardId === 'ev-heat' && card.classList.contains('ev-heat-inseminating')) evcsFile = 'insemination_photo.jpg';
+          if (cardId === 'ev-gestation' && card.classList.contains('ev-gestation-delivered')) evcsFile = 'delivered_photo.jpg';
           var evcsPhoto = document.getElementById('ev-cs-photo'), evcsTextwrap = document.getElementById('ev-cs-textwrap');
           var evcsSub = document.getElementById('ev-cs-sub'), evcsMeta = document.getElementById('ev-cs-meta');
           var evcsQ = q ? q.textContent : (title ? title.textContent : '');
