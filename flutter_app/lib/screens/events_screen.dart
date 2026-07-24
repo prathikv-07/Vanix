@@ -832,6 +832,16 @@ class _EventsScreenState extends State<EventsScreen> {
     _openVetSheet((vetName) => setState(() { _feverVetName = vetName; _fever = _VetFlowState.requested; widget.appState.resolveEvent(); }));
   }
 
+  void _startAbortVetFlow() {
+    setState(() => _abort = _VetFlowState.awaitingEmail);
+    _openVetSheet((vetName) => setState(() { _abortVetName = vetName; _abort = _VetFlowState.requested; widget.appState.resolveEvent(); }));
+  }
+
+  void _startFreshCowVetFlow() {
+    setState(() => _freshCow = _VetFlowState.awaitingEmail);
+    _openVetSheet((vetName) => setState(() { _freshCowVetName = vetName; _freshCow = _VetFlowState.requested; widget.appState.resolveEvent(); }));
+  }
+
   Widget _vetRequestedMessage(String context, String vetName) {
     return Padding(
       padding: const EdgeInsets.only(top: 12),
