@@ -352,6 +352,8 @@ class FS {
       // Milk-edit approval
       'mpPendingApproval': 'मालिक की मंज़ूरी बाकी', 'mpEditTo': 'बदलें', 'mpDeleteEntry': 'प्रविष्टि हटाएँ',
       'mpApprove': 'मंज़ूर करें', 'mpUpdated': 'अपडेट', 'mpBy': 'द्वारा',
+      // Home — AI Chat Bot banner
+      'aiChatComingSoon': 'एआई चैट बॉट — जल्द आ रहा है',
     },
   };
 }
