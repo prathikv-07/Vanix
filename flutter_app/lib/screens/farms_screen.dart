@@ -705,15 +705,18 @@ class _FarmsFilterSheetState extends State<_FarmsFilterSheet> {
   }
 }
 
+// Mirrors `.s7-cat` — transparent background always, a 5px start border
+// that's greenInk only when active (`.s7-cat.on`), a bottom divider
+// between rail rows, and a small trailing greenInk dot (`.fs-rail-dot`)
+// once that category's pane holds a non-"all" selection.
 class _CatTab extends StatelessWidget {
   final String label;
-  final bool active, isDark;
+  final bool active, filtered, isDark;
   final VoidCallback onTap;
-  const _CatTab({required this.label, required this.active, required this.isDark, required this.onTap});
+  const _CatTab({required this.label, required this.active, required this.filtered, required this.isDark, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    final activeColor = isDark ? VanixColors.textOnDarkDim : Colors.white;
     final textColor = isDark ? Colors.white : VanixColors.textPrimary;
     return InkWell(
       onTap: onTap,
@@ -721,13 +724,26 @@ class _CatTab extends StatelessWidget {
         width: double.infinity,
         constraints: const BoxConstraints(minHeight: 48),
         padding: const EdgeInsetsDirectional.symmetric(horizontal: 14, vertical: 14),
-        alignment: AlignmentDirectional.centerStart,
         decoration: BoxDecoration(
-          color: active ? activeColor : Colors.transparent,
-          border: active ? const BorderDirectional(start: BorderSide(color: VanixColors.greenInk, width: 3)) : null,
+          border: Border(
+            bottom: BorderSide(color: isDark ? VanixColors.darkDivider : VanixColors.divider),
+          ),
         ),
-        child: Text(label,
-            style: TextStyle(fontSize: 13, fontWeight: active ? FontWeight.w600 : FontWeight.w400, color: active && isDark ? VanixColors.darkPrimary : textColor)),
+        child: Row(
+          children: [
+            Container(
+              width: 5,
+              height: 20,
+              margin: const EdgeInsetsDirectional.only(end: 9),
+              color: active ? VanixColors.greenInk : Colors.transparent,
+            ),
+            Expanded(
+              child: Text(label,
+                  style: TextStyle(fontSize: 13, fontWeight: active ? FontWeight.w700 : FontWeight.w500, color: active ? VanixColors.greenInk : textColor)),
+            ),
+            if (filtered) Container(width: 7, height: 7, decoration: const BoxDecoration(color: VanixColors.greenInk, shape: BoxShape.circle)),
+          ],
+        ),
       ),
     );
   }
