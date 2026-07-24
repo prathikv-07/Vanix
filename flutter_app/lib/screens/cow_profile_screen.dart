@@ -929,11 +929,13 @@ class _CowProfileScreenState extends State<CowProfileScreen> {
   }
 
   Widget _activityCard() {
+    // Mirrors actTileNoIcon() in vanix_screens_preview.html — plain
+    // centered value + label, no icon, divider between tiles.
     final acts = [
-      (Icons.pets, '210', 'actRumination', VanixColors.greenInk, VanixColors.activeBg),
-      (Icons.restaurant, '268', 'actFeeding', VanixColors.warning, VanixColors.warning.withValues(alpha: 0.14)),
-      (Icons.directions_walk, '96', 'actStanding', VanixColors.accentBlue, VanixColors.accentBlue.withValues(alpha: 0.12)),
-      (Icons.bedtime_outlined, '512', 'actResting', VanixColors.accentViolet, VanixColors.accentViolet.withValues(alpha: 0.12)),
+      ('210', 'actRumination'),
+      ('268', 'actFeeding'),
+      ('96', 'actStanding'),
+      ('512', 'actResting'),
     ];
     final textColor = _isDark ? Colors.white : VanixColors.textPrimary;
     return _card(
@@ -943,26 +945,22 @@ class _CowProfileScreenState extends State<CowProfileScreen> {
           for (var i = 0; i < acts.length; i++)
             Expanded(
               child: Container(
+                alignment: Alignment.center,
                 padding: const EdgeInsets.symmetric(horizontal: 6),
                 decoration: BoxDecoration(
                   border: i == 0 ? null : Border(left: BorderSide(color: _isDark ? VanixColors.darkDivider : VanixColors.divider)),
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(
-                      width: 28, height: 28,
-                      decoration: BoxDecoration(color: acts[i].$5, borderRadius: BorderRadius.circular(9)),
-                      child: Icon(acts[i].$1, size: 15, color: acts[i].$4),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(crossAxisAlignment: CrossAxisAlignment.baseline, textBaseline: TextBaseline.alphabetic, children: [
-                      Text(acts[i].$2, style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: textColor)),
+                    Row(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.baseline, textBaseline: TextBaseline.alphabetic, children: [
+                      Text(acts[i].$1, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: textColor)),
                       const SizedBox(width: 3),
                       const Text('min', style: TextStyle(fontSize: 10, color: VanixColors.textHint)),
                     ]),
-                    const SizedBox(height: 3),
-                    Text(FS.t(_lang, acts[i].$3).toUpperCase(),
+                    const SizedBox(height: 4),
+                    Text(FS.t(_lang, acts[i].$2).toUpperCase(),
+                        textAlign: TextAlign.center,
                         style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w600, letterSpacing: 0.3, color: VanixColors.textHint)),
                   ],
                 ),
