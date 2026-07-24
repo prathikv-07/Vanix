@@ -1065,7 +1065,7 @@ class _EventsScreenState extends State<EventsScreen> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () => setState(() => _heatFormStage = (h >= 6 && h < 18) ? 'vet' : 'confirm'),
+                  onPressed: () => (h >= 6 && h < 18) ? _openHeatVetSheet() : setState(() => _heatFormStage = 'confirm'),
                   child: const Text('Call vet'),
                 ),
               ),
@@ -1077,11 +1077,9 @@ class _EventsScreenState extends State<EventsScreen> {
                 children: [
                   Expanded(child: OutlinedButton(onPressed: () => setState(() => _heatFormStage = 'idle'), child: const Text('Cancel'))),
                   const SizedBox(width: 8),
-                  Expanded(flex: 2, child: ElevatedButton(onPressed: () => setState(() => _heatFormStage = 'vet'), child: const Text('Continue'))),
+                  Expanded(flex: 2, child: ElevatedButton(onPressed: _openHeatVetSheet, child: const Text('Continue'))),
                 ],
               ),
-            ] else if (_heatFormStage == 'vet') ...[
-              _vetPicker((vetName) => setState(() { _heatTechCtrl.text = vetName; _heatFormStage = 'form'; })),
             ] else ...[
               const SizedBox(height: 10),
               const Text('Log insemination', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
