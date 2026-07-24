@@ -296,6 +296,7 @@ class FS {
       'mgrNamePh': 'प्रबंधक का नाम', 'confirmAssign': 'पुष्टि करें और नियुक्त करें', 'legalUpdated': 'अंतिम अपडेट: 1 जुलाई 2026',
       // Add Cattle
       'cancelWord': 'रद्द करें', 'saveWord': 'सहेजें', 'selectWord': 'चुनें', 'selectDate': 'तारीख चुनें',
+      'resetFilters': 'फ़िल्टर रीसेट करें',
       'genderWord': 'लिंग', 'yearsWord': 'साल', 'monthsWord': 'महीने', 'optionalWord': '(वैकल्पिक)',
       'acSubPre': 'इस खेत में नई गाय जोड़ें —', 'acPhotoLabel': 'गाय की फ़ोटो', 'acPhotoHint': 'गाय की PNG / JPG अपलोड करें',
       'acCattleType': 'पशु प्रकार', 'acTypeCow': 'गाय', 'acTypeHint': 'गाय · भेड़ · बकरी — गैर-गाय स्वास्थ्य स्कोरिंग चिह्नित होती है।',
