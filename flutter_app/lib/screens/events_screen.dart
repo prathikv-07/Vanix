@@ -827,18 +827,20 @@ class _EventsScreenState extends State<EventsScreen> {
     );
   }
 
+  // The card behind the sheet stays exactly as it was (still the Yes/No
+  // question) while the vet sheet is open — it only updates once, directly
+  // to "requested", when the farmer actually sends the request. Mirrors
+  // evVetRequestFlow() in vanix_screens.html, which never touches the card
+  // until the sheet's callback fires.
   void _startFeverVetFlow() {
-    setState(() => _fever = _VetFlowState.awaitingEmail);
     _openVetSheet((vetName) => setState(() { _feverVetName = vetName; _fever = _VetFlowState.requested; widget.appState.resolveEvent(); }));
   }
 
   void _startAbortVetFlow() {
-    setState(() => _abort = _VetFlowState.awaitingEmail);
     _openVetSheet((vetName) => setState(() { _abortVetName = vetName; _abort = _VetFlowState.requested; widget.appState.resolveEvent(); }));
   }
 
   void _startFreshCowVetFlow() {
-    setState(() => _freshCow = _VetFlowState.awaitingEmail);
     _openVetSheet((vetName) => setState(() { _freshCowVetName = vetName; _freshCow = _VetFlowState.requested; widget.appState.resolveEvent(); }));
   }
 
