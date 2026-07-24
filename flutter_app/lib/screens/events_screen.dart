@@ -3176,54 +3176,118 @@ class _FullCycleSheetState extends State<_FullCycleSheet> {
       color = VanixColors.danger;
     }
 
-    // "ask" stage (pre-Yes/No) is always a full-bleed photo card in
-    // prototype.html (imageMode is hardcoded true) — the "restricted" flag
-    // only trims the sub-line, both are photographic. Mirrors
-    // .ev-photo-step.ask in vanix_screens.html.
+    // Both the pre-Yes/No "ask" stage and the post-Yes insemination-window
+    // stage are full-bleed photo cards in prototype.html (imageMode is
+    // hardcoded true) — the "restricted" flag only trims the ask stage's
+    // sub-line, neither stage is ever the plain white sheet.
     if (!_heatConfirmed) {
       return _heatAskPhotoCard();
     }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Heat cycle detected — Gauri', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: textColor)),
-        Padding(padding: const EdgeInsets.only(top: 3), child: Text('Temperature swinging up and down with high movement since 04:30 this morning.', style: TextStyle(fontSize: 12, color: hintColor, height: 1.5))),
-        const Padding(padding: EdgeInsets.only(top: 10), child: Text('Is Gauri in heat?', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500))),
-        const SizedBox(height: 8),
-        Text(label, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: color)),
-        const SizedBox(height: 6),
-        _HeatWindowBar(simHours: h, fillColor: color),
-        if (_heatFormStage == 'idle') ...[
-          const SizedBox(height: 10),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () => setState(() => _heatFormStage = (h >= 6 && h < 18) ? 'vet' : 'confirm'),
-              child: const Text('Call vet'),
+    return _heatInseminationPhotoCard(h, label, color);
+  }
+
+  // Full-bleed photo card for the walkthrough's post-Yes insemination
+  // window — mirrors the real card's evolved state (title "Insemination
+  // window", segmented bar, Start Insemination / vet flow) instead of a
+  // plain white sheet. Bleeds to the sheet's edges the same way
+  // _heatAskPhotoCard does.
+  Widget _heatInseminationPhotoCard(double h, String label, Color color) {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(-20, -8, -20, 0),
+      clipBehavior: Clip.antiAlias,
+      decoration: const BoxDecoration(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      child: Stack(
+        children: [
+          AspectRatio(
+            aspectRatio: 3 / 4,
+            child: Image.asset(
+              'assets/images/cows/nandini.jpg',
+              fit: BoxFit.cover,
+              alignment: const Alignment(0, -0.5),
+              errorBuilder: (context, error, stack) => const ColoredBox(color: Color(0xFF0A2318)),
             ),
           ),
-        ] else if (_heatFormStage == 'confirm') ...[
-          const SizedBox(height: 10),
-          const Text("You're outside the optimal window (best results 6–18h after detection). Continue anyway?", style: TextStyle(fontSize: 12, height: 1.5)),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              Expanded(child: OutlinedButton(onPressed: () => setState(() => _heatFormStage = 'idle'), child: const Text('Cancel'))),
-              const SizedBox(width: 8),
-              Expanded(flex: 2, child: ElevatedButton(onPressed: () => setState(() => _heatFormStage = 'vet'), child: const Text('Continue'))),
-            ],
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.transparent, Colors.black.withValues(alpha: 0.15), Colors.black.withValues(alpha: 0.90)],
+                  stops: const [0.0, 0.35, 1.0],
+                ),
+              ),
+            ),
           ),
-        ] else if (_heatFormStage == 'vet') ...[
-          _VetPicker(onSent: (_) => setState(() => _heatFormStage = 'form')),
-        ] else ...[
-          const SizedBox(height: 10),
-          const Text('Log insemination', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
-          const SizedBox(height: 6),
-          _inseminationMethodGrid(_heatMethod, (m) => setState(() => _heatMethod = m), isDark: widget.isDark),
-          const SizedBox(height: 8),
-          SizedBox(width: double.infinity, child: ElevatedButton(onPressed: () => _goTo(_SeqStep.watch21), child: const Text('Log insemination'))),
+          Positioned(
+            left: 16,
+            right: 16,
+            bottom: 16,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Expanded(child: Text('Insemination window', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Colors.white))),
+                    Text('20 min ago', style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.75))),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                const Text('Gauri · Desi', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Color(0xCCFFFFFF))),
+                const SizedBox(height: 10),
+                Text(label, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: color)),
+                const SizedBox(height: 6),
+                _HeatWindowBar(simHours: h, fillColor: color),
+                const SizedBox(height: 12),
+                if (_heatFormStage == 'idle')
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(backgroundColor: VanixColors.greenInk, foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25))),
+                      onPressed: () => setState(() => _heatFormStage = (h >= 6 && h < 18) ? 'vet' : 'confirm'),
+                      child: const Text('Start Insemination', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                    ),
+                  )
+                else if (_heatFormStage == 'confirm') ...[
+                  const Text("You're outside the optimal window (best results 6–18h after detection). Continue anyway?", style: TextStyle(fontSize: 12, height: 1.5, color: Color(0xE6FFFFFF))),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(backgroundColor: Colors.white.withValues(alpha: 0.12), foregroundColor: Colors.white, side: const BorderSide(color: Color(0x80FFFFFF))),
+                          onPressed: () => setState(() => _heatFormStage = 'idle'),
+                          child: const Text('Cancel'),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        flex: 2,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(backgroundColor: VanixColors.greenInk, foregroundColor: Colors.white),
+                          onPressed: () => setState(() => _heatFormStage = 'vet'),
+                          child: const Text('Continue'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ] else if (_heatFormStage == 'vet')
+                  _VetPicker(onSent: (_) => setState(() => _heatFormStage = 'form'))
+                else ...[
+                  const Text('Log insemination', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.white)),
+                  const SizedBox(height: 6),
+                  _inseminationMethodGrid(_heatMethod, (m) => setState(() => _heatMethod = m), isDark: widget.isDark),
+                  const SizedBox(height: 8),
+                  SizedBox(width: double.infinity, height: 50, child: ElevatedButton(onPressed: () => _goTo(_SeqStep.watch21), child: const Text('Log insemination'))),
+                ],
+              ],
+            ),
+          ),
         ],
-      ],
+      ),
     );
   }
 
