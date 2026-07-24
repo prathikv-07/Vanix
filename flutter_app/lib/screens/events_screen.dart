@@ -536,7 +536,7 @@ class _EventsScreenState extends State<EventsScreen> {
           meta: 'Green Valley Farm · Belt 63 · since 30 Jun',
           photoQuestion: 'Is Kajri unwell?',
           onPhotoNo: () => setState(() { _fever = _VetFlowState.falseAlarm; widget.appState.resolveEvent(); }),
-          onPhotoYes: () => setState(() => _fever = _VetFlowState.awaitingEmail),
+          onPhotoYes: () => _startFeverVetFlow(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -545,7 +545,7 @@ class _EventsScreenState extends State<EventsScreen> {
                 children: [
                   Expanded(child: OutlinedButton(onPressed: () => setState(() { _fever = _VetFlowState.falseAlarm; widget.appState.resolveEvent(); }), child: _iconLabel(Icons.close, 'No'))),
                   const SizedBox(width: 8),
-                  Expanded(flex: 2, child: ElevatedButton(onPressed: () => setState(() => _fever = _VetFlowState.awaitingEmail), child: _iconLabel(Icons.check, 'Yes, fever'))),
+                  Expanded(flex: 2, child: ElevatedButton(onPressed: _startFeverVetFlow, child: _iconLabel(Icons.check, 'Yes, fever'))),
                 ],
               ),
             ],
