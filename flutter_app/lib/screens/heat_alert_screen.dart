@@ -89,15 +89,15 @@ class _HeatAlertScreenState extends State<HeatAlertScreen> {
             ),
           ),
           SafeArea(
-            child: Text('${_index + 1} of ${_kAlerts.length}',
-                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.white, shadows: [Shadow(color: Colors.black54, blurRadius: 4, offset: Offset(0, 1))])),
-          ).let((child) => Padding(padding: const EdgeInsets.only(left: 22, top: 4), child: child)),
-          SafeArea(
-            child: Align(
-              alignment: AlignmentDirectional.topEnd,
-              child: Padding(
-                padding: const EdgeInsetsDirectional.only(end: 18, top: 0),
-                child: _CircleBtn(icon: Icons.close, onTap: () => Navigator.of(context).pop(null)),
+            child: Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(22, 4, 18, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('${_index + 1} of ${_kAlerts.length}',
+                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.white, shadows: [Shadow(color: Colors.black54, blurRadius: 4, offset: Offset(0, 1))])),
+                  _CircleBtn(icon: Icons.close, onTap: () => Navigator.of(context).pop(null)),
+                ],
               ),
             ),
           ),
