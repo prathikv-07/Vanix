@@ -575,11 +575,11 @@ class _CowProfileScreenState extends State<CowProfileScreen> {
       children: [
         Row(children: [
           Expanded(child: _ovStatCard('19 Mar', 'ovLastHeat', VanixColors.border)),
-          const SizedBox(width: VanixSpacing.sm),
+          const SizedBox(width: 6),
           Expanded(child: _ovStatCard('14 Apr', 'ovNextHeat', VanixColors.border)),
-          const SizedBox(width: VanixSpacing.sm),
+          const SizedBox(width: 6),
           Expanded(child: _ovStatCard('18 Jun', 'ovLastSpike', VanixColors.border)),
-          const SizedBox(width: VanixSpacing.sm),
+          const SizedBox(width: 6),
           Expanded(child: _ovStatCard('1', 'ovNumCalving', VanixColors.border)),
         ]),
         const SizedBox(height: VanixSpacing.xl),
