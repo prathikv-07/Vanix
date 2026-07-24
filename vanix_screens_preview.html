@@ -8492,6 +8492,15 @@
           document.getElementById(btn.getAttribute('data-close')).style.display = 'none';
         });
       });
+      // Login screen — "Privacy Policy" / "Terms and Conditions" links open
+      // the same pages Account uses, with the existing .acct-back button
+      // closing them and returning here.
+      (function() {
+        var pv = document.getElementById('s1-privacy-link');
+        var tm = document.getElementById('s1-terms-link');
+        if (pv) pv.addEventListener('click', function() { document.getElementById('page-privacy').style.display = 'block'; });
+        if (tm) tm.addEventListener('click', function() { document.getElementById('page-terms').style.display = 'block'; });
+      })();
       // Contact Us -> mailto with support@vanix.com prefilled
       var acctContactRow = document.getElementById('acct-contact-row');
       if (acctContactRow) acctContactRow.addEventListener('click', function() {
