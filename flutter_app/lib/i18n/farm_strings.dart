@@ -48,6 +48,7 @@ class FS {
       'selectCowsWord': 'Select cows', 'fdHerdTitlePre': 'Herd', 'fdHerdTitlePost': 'today',
       'statusMilking': 'Milking', 'statusPregnant': 'Pregnant', 'statusHeatCycle': 'Heat Cycle', 'statusFeverAlert': 'Fever Alert',
       'cowTempCaption': 'cow temp', 'noCattleYet': 'No cattle yet on this farm.', 'tapAddCattle': 'Tap "Add Cattle" below to get started.',
+      'addCattle': 'Add Cattle',
       'noCattleMatch': 'No cattle match this filter.', 'breedWord': 'Breed', 'ageWord': 'Age',
       'breedJersey': 'Jersey', 'breedGir': 'Gir', 'breedSahiwal': 'Sahiwal', 'breedOngole': 'Ongole', 'breedDesi': 'Desi',
       'ageUnder2': 'Under 2 yrs', 'age2to4': '2 – 4 yrs', 'ageOver4': 'Over 4 yrs',
