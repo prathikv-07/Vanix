@@ -2111,38 +2111,36 @@ class _ActionCard extends StatelessWidget {
                 ),
               ),
             ),
-            // Cow name + breed — top-left.
+            // Cow name | breed | belt — single white caption row, top-left.
             Positioned(
               top: 18,
               left: 20,
               right: 68,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
+              child: Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: 6,
                 children: [
-                  Text(cowName, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: Colors.white, height: 1.2)),
+                  Text(cowName, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Colors.white, height: 1.2)),
                   if (breed.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 2),
-                      child: Text(breed, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.white.withValues(alpha: 0.82))),
-                    ),
-                  if (showOwnerContext && (meta != null || timeAgo != null))
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                        decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.4), borderRadius: BorderRadius.circular(8)),
-                        child: Text(
-                          [if (timeAgo != null) timeAgo, if (meta != null) meta].whereType<String>().join(' · '),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontSize: 11, color: Colors.white),
-                        ),
-                      ),
-                    ),
+                    Text('|  $breed', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.white.withValues(alpha: 0.82))),
+                  if (belt != null)
+                    Text('|  $belt', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.white.withValues(alpha: 0.82))),
                 ],
               ),
             ),
+            // Farm name | time-ago — second header line, below the name row.
+            if (showOwnerContext && (farmName != null || timeAgo != null))
+              Positioned(
+                top: 44,
+                left: 20,
+                right: 68,
+                child: Text(
+                  [if (farmName != null) farmName, if (timeAgo != null) timeAgo].whereType<String>().join(' · '),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.white.withValues(alpha: 0.72)),
+                ),
+              ),
             // Severity badge — top-right.
             Positioned(
               top: 0,
