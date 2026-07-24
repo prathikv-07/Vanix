@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../i18n/farm_strings.dart';
 import '../i18n/strings.dart';
 import '../models/farm_models.dart';
