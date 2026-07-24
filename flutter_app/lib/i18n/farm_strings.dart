@@ -12,6 +12,7 @@ class FS {
       // Farms list
       'farmsTitle': 'Farms', 'farmsSubtitle': 'Manage all your dairy farms in one place',
       'statTotalFarms': 'Total Farms', 'statTotalCattle': 'Total Cattle', 'statUnactionedAlerts': 'Unactioned Alerts',
+      'wordFarmsShort': 'Farms', 'wordCattleShort': 'Cattle', 'wordAlertsShort': 'Alerts',
       'searchFarms': 'Search farms', 'yourFarms': 'Your Farms', 'wordCattle': 'cattle',
       'sevCritical': 'CRITICAL', 'healthyWord': 'HEALTHY', 'notSetUp': 'Not set up yet', 'setupFarm': 'Setup Farm',
       'cattleHeat': 'Heat', 'cattleFever': 'Fever', 'insemWord': 'Insemination', 'statMilkToday': 'Milk Today',
