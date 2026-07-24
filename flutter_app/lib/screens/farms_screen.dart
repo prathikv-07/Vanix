@@ -158,12 +158,7 @@ class _FarmsScreenState extends State<FarmsScreen> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(16, 18, 16, 10),
-                        child: Text(FS.t(lang, 'yourFarms'),
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: textColor)),
-                      ),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.symmetric(horizontal: 16),
+                        padding: const EdgeInsetsDirectional.fromSTEB(16, 10, 16, 0),
                         child: list.isEmpty
                             ? Padding(
                                 padding: const EdgeInsetsDirectional.only(top: 24),
