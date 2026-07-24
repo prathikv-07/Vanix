@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../i18n/strings.dart';
 import '../state/app_state.dart';
 import 'vanix_bottom_nav.dart';
