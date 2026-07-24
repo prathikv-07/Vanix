@@ -12,11 +12,16 @@ import 'account_screen.dart';
 import 'farm_detail_screen.dart';
 import 'setup_farm_screen.dart';
 
-/// Farms list — screen 04. Mirrors #page-farms in prototype.html:
-/// hero (title + subtitle, 3 stat tiles, auto-scrolling activity ticker),
-/// search + two-pane filter sheet (Status / Location), and the farm cards
-/// (severity corner tag, cattle count, 4 stat chips). Setup farms render as
-/// a dashed-style row with a "Setup Farm" pill.
+/// Farms list — screen 04. Mirrors #page-farms in prototype.html: hero
+/// (title, 3 stat tiles — no subtitle/ticker, both were removed from the
+/// HTML), search + two-pane filter sheet (Status single-select / Location
+/// multi-select, boxless radio/checkbox rows, Reset + Cancel + Apply,
+/// matching the shared `wireFilterSheet()` convention used app-wide), and
+/// the farm cards straight into the list (no "Your Farms" heading — that
+/// text is dead/unused in the current HTML) with a severity corner tag,
+/// cattle count, and 5 stat chips (Heat / Insemination / Pregnant / Fever /
+/// Milk Today). Setup farms render as a dashed-style row with a
+/// "Setup Farm" pill.
 class FarmsScreen extends StatefulWidget {
   final AppState appState;
   const FarmsScreen({super.key, required this.appState});
@@ -25,24 +30,17 @@ class FarmsScreen extends StatefulWidget {
   State<FarmsScreen> createState() => _FarmsScreenState();
 }
 
-class _FarmsScreenState extends State<FarmsScreen> with SingleTickerProviderStateMixin {
+class _FarmsScreenState extends State<FarmsScreen> {
   final int _navIndex = 1;
   final TextEditingController _searchCtrl = TextEditingController();
   String _query = '';
-  String _statusFilter = 'all'; // all | healthy | attention | setup
-  String _locFilter = 'all'; // all | coimbatore | erode | salem
+  String _statusFilter = 'all'; // all | healthy | attention | setup (single-select)
+  List<String> _locFilter = const ['all']; // coimbatore | erode | salem (multi-select)
 
-  late final AnimationController _tickerCtrl;
-
-  @override
-  void initState() {
-    super.initState();
-    _tickerCtrl = AnimationController(vsync: this, duration: const Duration(seconds: 55))..repeat();
-  }
+  bool get _hasActiveFilter => _statusFilter != 'all' || !(_locFilter.length == 1 && _locFilter.first == 'all');
 
   @override
   void dispose() {
-    _tickerCtrl.dispose();
     _searchCtrl.dispose();
     super.dispose();
   }
