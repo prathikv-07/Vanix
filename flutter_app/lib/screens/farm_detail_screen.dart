@@ -105,26 +105,6 @@ class _FarmDetailScreenState extends State<FarmDetailScreen> {
     super.dispose();
   }
 
-  void _onNavTap(int i) {
-    switch (i) {
-      case 0:
-        Navigator.of(context).popUntil((r) => r.isFirst);
-        break;
-      case 1:
-        Navigator.of(context).pop();
-        break;
-      case 2:
-        Navigator.of(context).push(MaterialPageRoute(builder: (_) => MilkLogScreen(appState: widget.appState))).then((_) => setState(() {}));
-        break;
-      case 3:
-        Navigator.of(context).push(MaterialPageRoute(builder: (_) => EventsScreen(appState: widget.appState))).then((_) => setState(() {}));
-        break;
-      case 4:
-        Navigator.of(context).push(MaterialPageRoute(builder: (_) => AccountScreen(appState: widget.appState))).then((_) => setState(() {}));
-        break;
-    }
-  }
-
   List<CowModel> get _visibleCows {
     final q = _search.text.trim().toLowerCase();
     return widget.farm.cows.where((c) {
