@@ -1025,6 +1025,8 @@ class _EventsScreenState extends State<EventsScreen> {
       photoQuestion: 'Gauri in heat?',
       onPhotoNo: _heatConfirmed ? null : () => setState(() { _heat = _HeatState.dismissed; widget.appState.resolveEvent(); }),
       onPhotoYes: _heatConfirmed ? null : () => setState(() { _heatConfirmed = true; _heat = _HeatState.active; }),
+      photoTitleOverride: _heatConfirmed ? 'Insemination window' : null,
+      photoBodyOverride: _heatConfirmed ? _heatEvolvingBody(h, label, color, isDark) : null,
       child: Padding(
         padding: const EdgeInsets.only(top: 12),
         child: Column(
