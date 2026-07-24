@@ -296,7 +296,7 @@ class _FilterButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: isDark ? VanixColors.darkBorder : VanixColors.border),
             ),
-            child: Icon(Icons.filter_list, size: 20, color: isDark ? Colors.white : VanixColors.textPrimary),
+            child: Center(child: FunnelIcon(size: 15, color: isDark ? Colors.white : VanixColors.textPrimary)),
           ),
           if (active)
             PositionedDirectional(
