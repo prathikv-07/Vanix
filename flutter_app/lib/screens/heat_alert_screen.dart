@@ -155,7 +155,7 @@ class _ArrowButton extends StatelessWidget {
         height: 34,
         decoration: const BoxDecoration(color: Color(0x66000000), shape: BoxShape.circle),
         alignment: Alignment.center,
-        child: const Icon(Icons.chevron_left, color: Colors.white, size: 20),
+        child: Icon(icon, color: Colors.white, size: 20),
       ),
     );
   }
