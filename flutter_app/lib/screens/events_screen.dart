@@ -334,31 +334,18 @@ class _EventsScreenState extends State<EventsScreen> {
     await openFullCycleFlow(context, widget.appState);
   }
 
-  // Lightweight filter sheet stub — keeps the Filter button functional
-  // without duplicating the full two-pane sheet wiring here.
-  void _openFilterSheet(BuildContext context) {
-    final isDark = widget.appState.isDark;
-    showModalBottomSheet(
+  // Two-pane filter sheet — mirrors #ev-fs-sheet in vanix_screens.html:
+  // Type / Criticality / Status / Category / Farm categories on a left rail,
+  // radio (single-select) or checkbox (multi-select) rows on the right,
+  // Reset filters / Apply filters / Cancel.
+  Future<void> _openFilterSheet(BuildContext context) async {
+    final result = await showModalBottomSheet<EventsFilter>(
       context: context,
-      backgroundColor: isDark ? const Color(0xFF1C1C1C) : VanixColors.bgCard,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-      builder: (context) => SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Filter', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: isDark ? Colors.white : VanixColors.textPrimary)),
-              const SizedBox(height: 6),
-              const Text('All events are shown.', style: TextStyle(fontSize: 13, color: VanixColors.textHint)),
-              const SizedBox(height: 16),
-              SizedBox(width: double.infinity, child: ElevatedButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Close'))),
-            ],
-          ),
-        ),
-      ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => _EventsFilterSheet(initial: _filter, isDark: widget.appState.isDark),
     );
+    if (result != null) setState(() => _filter = result);
   }
 
   @override
