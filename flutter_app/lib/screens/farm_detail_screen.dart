@@ -191,28 +191,13 @@ class _FarmDetailScreenState extends State<FarmDetailScreen> {
                     heroTag: 'addCattleFab',
                     backgroundColor: VanixColors.greenInk,
                     onPressed: () {
-                      // Bottom slide-up sheet (leaves the farm-detail hero
-                      // peeking through at the top) — mirrors #page-add-cattle
-                      // / #ac-backdrop in vanix_screens_preview.html (top:64px,
-                      // rounded top corners, dimming backdrop) rather than a
-                      // full-screen page push.
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        backgroundColor: Colors.transparent,
-                        barrierColor: Colors.black.withValues(alpha: 0.35),
-                        builder: (_) => ClipRRect(
-                          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-                          child: ConstrainedBox(
-                            // Sized to content, not full-screen — mirrors the
-                            // HTML fix (max-height cap instead of a fixed
-                            // top:64px stretch that left dead whitespace
-                            // below "Add cow history" on short forms).
-                            constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.75),
-                            child: AddCattleScreen(appState: widget.appState, farm: widget.farm),
-                          ),
-                        ),
-                      );
+                      // Full-screen page push — #page-add-cattle was
+                      // converted from a bottom sheet to a full page this
+                      // session (back chevron + title, no more slide-up
+                      // sheet/backdrop).
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (_) => AddCattleScreen(appState: widget.appState, farm: widget.farm)))
+                          .then((_) => setState(() {}));
                     },
                     child: const Icon(Icons.add, color: Colors.white),
                   ),
