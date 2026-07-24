@@ -199,10 +199,10 @@ class _AlertCard extends StatelessWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Color(0x99000000), Color(0x47000000), Color(0x00000000),
+                Color(0x40000000), Color(0x00000000),
                 Color(0x00000000), Color(0xBF000000), Color(0xF7000000),
               ],
-              stops: [0.0, 0.20, 0.42, 0.58, 0.78, 1.0],
+              stops: [0.0, 0.18, 0.55, 0.78, 1.0],
             ),
           ),
         ),
