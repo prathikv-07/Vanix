@@ -1388,6 +1388,10 @@ class _ActionsSheetState extends State<_ActionsSheet> {
         return (title: _t('schedVisit'), body: _scheduleStep());
       case 'vetlogForm':
         return (title: _t('addVetLog'), body: _vetlogStep());
+      case 'illnessNote':
+        return (title: _t('addIllness'), body: _noteStep(
+          _t('illnessNoteTitle'), _t('illnessNotePh'), _reason,
+          () => _done('${_t('illnessLogged')} ✓')));
       case 'heatConfirm':
         return (title: _t('addHeat'), body: _confirmStep(_t('heatQ').replaceAll('{cow}', widget.cowName), () => _go('heatWhen')));
       case 'heatWhen':
