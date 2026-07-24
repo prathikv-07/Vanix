@@ -641,7 +641,7 @@ class _EventsScreenState extends State<EventsScreen> {
                 children: [
                   Expanded(child: OutlinedButton(onPressed: () => setState(() { _abort = _VetFlowState.falseAlarm; widget.appState.resolveEvent(); }), child: _iconLabel(Icons.close, 'No'))),
                   const SizedBox(width: 8),
-                  Expanded(flex: 2, child: ElevatedButton(onPressed: () => setState(() => _abort = _VetFlowState.awaitingEmail), child: _iconLabel(Icons.check, 'Yes, notify vet'))),
+                  Expanded(flex: 2, child: ElevatedButton(onPressed: _startAbortVetFlow, child: _iconLabel(Icons.check, 'Yes, notify vet'))),
                 ],
               ),
             ],
