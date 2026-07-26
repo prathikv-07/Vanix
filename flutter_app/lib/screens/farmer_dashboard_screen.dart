@@ -4,6 +4,7 @@ import '../i18n/strings.dart';
 import '../models/farm_models.dart';
 import '../state/app_state.dart';
 import '../theme/vanix_theme.dart';
+import '../widgets/brand_logo.dart';
 import '../widgets/vanix_bottom_nav.dart';
 import '../widgets/vanix_nav_items.dart';
 import 'milk_log_screen.dart';
@@ -100,18 +101,17 @@ class _FarmerDashboardScreenState extends State<FarmerDashboardScreen> {
                           padding: const EdgeInsetsDirectional.fromSTEB(16, 20, 16, 6),
                           child: Row(
                             children: [
-                              Text.rich(TextSpan(children: [
-                                TextSpan(text: 'My', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700, color: _text1)),
-                                const TextSpan(text: 'Bovine', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700, color: VanixColors.greenInk)),
-                              ])),
+                              // The prototype header uses vanix-logo.svg at height:32.
+                              BrandLogo(height: 32, fallbackFontSize: 19, fallbackPrimaryColor: _text1),
                               const Spacer(),
                               Text(_t('fpGreeting'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: VanixColors.textHint)),
                             ],
                           ),
                         ),
-                        // Tabs
+                        // Tabs — the wrapper is padding:14px 16px 0 and the tab
+                        // row carries margin-bottom:14.
                         Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
+                          padding: const EdgeInsetsDirectional.fromSTEB(16, 14, 16, 0),
                           child: Row(children: [
                             _tabBtn('immediate', _t('fpImmediate'), VanixColors.danger),
                             const SizedBox(width: 8),
@@ -196,16 +196,19 @@ class _FarmerDashboardScreenState extends State<FarmerDashboardScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // letter-spacing .05em at 11px = 0.55px.
               Text(_t(typeKey).toUpperCase(),
-                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.5, color: eyebrow)),
+                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.55, color: eyebrow)),
               const SizedBox(height: 4),
               Text.rich(TextSpan(children: [
                 TextSpan(text: cow, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: _text1)),
-                TextSpan(text: '  —  $breed', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400, color: VanixColors.textHint)),
+                // Single spaces around the em dash, as in the markup.
+                TextSpan(text: ' — $breed', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400, color: VanixColors.textHint)),
               ])),
               const SizedBox(height: 6),
               Row(children: [
                 Expanded(child: Text(_t(qKey), style: const TextStyle(fontSize: 13, color: VanixColors.textHint))),
+                const SizedBox(width: 10),
                 const Icon(Icons.chevron_right, size: 18, color: VanixColors.textHint),
               ]),
             ],
@@ -242,7 +245,9 @@ class _FarmerDashboardScreenState extends State<FarmerDashboardScreen> {
               ],
             ),
           ),
-          const SizedBox(width: 10),
+          // The card is a flex row with a uniform 12px column-gap, so the gap
+          // before the Open button matches the one after the accent bar.
+          const SizedBox(width: 12),
           ElevatedButton(
             onPressed: _openEvents,
             style: ElevatedButton.styleFrom(

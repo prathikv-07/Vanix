@@ -26,6 +26,7 @@ bash tools/parity/verify_01_login.sh
 |---|---|---|
 | 01 Login / OTP | 70/71 — **98.6%** | ✅ |
 | 02 Owner Dashboard | 67/67 — **100%** | ✅ |
+| 03 Farmer Dashboard | 60/60 — **100%** | ✅ |
 
 When writing a check script, negative-test it: a `grep -E` pattern containing
 `\n` silently never matches, so a naive "must not contain" check passes
