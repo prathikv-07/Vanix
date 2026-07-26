@@ -134,7 +134,13 @@ class FS {
       'acDeviceDetails': 'Device Details', 'acBeltNo': 'Cattle Belt Number', 'acMacId': 'MAC ID',
       'acCowHistory': 'Cow History', 'acFillHistory': 'Fill cow history', 'acHistUnknown': 'History unknown',
       'acLastHeat': 'Last Heat', 'acLastInsem': 'Last Insemination', 'acLastPreg': 'Last Pregnancy',
-      'acLastCalving': 'Last Calving', 'acLactationNo': 'Lactation Number',
+      // The prototype label is "Calving Number", not "Lactation Number".
+      'acLastCalving': 'Last Calving', 'acLactationNo': 'Calving Number',
+      // These five were missing entirely, so FS.t fell through to returning the
+      // raw key and the Add Cattle screen rendered "acTabCowDetails" on screen.
+      'acTabCowDetails': 'Cattle Detail', 'acTabDeviceDetails': 'Device Details',
+      'acAddHistory': 'Add cow history', 'acNodeMacId': 'Node/MAC ID',
+      'statusUnknown': 'Before Estrus',
       'acLactHint': 'Number stepper, not a date. Fields show only while "Fill cow history" is selected.',
       // Dashboard (Screen 03)
       'dashGreeting': 'Good morning,', 'dashAllFarms': 'All Farms', 'dashLive': 'Live', 'dashAddedToday': 'added today',
@@ -311,7 +317,10 @@ class FS {
       'acDeviceDetails': 'डिवाइस विवरण', 'acBeltNo': 'पशु बेल्ट नंबर', 'acMacId': 'MAC आईडी',
       'acCowHistory': 'गाय का इतिहास', 'acFillHistory': 'गाय का इतिहास भरें', 'acHistUnknown': 'इतिहास अज्ञात',
       'acLastHeat': 'अंतिम हीट', 'acLastInsem': 'अंतिम गर्भाधान', 'acLastPreg': 'अंतिम गर्भावस्था',
-      'acLastCalving': 'अंतिम प्रसव', 'acLactationNo': 'स्तनपान संख्या',
+      'acLastCalving': 'अंतिम प्रसव', 'acLactationNo': 'ब्याने की संख्या',
+      'acTabCowDetails': 'पशु विवरण', 'acTabDeviceDetails': 'डिवाइस विवरण',
+      'acAddHistory': 'गाय का इतिहास जोड़ें', 'acNodeMacId': 'नोड/MAC आईडी',
+      'statusUnknown': 'एस्ट्रस से पहले',
       'acLactHint': 'संख्या स्टेपर, तारीख नहीं। ये फ़ील्ड केवल "गाय का इतिहास भरें" चुनने पर दिखते हैं।',
       // Dashboard (Screen 03)
       'dashGreeting': 'सुप्रभात,', 'dashAllFarms': 'सभी खेत', 'dashLive': 'लाइव', 'dashAddedToday': 'आज जोड़े गए',
