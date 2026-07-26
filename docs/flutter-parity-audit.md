@@ -11,6 +11,21 @@ Servers for side-by-side verification:
 
 Status legend: ☐ open · ☑ fixed · ⊘ won't-fix (with reason)
 
+## Scoring gate
+
+A screen is only pushed once it scores **>95%**. Each screen gets a repeatable
+check script under `tools/parity/` that asserts the values measured off the
+live prototype are present in the Dart source, plus explicit entries for any
+parity gap that is real but not expressible as a grep. Run e.g.:
+
+```bash
+bash tools/parity/verify_01_login.sh
+```
+
+| Screen | Score | Pushed |
+|---|---|---|
+| 01 Login / OTP | 70/71 — **98.6%** | ✅ |
+
 ---
 
 ## Foundation — design tokens
