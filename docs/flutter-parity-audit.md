@@ -11,6 +11,25 @@ Servers for side-by-side verification:
 
 Status legend: ☐ open · ☑ fixed · ⊘ won't-fix (with reason)
 
+## Open question for the Farm Detail audit
+
+`test/farm_manager_test.dart` ("Manager edit: send invite shows pending state")
+fails: it taps `Icons.edit_outlined` in the Farm Detail hero, and no such icon
+renders. `_openManagerChooser` in `farm_detail_screen.dart` is correspondingly
+dead code (`unused_element`) — so the pencil that called it was removed at some
+point.
+
+Evidence so far suggests the **test** is wrong rather than the screen:
+`#farm-detail-manager-wrap` (prototype.html:3262) is just the manager name plus
+the temperature — there is no edit control there — and the prototype's
+manager-management flow lives in Account → Farm Management
+(`manageFarmMgr` sheet, prototype.html:2906), which Flutter already has as
+`FarmMgmtPage`.
+
+Decide this during the Farm Detail screen audit, with the whole file in view:
+either delete the obsolete test and the dead method, or restore the affordance
+if the prototype does have one somewhere I haven't checked. Don't guess.
+
 ## Scoring gate
 
 A screen is only pushed once it scores **>95%**. Each screen gets a repeatable
@@ -28,6 +47,46 @@ bash tools/parity/verify_01_login.sh
 | 02 Owner Dashboard | 67/67 — **100%** | ✅ |
 | 03 Farmer Dashboard | 60/60 — **100%** | ✅ |
 | 04 Approvals | 61/61 — **100%** | ✅ |
+| 07 Setup Farm | 67/70 — **95.7%** | ✅ |
+
+### Screen 07 note — the old file had no prototype counterpart
+
+`setup_farm_screen.dart` was a full-screen two-card page (invite card, "or"
+divider, PENDING chip, Done button) that does not exist in the prototype.
+Verified: there is no `#page-setup-farm`, and `openSetupFarm()`
+(prototype.html:8289) just calls `openFmChoose()`, which raises the
+`#fm-choose-sheet` bottom sheet — Assign Manager / Invite Manager / Assign to
+Self. The only `sf-` ids in the file are the success sheet. So it was rewritten
+to the measured sheet flow, and the invented pending-invite state removed (a
+manager is assigned immediately; only *vet* invites pend).
+
+Three gaps are deliberately left counted as failures rather than papered over:
+the sheet needs a non-opaque route to show the farms list through its 35% scrim
+(`farms_screen.dart`), the `#fm-mgrlist-sheet` manager picker has no manager
+roster in Flutter state to drive it, and the post-assign
+Add-Cattle → `#sf-success-sheet` chain is unimplemented.
+
+## Shared-file follow-ups (deliberately deferred)
+
+Agents are told not to edit shared files, so these are queued for the
+integrator rather than done piecemeal:
+
+1. **Strings** — Setup Farm inlines `assignMgrWord`, `inviteMgrWord`,
+   `assignSelfWord`, `inviteFarmMgrTitle` in a local map; migrate into
+   `farm_strings.dart`. Now orphaned there: `sfInviteTitle`, `sfInviteSub`,
+   `sfAssignTitle`, `sfAssignSub`, `sfOrWord`, `sfDoneBtn`, `sfSendInvite`,
+   `sfPendingNote`, `sfAssignedMsg`, `sfManagerNamePh`.
+2. **Dark tokens drift from the prototype** — `--bgcard` is `#1E1E1E` vs
+   `darkSecond #1C1C1C`; `--border` `#333333` vs `darkBorder #3A3A3A`;
+   `--bgwarm` `#121212` vs `darkPrimary #111111`; and dark `--text2 #9E988E`
+   has no token at all. Changing these touches every screen including ones
+   already scored and pushed, so it needs its own pass with a full re-verify —
+   not a drive-by edit.
+3. **A prototype bug we chose not to replicate**: `#fm-choose-sheet` and
+   `#fm-mgrlist-sheet` are missing from the `#flow-root.dark` override list
+   (prototype.html:262-264, which lists only `#fm-sheet`), so they stay white
+   in dark mode. Correct dark surfaces were implemented instead. Flag for the
+   user — strict replication would mean copying the bug.
 
 Second harness trap, after the vacuous-`\n` one: keep numeric patterns
 anchored. `letterSpacing: 0\.5` also matches `0.55`, so a "must not be 0.5"
