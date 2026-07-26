@@ -14,9 +14,21 @@ class VanixColors {
   static const Color greenDeep = Color(0xFF2EBD7E); // CTA fill w/ dark text; focus accents
   static const Color greenInk = Color(0xFF1E7A52); // green as text/icon on white
   static const Color darkPrimary = Color(0xFF111111);
-  static const Color darkSecond = Color(0xFF1C1C1C);
+  static const Color darkSecond = Color(0xFF1C1C1C); // .m-hero dark bg — genuinely distinct from --bgcard
   static const Color darkSubSurface = Color(0xFF262626);
-  static const Color darkBorder = Color(0xFF3A3A3A);
+
+  // ── Dark-mode equivalents of the themed CSS variables ──────────────
+  // These mirror the `#flow-root.dark` block in prototype.html:244 exactly.
+  // They are separate tokens rather than redefinitions of darkPrimary /
+  // darkSecond, because those two carry their own meanings in dark (e.g.
+  // .m-hero really is #1C1C1C while --bgcard is #1E1E1E).
+  static const Color darkBgWarm = Color(0xFF121212); // --bgwarm
+  static const Color darkBgCard = Color(0xFF1E1E1E); // --bgcard
+  static const Color darkBorder = Color(0xFF333333); // --border
+  static const Color darkTextHint = Color(0xFF9E988E); // --text2
+  static const Color darkActiveBg = Color(0xFF123024); // --activebg
+  static const Color darkWarningBg = Color(0xFF2A2312); // --warnbg
+  static const Color darkDangerBg = Color(0xFF2E1815); // --dangerbg
 
   // Light-mode surfaces
   static const Color bgWarm = Color(0xFFF2EDE4); // scaffold bg — never pure white
@@ -154,7 +166,8 @@ ThemeData vanixDarkTheme({String languageCode = 'hi'}) {
   return ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,
-    scaffoldBackgroundColor: VanixColors.darkPrimary,
+    // --bgwarm in dark is #121212, not #111111.
+    scaffoldBackgroundColor: VanixColors.darkBgWarm,
     fontFamily: fontFamily,
     colorScheme: const ColorScheme(
       brightness: Brightness.dark,
@@ -164,11 +177,11 @@ ThemeData vanixDarkTheme({String languageCode = 'hi'}) {
       onSecondary: VanixColors.darkPrimary,
       error: VanixColors.danger,
       onError: VanixColors.textOnDark,
-      surface: VanixColors.darkSecond,
+      surface: VanixColors.darkBgCard,
       onSurface: VanixColors.textOnDarkDim,
     ),
     cardTheme: CardThemeData(
-      color: VanixColors.darkSecond,
+      color: VanixColors.darkBgCard,
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(VanixRadius.lg),
@@ -178,7 +191,7 @@ ThemeData vanixDarkTheme({String languageCode = 'hi'}) {
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: VanixColors.darkSecond,
+      fillColor: VanixColors.darkBgCard,
       hintStyle: VanixTextTheme.small.copyWith(color: const Color(0x738C8780), fontSize: 13),
       contentPadding: const EdgeInsetsDirectional.symmetric(horizontal: VanixSpacing.lg, vertical: VanixSpacing.md),
       constraints: const BoxConstraints(minHeight: VanixSpacing.touch),
