@@ -25,6 +25,10 @@ class VanixColors {
   static const Color darkBgWarm = Color(0xFF121212); // --bgwarm
   static const Color darkBgCard = Color(0xFF1E1E1E); // --bgcard
   static const Color darkBorder = Color(0xFF333333); // --border
+  // #3A3A3A is NOT --border, but it is a real prototype value: the dark
+  // hairline on .m-stat-card / .m-tile / .m-hero button, whose own dark rule is
+  // !important and so beats var(--border). Both values are needed.
+  static const Color darkHairline = Color(0xFF3A3A3A);
   static const Color darkTextHint = Color(0xFF9E988E); // --text2
   static const Color darkActiveBg = Color(0xFF123024); // --activebg
   static const Color darkWarningBg = Color(0xFF2A2312); // --warnbg
