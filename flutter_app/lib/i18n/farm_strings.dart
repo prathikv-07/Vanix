@@ -148,7 +148,10 @@ class FS {
       'dashGoodNews': 'Good News', 'dashRecovered': 'recovered', 'dashFeverCaught': 'fever caught by collar, treated by Dr. Sharma', 'dashDaysAgo': 'days ago',
       'dashConfPreg': 'confirmed pregnant', 'dashInseminated': 'Inseminated', 'dashConfYesterday': 'confirmed yesterday',
       'dashCalved': 'calved', 'dashHealthyCalf': 'healthy calf, now in the Milk Log', 'dashYesterday': 'Yesterday', 'dashTriageDone': 'Logged — thanks', 'dashUpdates': 'Updates', 'dashToday': 'Today',
-      'homeCowsPregnant': 'Cows\nPregnant', 'homeCowsHeat': 'Cows in\nHeat', 'homePendingApprovals': 'Pending\nApprovals',
+      // The two Farm Status labels are single-line in the prototype
+      // (white-space:nowrap, no break) — unlike homePendingApprovals, which
+      // really does carry a \n there.
+      'homeCowsPregnant': 'Cows Pregnant', 'homeCowsHeat': 'Cows in Heat', 'homePendingApprovals': 'Pending\nApprovals',
       'homeMilkingsMissed': 'Milkings\nMissed', 'homeUnresolvedAlerts': 'Unresolved\nAlerts',
       'homeCowsInFever': 'Cows in Fever', 'homeCowsInHeat': 'Cows in Heat', 'homeCowsInGestation': 'Cows in gestation',
       // Dashboard — Farm Status / Needs Attention / Approvals page (Screen 03 r3)
@@ -322,7 +325,7 @@ class FS {
       'dashGoodNews': 'अच्छी खबर', 'dashRecovered': 'ठीक हो गई', 'dashFeverCaught': 'कॉलर ने बुखार पकड़ा, डॉ. शर्मा ने इलाज किया', 'dashDaysAgo': 'दिन पहले',
       'dashConfPreg': 'गर्भ की पुष्टि', 'dashInseminated': 'गर्भाधान', 'dashConfYesterday': 'कल पुष्टि हुई',
       'dashCalved': 'ब्याई', 'dashHealthyCalf': 'स्वस्थ बछड़ा, अब दूध लॉग में', 'dashYesterday': 'कल', 'dashTriageDone': 'दर्ज — धन्यवाद', 'dashUpdates': 'अपडेट', 'dashToday': 'आज',
-      'homeCowsPregnant': 'गर्भवती\nगायें', 'homeCowsHeat': 'गर्मी में\nगायें', 'homePendingApprovals': 'लंबित\nमंज़ूरियाँ',
+      'homeCowsPregnant': 'गर्भवती गायें', 'homeCowsHeat': 'हीट में गायें', 'homePendingApprovals': 'लंबित\nमंज़ूरियाँ',
       'homeMilkingsMissed': 'छूटी\nदूध दुहाई', 'homeUnresolvedAlerts': 'अनसुलझी\nचेतावनी',
       'homeCowsInFever': 'बुखार में गायें', 'homeCowsInHeat': 'गर्मी में गायें', 'homeCowsInGestation': 'गर्भावस्था में गायें',
       // Dashboard — Farm Status / Needs Attention / Approvals page (Screen 03 r3)

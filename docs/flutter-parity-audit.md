@@ -25,6 +25,12 @@ bash tools/parity/verify_01_login.sh
 | Screen | Score | Pushed |
 |---|---|---|
 | 01 Login / OTP | 70/71 — **98.6%** | ✅ |
+| 02 Owner Dashboard | 67/67 — **100%** | ✅ |
+
+When writing a check script, negative-test it: a `grep -E` pattern containing
+`\n` silently never matches, so a naive "must not contain" check passes
+vacuously and inflates the score. Use the multiline `ckmn` helper for those,
+and prove it fails when the defect is reintroduced.
 
 ---
 

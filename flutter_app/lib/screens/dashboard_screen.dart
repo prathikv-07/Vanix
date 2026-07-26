@@ -5,6 +5,7 @@ import '../i18n/strings.dart';
 import '../models/farm_models.dart';
 import '../state/app_state.dart';
 import '../theme/vanix_theme.dart';
+import '../widgets/brand_logo.dart';
 import '../widgets/vanix_bottom_nav.dart';
 import '../widgets/vanix_nav_items.dart';
 import 'milk_log_screen.dart';
@@ -154,9 +155,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   // ── Card shell ──
-  BoxDecoration _cardDeco() => BoxDecoration(color: _cardBg, borderRadius: BorderRadius.circular(16), boxShadow: _shadow);
+  BoxDecoration _cardDeco({double radius = 16}) => BoxDecoration(color: _cardBg, borderRadius: BorderRadius.circular(radius), boxShadow: _shadow);
 
-  TextStyle get _secLbl => const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.6, color: VanixColors.textHint);
+  // Section headings: 11px / w700 / letter-spacing .05em (= 0.55px at 11px) /
+  // uppercase / --text2.
+  TextStyle get _secLbl => const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.55, color: VanixColors.textHint);
 
   String get _farmSelLabel {
     if (_farmSel == 'all') return '${_t('dashAllFarms')} (${kFarms.length})';
@@ -216,12 +219,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       padding: const EdgeInsetsDirectional.fromSTEB(16, 20, 16, 6),
       child: Row(
         children: [
-          Text.rich(
-            TextSpan(children: [
-              TextSpan(text: 'My', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700, color: _text1)),
-              const TextSpan(text: 'Bovine', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700, color: VanixColors.greenInk)),
-            ]),
-          ),
+          // The prototype header uses vanix-logo.svg at height:32.
+          BrandLogo(height: 32, fallbackFontSize: 19, fallbackPrimaryColor: _text1),
           const SizedBox(width: 12),
           // Expanded + end-alignment pins the pill to the trailing edge at
           // every width (a Spacer+Flexible pair let it drift left on wide
@@ -245,8 +244,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ),
                     if (!_isSingleFarmManager) ...[
-                      const SizedBox(width: 4),
-                      Icon(Icons.keyboard_arrow_down, size: 16, color: _text1),
+                      // #dash-farmsel: gap 8px, 13×13 chevron.
+                      const SizedBox(width: 8),
+                      Icon(Icons.keyboard_arrow_down, size: 13, color: _text1),
                     ],
                   ]),
                 ),
@@ -282,11 +282,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
     // for longer Hindi/Bhojpuri text — so force maxLines:1 here too rather
     // than letting it wrap to 2 lines.
     final card = Container(
-      decoration: BoxDecoration(color: _cardBg, borderRadius: BorderRadius.circular(16)),
+      // .m-stat-card carries the same soft card shadow as the other cards.
+      decoration: BoxDecoration(color: _cardBg, borderRadius: BorderRadius.circular(16), boxShadow: _shadow),
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 14),
       child: Column(
         children: [
-          Text(num, textAlign: TextAlign.center, style: TextStyle(fontSize: 26, fontWeight: FontWeight.w700, height: 1, color: _text1)),
+          // The number is class="en" in the markup — Latin face, not Devanagari.
+          Text(num, textAlign: TextAlign.center, style: TextStyle(fontSize: 26, fontWeight: FontWeight.w700, height: 1, color: _text1, fontFamily: 'NotoSans')),
           const SizedBox(height: 7),
           Text(_t(labelKey),
               textAlign: TextAlign.center,
@@ -340,8 +342,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
       children: [
         Padding(padding: const EdgeInsetsDirectional.only(bottom: 10), child: Text(_t('needsAttentionTitle').toUpperCase(), style: _secLbl)),
         Container(
-          decoration: _cardDeco(),
-          padding: const EdgeInsetsDirectional.symmetric(horizontal: 16),
+          // Needs Attention uses an 18px radius and 4px vertical padding,
+          // unlike the 16px stat cards.
+          decoration: _cardDeco(radius: 18),
+          padding: const EdgeInsetsDirectional.fromSTEB(16, 4, 16, 4),
           child: Column(children: [
             _needsAttentionRow('2', 'rowPendingApprovals', () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => ApprovalsScreen(appState: widget.appState)))),
             _needsAttentionRow('3', 'rowMilkingMissed', () => _onNavTap(2), divider: true),
@@ -491,7 +495,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Expanded(
             child: RichText(
               text: TextSpan(children: [
-                TextSpan(text: '$count ', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: _text1)),
+                // The count is class="en" in the markup — Latin face.
+                TextSpan(text: '$count ', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: _text1, fontFamily: 'NotoSans')),
                 TextSpan(text: _t(labelKey), style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: _text1)),
               ]),
             ),
@@ -557,7 +562,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 borderRadius: BorderRadius.circular(14),
                 child: Container(
                   width: 190,
-                  decoration: _cardDeco(),
+                  // These cards are radius 14 and carry NO shadow (measured) —
+                  // unlike the 16px shadowed cards elsewhere on the dashboard.
+                  decoration: BoxDecoration(color: _cardBg, borderRadius: BorderRadius.circular(14)),
                   padding: const EdgeInsets.all(10),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -574,18 +581,38 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
+                            // Line boxes are pinned to the browser's computed
+                            // heights (17px for the 13px line, 15px for the two
+                            // 11px ones) so the block is exactly 53px like the
+                            // prototype, inside a 78px card.
+                            //
+                            // Both halves matter: `height` alone isn't enough,
+                            // because RichText takes its strut from the root
+                            // span, which carries no style — so forceStrutHeight
+                            // makes each line exact whatever the active font's
+                            // metrics are. And every line needs maxLines:1, or
+                            // a wider font wraps one and adds a whole line.
                             RichText(
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
+                              strutStyle: const StrutStyle(fontSize: 13, height: 17 / 13, forceStrutHeight: true),
                               text: TextSpan(children: [
-                                TextSpan(text: c.name, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: _text1)),
-                                TextSpan(text: ' | ${c.belt}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w400, color: VanixColors.textHint)),
+                                TextSpan(text: c.name, style: TextStyle(fontSize: 13, height: 17 / 13, fontWeight: FontWeight.w600, color: _text1)),
+                                TextSpan(text: ' | ${c.belt}', style: const TextStyle(fontSize: 13, height: 17 / 13, fontWeight: FontWeight.w400, color: VanixColors.textHint)),
                               ]),
                             ),
                             const SizedBox(height: 3),
-                            Text(c.timeAgo, style: const TextStyle(fontSize: 11, color: VanixColors.textHint)),
+                            Text(c.timeAgo,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                strutStyle: const StrutStyle(fontSize: 11, height: 15 / 11, forceStrutHeight: true),
+                                style: const TextStyle(fontSize: 11, height: 15 / 11, color: VanixColors.textHint)),
                             const SizedBox(height: 3),
-                            Text(c.farm, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 11, color: VanixColors.textHint)),
+                            Text(c.farm,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                strutStyle: const StrutStyle(fontSize: 11, height: 15 / 11, forceStrutHeight: true),
+                                style: const TextStyle(fontSize: 11, height: 15 / 11, color: VanixColors.textHint)),
                           ],
                         ),
                       ),
