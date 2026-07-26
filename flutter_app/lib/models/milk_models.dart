@@ -64,16 +64,16 @@ class MilkSeed {
   // Breed set matches the Cattle Health Logic v3.1 breed matrix
   // (Ongole, Jersey, Gir/Sahiwal, Desi) — not the earlier invented "HF Cross".
   static const cows = [
-    Cow('Gauri', 'Jersey', '41'),
+    Cow('Gauri', 'Jersey', '112'),
     Cow('Kajri', 'Jersey', '63'),
     Cow('Mohini', 'Desi', '91'),
-    Cow('Dhauli', 'Gir/Sahiwal', '18'),
+    Cow('Dhauli', 'Gir/Sahiwal', '208'),
     Cow('Ganga', 'Ongole', '27'),
-    Cow('Lakshmi', 'Ongole', '52'),
+    Cow('Lakshmi', 'Ongole', '47'),
     Cow('Bhoori', 'Gir/Sahiwal', '09'),
   ];
 
-  static const farms = ['Green Valley Farm', 'Sunrise Dairy'];
+  static const farms = ['Ravi Kumar Farm', 'Green Valley Farm'];
 
   static List<MilkEntry> entries(DateTime today) {
     final yesterday = today.subtract(const Duration(days: 1));
@@ -107,11 +107,11 @@ class MilkSeed {
     }
 
     return [
-      e(cow: 'Gauri', breed: 'Jersey', belt: '41', date: today, session: MilkSession.morning, time: const TimeOfDay(hour: 7, minute: 5), litres: 12.5),
+      e(cow: 'Gauri', breed: 'Jersey', belt: '112', date: today, session: MilkSession.morning, time: const TimeOfDay(hour: 7, minute: 5), litres: 12.5),
       e(cow: 'Mohini', breed: 'Desi', belt: '91', date: today, session: MilkSession.morning, time: const TimeOfDay(hour: 7, minute: 15), litres: 5.0),
-      e(cow: 'Dhauli', breed: 'Gir/Sahiwal', belt: '18', date: today, session: MilkSession.morning, time: const TimeOfDay(hour: 7, minute: 20), litres: 6.8),
+      e(cow: 'Dhauli', breed: 'Gir/Sahiwal', belt: '208', date: today, session: MilkSession.morning, time: const TimeOfDay(hour: 7, minute: 20), litres: 6.8),
       e(cow: 'Ganga', breed: 'Ongole', belt: '27', date: today, session: MilkSession.morning, time: const TimeOfDay(hour: 7, minute: 30), litres: 4.2),
-      e(cow: 'Lakshmi', breed: 'Ongole', belt: '52', date: today, session: MilkSession.morning, time: const TimeOfDay(hour: 8, minute: 45), litres: 5.6, onTime: false, lateNote: '1h 45m after milking'),
+      e(cow: 'Lakshmi', breed: 'Ongole', belt: '47', date: today, session: MilkSession.morning, time: const TimeOfDay(hour: 8, minute: 45), litres: 5.6, onTime: false, lateNote: '1h 45m after milking'),
       e(cow: 'Kajri', breed: 'Jersey', belt: '63', date: today, session: MilkSession.evening, time: const TimeOfDay(hour: 18, minute: 20), litres: 2.0),
       e(cow: 'Bhoori', breed: 'Gir/Sahiwal', belt: '09', date: today, session: MilkSession.evening, time: const TimeOfDay(hour: 18, minute: 5), litres: 2.5),
       e(cow: 'Kajri', breed: 'Jersey', belt: '63', date: yesterday, session: MilkSession.evening, time: const TimeOfDay(hour: 22, minute: 45), litres: 2.0, onTime: false, lateNote: '4h 25m after milking'),
