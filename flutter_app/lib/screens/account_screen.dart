@@ -196,19 +196,19 @@ class _AccountScreenState extends State<AccountScreen> {
                                 _AccountRow(
                                   isDark: isDark,
                                   title: FS.t(lang, 'rowPrivacy'),
-                                  onTap: () => _push(_LegalPage(
+                                  onTap: () => _push(LegalPage(
                                     appState: widget.appState,
                                     title: FS.t(lang, 'rowPrivacy'),
-                                    sections: _privacySections,
+                                    sections: privacySections,
                                   )),
                                 ),
                                 _AccountRow(
                                   isDark: isDark,
                                   title: FS.t(lang, 'rowTerms'),
-                                  onTap: () => _push(_LegalPage(
+                                  onTap: () => _push(LegalPage(
                                     appState: widget.appState,
                                     title: FS.t(lang, 'rowTerms'),
-                                    sections: _termsSections,
+                                    sections: termsSections,
                                   )),
                                 ),
                               ],
@@ -669,7 +669,7 @@ class _VetsPageState extends State<_VetsPage> {
 // ─────────────────────────────────────────────────────────────
 class FarmMgmtPage extends StatefulWidget {
   final AppState appState;
-  const FarmMgmtPage({required this.appState});
+  const FarmMgmtPage({super.key, required this.appState});
 
   @override
   State<FarmMgmtPage> createState() => _FarmMgmtPageState();
@@ -942,37 +942,37 @@ class _FarmMgmtPageState extends State<FarmMgmtPage> {
 // ─────────────────────────────────────────────────────────────
 // LEGAL (Privacy / Terms)
 // ─────────────────────────────────────────────────────────────
-class _LegalSection {
+class LegalSection {
   final String heading, body;
-  const _LegalSection(this.heading, this.body);
+  const LegalSection(this.heading, this.body);
 }
 
-const List<_LegalSection> _privacySections = [
-  _LegalSection('Introduction', 'MyBovine.ai ("we," "us") provides farm and cattle management tools. This policy explains what information we collect when you use the app, how we use it, and the choices you have.'),
-  _LegalSection('Information We Collect', 'Account details (name, phone, email, role); farm data (farm name, location, acreage, team members); cattle information (breed, weight, health and breeding records, milk yield); and device data from connected sensors or ear tags (battery level, connectivity status, readings), where applicable.'),
-  _LegalSection('How Information Is Used', 'We use this information to operate core features such as health alerts, vet reports, and cattle group tracking; to notify you and your emergency contacts; and to maintain and improve the app.'),
-  _LegalSection('Data Sharing & Third-Party Services', 'We share data only with people you authorize, such as vets or farm managers added to your account, and with service providers who help operate the app (e.g. SMS or notification delivery). We do not sell your personal data.'),
-  _LegalSection('Data Security', 'We use encryption in transit, access controls, and secure servers to protect your data. No method of storage or transmission is completely secure, and we work to continually improve our safeguards.'),
-  _LegalSection('Your Rights', 'You may view or update your profile and farm data at any time from within the app. You can also request a copy of your data or request deletion of your account and associated data, where applicable, by contacting us below.'),
-  _LegalSection('Contact Us', 'For privacy-related questions or requests, contact privacy@mybovine.ai.'),
+const List<LegalSection> privacySections = [
+  LegalSection('Introduction', 'MyBovine.ai ("we," "us") provides farm and cattle management tools. This policy explains what information we collect when you use the app, how we use it, and the choices you have.'),
+  LegalSection('Information We Collect', 'Account details (name, phone, email, role); farm data (farm name, location, acreage, team members); cattle information (breed, weight, health and breeding records, milk yield); and device data from connected sensors or ear tags (battery level, connectivity status, readings), where applicable.'),
+  LegalSection('How Information Is Used', 'We use this information to operate core features such as health alerts, vet reports, and cattle group tracking; to notify you and your emergency contacts; and to maintain and improve the app.'),
+  LegalSection('Data Sharing & Third-Party Services', 'We share data only with people you authorize, such as vets or farm managers added to your account, and with service providers who help operate the app (e.g. SMS or notification delivery). We do not sell your personal data.'),
+  LegalSection('Data Security', 'We use encryption in transit, access controls, and secure servers to protect your data. No method of storage or transmission is completely secure, and we work to continually improve our safeguards.'),
+  LegalSection('Your Rights', 'You may view or update your profile and farm data at any time from within the app. You can also request a copy of your data or request deletion of your account and associated data, where applicable, by contacting us below.'),
+  LegalSection('Contact Us', 'For privacy-related questions or requests, contact privacy@mybovine.ai.'),
 ];
 
-const List<_LegalSection> _termsSections = [
-  _LegalSection('Acceptance of Terms', 'By creating an account or using MyBovine.ai, you agree to these Terms of Service. If you do not agree, please do not use the app.'),
-  _LegalSection('User Responsibilities', 'You are responsible for the accuracy of the farm, cattle, and contact information you enter, and for keeping your login credentials confidential.'),
-  _LegalSection('Acceptable Use', 'The app is intended for legitimate farm and cattle management. You agree not to misuse the service, attempt to disrupt it, or reverse-engineer any part of it.'),
-  _LegalSection('Account Responsibilities', 'Farm Owners manage access for Farm Managers and other team members added to an account. You are responsible for the actions taken under roles you assign.'),
-  _LegalSection('Limitation of Liability', 'MyBovine.ai is a monitoring and record-keeping aid, not a substitute for veterinary judgment. We are not liable for losses arising from reliance on alerts, records, or data accuracy.'),
-  _LegalSection('Intellectual Property', 'The MyBovine.ai app, its design, logo, and underlying software are owned by us and may not be copied or redistributed without permission.'),
-  _LegalSection('Termination or Suspension', 'We may suspend or terminate accounts that violate these terms or misuse the service. You may stop using the app and request account deletion at any time.'),
-  _LegalSection('Contact Us', 'For support or legal queries, contact support@mybovine.ai.'),
+const List<LegalSection> termsSections = [
+  LegalSection('Acceptance of Terms', 'By creating an account or using MyBovine.ai, you agree to these Terms of Service. If you do not agree, please do not use the app.'),
+  LegalSection('User Responsibilities', 'You are responsible for the accuracy of the farm, cattle, and contact information you enter, and for keeping your login credentials confidential.'),
+  LegalSection('Acceptable Use', 'The app is intended for legitimate farm and cattle management. You agree not to misuse the service, attempt to disrupt it, or reverse-engineer any part of it.'),
+  LegalSection('Account Responsibilities', 'Farm Owners manage access for Farm Managers and other team members added to an account. You are responsible for the actions taken under roles you assign.'),
+  LegalSection('Limitation of Liability', 'MyBovine.ai is a monitoring and record-keeping aid, not a substitute for veterinary judgment. We are not liable for losses arising from reliance on alerts, records, or data accuracy.'),
+  LegalSection('Intellectual Property', 'The MyBovine.ai app, its design, logo, and underlying software are owned by us and may not be copied or redistributed without permission.'),
+  LegalSection('Termination or Suspension', 'We may suspend or terminate accounts that violate these terms or misuse the service. You may stop using the app and request account deletion at any time.'),
+  LegalSection('Contact Us', 'For support or legal queries, contact support@mybovine.ai.'),
 ];
 
-class _LegalPage extends StatelessWidget {
+class LegalPage extends StatelessWidget {
   final AppState appState;
   final String title;
-  final List<_LegalSection> sections;
-  const _LegalPage({required this.appState, required this.title, required this.sections});
+  final List<LegalSection> sections;
+  const LegalPage({super.key, required this.appState, required this.title, required this.sections});
 
   @override
   Widget build(BuildContext context) {

@@ -4,6 +4,7 @@ class VanixStrings {
   final String title, email, cont;
   final String vtitle, sent, desc, enterotp, timer, nootp, resend, confirm;
   final String phEmail;
+  final String loginConsentPre, loginConsentAnd, rowPrivacy, rowTerms;
   final String navHome, navFarms, navMilk, navEvents, navAccount;
 
   const VanixStrings({
@@ -19,6 +20,10 @@ class VanixStrings {
     required this.resend,
     required this.confirm,
     required this.phEmail,
+    required this.loginConsentPre,
+    required this.loginConsentAnd,
+    required this.rowPrivacy,
+    required this.rowTerms,
     required this.navHome,
     required this.navFarms,
     required this.navMilk,
@@ -32,6 +37,8 @@ class VanixStrings {
       vtitle: 'Verification', sent: 'OTP was sent to', desc: 'Enter the code to log in securely to your account.',
       enterotp: 'ENTER OTP', timer: 'Time Remaining', nootp: "Didn't receive OTP?", resend: 'Resend', confirm: 'Confirm',
       phEmail: 'you@example.com',
+      loginConsentPre: 'By continuing you are accepting the', loginConsentAnd: 'and',
+      rowPrivacy: 'Privacy Policy', rowTerms: 'Terms of Service',
       navHome: 'Home', navFarms: 'Farms', navMilk: 'Milk', navEvents: 'Events', navAccount: 'Account',
     ),
     'hi': VanixStrings(
@@ -39,6 +46,8 @@ class VanixStrings {
       vtitle: 'सत्यापन', sent: 'OTP भेजा गया', desc: 'अपने खाते में सुरक्षित लॉगिन के लिए कोड डालें।',
       enterotp: 'OTP डालें', timer: 'समय शेष', nootp: 'OTP नहीं मिला?', resend: 'फिर से भेजें', confirm: 'पुष्टि करें',
       phEmail: 'अपना ईमेल डालें',
+      loginConsentPre: 'जारी रखकर आप स्वीकार करते हैं', loginConsentAnd: 'और',
+      rowPrivacy: 'गोपनीयता नीति', rowTerms: 'सेवा की शर्तें',
       navHome: 'होम', navFarms: 'खेत', navMilk: 'दूध', navEvents: 'कार्यक्रम', navAccount: 'खाता',
     ),
     'bho': VanixStrings(
@@ -46,6 +55,8 @@ class VanixStrings {
       vtitle: 'सत्यापन', sent: 'OTP भेजल गइल', desc: 'आपन खाता में सुरक्षित लॉगिन खातिर कोड डालीं।',
       enterotp: 'OTP डालीं', timer: 'समय बाकी', nootp: 'OTP ना मिलल?', resend: 'फिर से भेजीं', confirm: 'पुष्टि करीं',
       phEmail: 'आपन ईमेल डालीं',
+      loginConsentPre: 'जारी राखे पर रउरा स्वीकार करत बानी', loginConsentAnd: 'आ',
+      rowPrivacy: 'गोपनीयता नीति', rowTerms: 'सेवा की शर्तें',
       navHome: 'होम', navFarms: 'खेत', navMilk: 'दूध', navEvents: 'कार्यक्रम', navAccount: 'खाता',
     ),
   };

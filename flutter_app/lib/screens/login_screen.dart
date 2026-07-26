@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
+import 'dart:ui' show ImageFilter;
+import 'package:flutter/gestures.dart' show TapGestureRecognizer;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:video_player/video_player.dart';
@@ -8,6 +10,7 @@ import '../i18n/strings.dart';
 import '../state/app_state.dart';
 import '../theme/vanix_theme.dart';
 import '../widgets/language_sheet.dart';
+import 'account_screen.dart' show LegalPage, LegalSection, privacySections, termsSections;
 import 'dashboard_screen.dart';
 import 'farmer_dashboard_screen.dart';
 
@@ -133,7 +136,12 @@ class _LoginScreenState extends State<LoginScreen> {
         return Theme(
           data: theme,
           child: Scaffold(
-            backgroundColor: VanixColors.darkPrimary,
+            // Transparent on purpose. Any Scaffold fill is painted by the
+            // canvas, which on Flutter web composites *above* the video's
+            // <flt-platform-view> — an opaque colour here tints the whole hero
+            // (it read dark green as #111111, washed-out as #F2EDE4).
+            // _HeroBackground supplies the warm #F2EDE4 fallback instead.
+            backgroundColor: Colors.transparent,
             body: Stack(
               children: [
                 Positioned.fill(child: _HeroBackground(controller: _videoReady ? _videoCtrl : null)),
@@ -208,7 +216,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   offset: _landing ? const Offset(0, 1) : Offset.zero,
                   child: Align(
                     alignment: Alignment.bottomCenter,
-                    child: _SheetContainer(isDark: isDark, child: _buildPanel(isDark)),
+                    child: _SheetContainer(isDark: isDark, frosted: !_landing, child: _buildPanel(isDark)),
                   ),
                 ),
               ],
@@ -228,6 +236,7 @@ class _LoginScreenState extends State<LoginScreen> {
           isDark: isDark,
           emailCtrl: _emailCtrl,
           currentLanguage: widget.appState.languageCode,
+          appState: widget.appState,
           onLanguageTap: () => showLanguageSheet(context, current: widget.appState.languageCode, onSelect: widget.appState.setLanguage),
           onContinue: _goToOtp,
         );
@@ -261,9 +270,16 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-/// Looping, muted hero video with a 45% dark scrim (matches the HTML). When
-/// the controller isn't ready it falls back gracefully to the brand gradient,
-/// which also shows through beneath the video as it fades in.
+/// Looping, muted hero video under a 22% dark scrim — mirrors `#s1-video`:
+/// `object-fit: cover; object-position: center top` with an
+/// `rgba(0,0,0,0.22)` overlay, revealed over `opacity 2.2s ease`.
+///
+/// The 2.2s reveal is done by fading the warm fallback fill *out* over the
+/// video, rather than fading the video *in*. Same result on screen, but it
+/// composites correctly: on Flutter web the video is an
+/// `<flt-platform-view>` that sits below the canvas, and both opacity on a
+/// platform view and an opaque fill left beneath one misbehave there — an
+/// underlay ends up washing the video out instead of hiding behind it.
 class _HeroBackground extends StatelessWidget {
   final VideoPlayerController? controller;
   const _HeroBackground({this.controller});
@@ -274,31 +290,27 @@ class _HeroBackground extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        // Fallback / underlay gradient.
-        const DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Color(0xFF203A2C), Color(0xFF0E1A14)]),
+        if (ready)
+          FittedBox(
+            fit: BoxFit.cover,
+            clipBehavior: Clip.hardEdge,
+            alignment: Alignment.topCenter,
+            child: SizedBox(
+              width: controller!.value.size.width,
+              height: controller!.value.size.height,
+              child: VideoPlayer(controller!),
+            ),
+          ),
+        // Warm #F2EDE4 fallback (the prototype's `body` background), fading
+        // away to reveal the video.
+        IgnorePointer(
+          child: AnimatedOpacity(
+            duration: const Duration(milliseconds: 2200),
+            opacity: ready ? 0 : 1,
+            child: const ColoredBox(color: VanixColors.bgWarm),
           ),
         ),
-        // Cover-fit video, faded in (mirrors CSS opacity 2.2s ease).
-        AnimatedOpacity(
-          duration: const Duration(milliseconds: 2200),
-          opacity: ready ? 1 : 0,
-          child: ready
-              ? FittedBox(
-                  fit: BoxFit.cover,
-                  clipBehavior: Clip.hardEdge,
-                  alignment: Alignment.topCenter,
-                  child: SizedBox(
-                    width: controller!.value.size.width,
-                    height: controller!.value.size.height,
-                    child: VideoPlayer(controller!),
-                  ),
-                )
-              : const SizedBox.shrink(),
-        ),
-        // 45% dark scrim.
-        Container(color: Colors.black.withValues(alpha: 0.45)),
+        Container(color: Colors.black.withValues(alpha: 0.22)),
       ],
     );
   }
@@ -382,27 +394,65 @@ class _BrandLogoState extends State<_BrandLogo> {
   }
 }
 
+/// The frosted login sheet. Mirrors `#s1-sheet`:
+///   background: rgba(255,255,255,0.9)      (dark: rgba(16,16,16,0.62))
+///   backdrop-filter: blur(26px) saturate(1.5)
+///   border-top: 1px rgba(255,255,255,0.7)  (dark: 0.18)
+///   border-radius: 24px 24px 0 0
+///   padding: 0 32px 40px
+///
+/// The inline `box-shadow: 0 -8px 32px` is overridden away by the global
+/// `[id$="-sheet"] { box-shadow: none !important }` rule, so the sheet renders
+/// with no shadow — verified against getComputedStyle. Don't add one back.
 class _SheetContainer extends StatelessWidget {
   final bool isDark;
   final Widget child;
-  const _SheetContainer({required this.isDark, required this.child});
+
+  /// Whether to actually apply the frost. A [BackdropFilter] filters the whole
+  /// surface painted beneath it — not just its own bounds — so leaving one
+  /// mounted while the sheet is parked off-screen (the landing state) washes
+  /// out the entire hero video. Only frost while the sheet is on screen.
+  final bool frosted;
+
+  const _SheetContainer({required this.isDark, required this.frosted, required this.child});
+
+  // CSS saturate(1.5) as a colour matrix, using the sRGB luminance
+  // coefficients from the filter-effects spec (0.213 / 0.715 / 0.072).
+  static const List<double> _saturate15 = <double>[
+    1.3935, -0.3575, -0.0360, 0, 0, //
+    -0.1065, 1.1425, -0.0360, 0, 0, //
+    -0.1065, -0.3575, 1.4640, 0, 0, //
+    0, 0, 0, 1, 0, //
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
+    const radius = BorderRadius.vertical(top: Radius.circular(24));
+    final surface = AnimatedContainer(
       duration: const Duration(milliseconds: 400),
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(32, 0, 32, 40),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0x9E101010) : Colors.white.withValues(alpha: 0.94),
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-        border: Border(top: BorderSide(color: Colors.white.withValues(alpha: isDark ? 0.10 : 0.55))),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.18), blurRadius: 32, offset: const Offset(0, -8))],
+        color: isDark ? const Color(0x9E101010) : Colors.white.withValues(alpha: 0.90),
+        border: Border(top: BorderSide(color: Colors.white.withValues(alpha: isDark ? 0.18 : 0.70))),
       ),
       child: SafeArea(
         top: false,
         child: AnimatedSwitcher(duration: const Duration(milliseconds: 250), child: child),
       ),
+    );
+
+    return ClipRRect(
+      borderRadius: radius,
+      child: frosted
+          ? BackdropFilter(
+              filter: ImageFilter.compose(
+                outer: const ColorFilter.matrix(_saturate15),
+                inner: ImageFilter.blur(sigmaX: 26, sigmaY: 26),
+              ),
+              child: surface,
+            )
+          : surface,
     );
   }
 }
@@ -412,6 +462,7 @@ class _LoginPanel extends StatelessWidget {
   final bool isDark;
   final TextEditingController emailCtrl;
   final String currentLanguage;
+  final AppState appState;
   final VoidCallback onLanguageTap, onContinue;
 
   const _LoginPanel({
@@ -420,6 +471,7 @@ class _LoginPanel extends StatelessWidget {
     required this.isDark,
     required this.emailCtrl,
     required this.currentLanguage,
+    required this.appState,
     required this.onLanguageTap,
     required this.onContinue,
   });
@@ -433,14 +485,83 @@ class _LoginPanel extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // #s1-login-panel: padding-top 26px, then the email block at margin-top 20px.
         const SizedBox(height: 26),
-        Text(t.title, style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: textColor)),
-        const SizedBox(height: 36),
+        Text(t.title, style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, height: 1.2, color: textColor)),
+        const SizedBox(height: 20),
         _FieldLabel(t.email, isDark: isDark),
         _UnderlineField(controller: emailCtrl, hint: t.phEmail, isDark: isDark),
-        const SizedBox(height: 44),
-        SizedBox(width: double.infinity, child: ElevatedButton(onPressed: onContinue, style: ElevatedButton.styleFrom(backgroundColor: VanixColors.greenInk, foregroundColor: Colors.white), child: Text(t.cont))),
+        // #s1-continue: margin-top 24px, 52px tall, radius 26px.
+        const SizedBox(height: 24),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: onContinue,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: VanixColors.greenInk,
+              foregroundColor: Colors.white,
+              minimumSize: const Size(0, 52),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
+            ),
+            child: Text(t.cont, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+          ),
+        ),
+        const SizedBox(height: 14),
+        _ConsentLine(t: t, isDark: isDark, appState: appState),
       ],
+    );
+  }
+}
+
+/// "By continuing you are accepting the Privacy Policy and Terms of Service".
+/// Mirrors the consent paragraph under `#s1-continue`: 11px, centred,
+/// line-height 1.5, `--text2` body with bold + underlined tappable links in
+/// `--text1`.
+class _ConsentLine extends StatelessWidget {
+  final VanixStrings t;
+  final bool isDark;
+  final AppState appState;
+  const _ConsentLine({required this.t, required this.isDark, required this.appState});
+
+  @override
+  Widget build(BuildContext context) {
+    final bodyColor = isDark ? const Color(0xA6FFFFFF) : VanixColors.textHint;
+    final linkColor = isDark ? Colors.white : VanixColors.textPrimary;
+    final family = Theme.of(context).textTheme.bodyMedium?.fontFamily;
+
+    // Opens the very same legal pages the Account tab uses — mirrors the
+    // prototype, which reveals #page-privacy / #page-terms from here.
+    void open(String title, List<LegalSection> sections) => Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => LegalPage(appState: appState, title: title, sections: sections)),
+        );
+
+    TextSpan link(String label, VoidCallback onTap) => TextSpan(
+          text: label,
+          style: TextStyle(
+            fontSize: 11,
+            height: 1.5,
+            fontWeight: FontWeight.w700,
+            decoration: TextDecoration.underline,
+            color: linkColor,
+            fontFamily: family,
+          ),
+          recognizer: TapGestureRecognizer()..onTap = onTap,
+        );
+
+    return SizedBox(
+      width: double.infinity,
+      child: Text.rich(
+        TextSpan(
+          style: TextStyle(fontSize: 11, height: 1.5, color: bodyColor, fontFamily: family),
+          children: [
+            TextSpan(text: '${t.loginConsentPre} '),
+            link(t.rowPrivacy, () => open(t.rowPrivacy, privacySections)),
+            TextSpan(text: ' ${t.loginConsentAnd} '),
+            link(t.rowTerms, () => open(t.rowTerms, termsSections)),
+          ],
+        ),
+        textAlign: TextAlign.center,
+      ),
     );
   }
 }
@@ -474,7 +595,9 @@ class _OtpPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textColor = isDark ? Colors.white : VanixColors.textPrimary;
-    final hintColor = isDark ? const Color(0xA6FFFFFF) : VanixColors.textHint;
+    // On-glass secondary text is #5F5A52 (`#s1-sheet #s1-v-desc`, `#s1-nootp`),
+    // not --text2 — verified via computed style.
+    final hintColor = isDark ? const Color(0xA6FFFFFF) : const Color(0xFF5F5A52);
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -494,15 +617,18 @@ class _OtpPanel extends StatelessWidget {
           ),
         ),
         Padding(padding: const EdgeInsets.only(top: 6), child: Text(t.desc, style: TextStyle(fontSize: 13, color: hintColor))),
-        const SizedBox(height: 20),
+        // #s1-l-otp: margin 32px 0 12px — the 32 is a full top gap (the desc
+        // above has no bottom margin), the 12 = label's 10 + the 2 below.
+        const SizedBox(height: 32),
         _FieldLabel(t.enterotp, isDark: isDark),
-        const SizedBox(height: 10),
+        const SizedBox(height: 2),
+        // #s1-otp-boxes: six 44×52 boxes, radius 10, fixed 10px gaps.
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            for (var i = 0; i < 6; i++)
+            for (var i = 0; i < 6; i++) ...[
+              if (i > 0) const SizedBox(width: 10),
               SizedBox(
-                width: 42,
+                width: 44,
                 height: 52,
                 child: TextField(
                   controller: otpCtrls[i],
@@ -510,29 +636,69 @@ class _OtpPanel extends StatelessWidget {
                   textAlign: TextAlign.center,
                   keyboardType: TextInputType.number,
                   maxLength: 1,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: textColor),
-                  decoration: InputDecoration(counterText: '', contentPadding: EdgeInsets.zero, enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: isDark ? const Color(0x66FFFFFF) : const Color(0xFF9A948A)))),
+                  // OTP digits use the Latin face (font-family: var(--font-en)),
+                  // not the Devanagari body font.
+                  style: TextStyle(fontSize: 20, color: textColor, fontFamily: 'NotoSans'),
+                  decoration: InputDecoration(
+                    counterText: '',
+                    contentPadding: EdgeInsets.zero,
+                    filled: false,
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: isDark ? const Color(0x66FFFFFF) : const Color(0xFF9A948A)),
+                    ),
+                    // #s1-otp-boxes input:focus — greendeep border + 1px ring.
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(color: VanixColors.greenDeep, width: 2),
+                    ),
+                  ),
                   onChanged: (v) {
                     if (v.isNotEmpty && i < 5) otpFocus[i + 1].requestFocus();
                     onChanged();
                   },
                 ),
               ),
+            ],
           ],
         ),
-        const SizedBox(height: 14),
+        // Timer sits left; the resend prompt only appears once it runs out.
+        const SizedBox(height: 16),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(t.nootp, style: TextStyle(fontSize: 12, color: hintColor)),
-            if (!showResend)
-              Text('${t.timer} 0:${secondsLeft < 10 ? '0$secondsLeft' : secondsLeft}s', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: hintColor))
-            else
-              GestureDetector(onTap: onResend, child: Text(t.resend, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: VanixColors.greenInk))),
+            Text(
+              '${t.timer} 0:${secondsLeft < 10 ? '0$secondsLeft' : secondsLeft}s',
+              style: TextStyle(fontSize: 13, color: textColor),
+            ),
+            if (showResend)
+              Text.rich(
+                TextSpan(
+                  style: TextStyle(fontSize: 13, color: hintColor, fontFamily: Theme.of(context).textTheme.bodyMedium?.fontFamily),
+                  children: [
+                    TextSpan(text: '${t.nootp} '),
+                    TextSpan(
+                      text: t.resend,
+                      style: TextStyle(fontWeight: FontWeight.w600, decoration: TextDecoration.underline, color: textColor),
+                      recognizer: TapGestureRecognizer()..onTap = onResend,
+                    ),
+                  ],
+                ),
+              ),
           ],
         ),
-        const SizedBox(height: 30),
-        SizedBox(width: double.infinity, child: ElevatedButton(onPressed: confirmEnabled ? onConfirm : null, child: Text(t.confirm))),
+        const SizedBox(height: 40),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: confirmEnabled ? onConfirm : null,
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size(0, 52),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
+            ),
+            child: Text(t.confirm, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+          ),
+        ),
       ],
     );
   }
@@ -564,11 +730,21 @@ class _FieldLabel extends StatelessWidget {
   final bool isDark;
   const _FieldLabel(this.label, {required this.isDark});
 
+  // p[id^="s1-l-"]: 11px / w500 / letter-spacing .1em / uppercase.
+  // Colour is the on-glass override #5F5A52, not --text2.
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
-      child: Text(label, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, letterSpacing: 1.1, color: isDark ? const Color(0xA6FFFFFF) : VanixColors.textPrimary)),
+      child: Text(
+        label.toUpperCase(),
+        style: TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.w500,
+          letterSpacing: 1.1,
+          color: isDark ? const Color(0xA6FFFFFF) : const Color(0xFF5F5A52),
+        ),
+      ),
     );
   }
 }
@@ -582,13 +758,18 @@ class _UnderlineField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textColor = isDark ? Colors.white : VanixColors.textPrimary;
-    final lineColor = isDark ? const Color(0x66FFFFFF) : const Color(0xFFCCCCCC);
+    // #s1-sheet input { border-bottom-color: #9A948A !important } beats the
+    // inline #CCCCCC, so the on-glass underline is #9A948A.
+    final lineColor = isDark ? const Color(0x66FFFFFF) : const Color(0xFF9A948A);
     return TextField(
       controller: controller,
       style: TextStyle(fontSize: 17, color: textColor),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: TextStyle(fontSize: 15, color: isDark ? const Color(0xB3FFFFFF) : const Color(0xFF4A453E)),
+        // #s1-sheet input::placeholder { font-size: 13px }. The colour is the
+        // UA default #757575 — the #5F5A52 on-glass override applies to the
+        // label paragraphs, not the placeholder (verified via computed style).
+        hintStyle: TextStyle(fontSize: 13, color: isDark ? const Color(0x73FFFFFF) : const Color(0xFF757575)),
         filled: false,
         contentPadding: const EdgeInsets.only(bottom: 10),
         border: UnderlineInputBorder(borderSide: BorderSide(color: lineColor)),
