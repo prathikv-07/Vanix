@@ -57,7 +57,6 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
   Color get _cardBg => _isDark ? VanixColors.darkSecond : VanixColors.bgCard;
   Color get _text1 => _isDark ? Colors.white : VanixColors.textPrimary;
   Color get _border => _isDark ? VanixColors.darkBorder : VanixColors.border;
-  Color get _divider => _isDark ? VanixColors.darkDivider : VanixColors.divider;
 
   int _daysAgo(String iso) {
     final d = DateTime.parse(iso);
@@ -158,7 +157,8 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
 
   Widget _sectionLabel(String text) => Padding(
         padding: const EdgeInsetsDirectional.only(bottom: 10),
-        child: Text(text.toUpperCase(), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.6, color: VanixColors.textHint)),
+        // letter-spacing .05em at 11px = 0.55px.
+        child: Text(text.toUpperCase(), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 0.55, color: VanixColors.textHint)),
       );
 
   Widget _header() {
@@ -178,7 +178,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
               padding: EdgeInsets.zero,
               style: IconButton.styleFrom(backgroundColor: _cardBg, shape: const CircleBorder()),
               onPressed: () => Navigator.of(context).pop(),
-              icon: Icon(Icons.chevron_left, size: 20, color: _text1),
+              icon: Icon(Icons.chevron_left, size: 18, color: _text1),
             ),
           ),
           const SizedBox(width: 10),
@@ -208,12 +208,15 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 alignment: Alignment.center,
+                // .s7-bchip.on is a solid --text1 fill with white text and
+                // w500 — not a green outline. Inactive is a white card with a
+                // --border hairline and w400.
                 decoration: BoxDecoration(
-                  color: _cardBg,
+                  color: on ? _text1 : _cardBg,
                   borderRadius: BorderRadius.circular(17),
-                  border: Border.all(color: on ? VanixColors.greenInk : _border, width: on ? 1.4 : 1),
+                  border: Border.all(color: on ? _text1 : _border),
                 ),
-                child: Text(labels[f]!, style: TextStyle(fontSize: 13, fontWeight: on ? FontWeight.w600 : FontWeight.w500, color: on ? VanixColors.greenInk : _text1)),
+                child: Text(labels[f]!, style: TextStyle(fontSize: 13, fontWeight: on ? FontWeight.w500 : FontWeight.w400, color: on ? _cardBg : _text1)),
               ),
             );
           },
@@ -225,7 +228,8 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
   Widget _statusPill(String status) {
     final color = status == 'pending' ? VanixColors.warning : (status == 'approved' ? VanixColors.greenInk : VanixColors.danger);
     final key = status == 'pending' ? 'statusPending' : (status == 'approved' ? 'approvedWord' : 'deniedWord');
-    return Text(_t(key).toUpperCase(), style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.5, color: color));
+    // letter-spacing .04em at 10px = 0.4px.
+    return Text(_t(key).toUpperCase(), style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.4, color: color));
   }
 
   Widget _approvalRow(_ApprovalItem item, {required bool showActions}) {
@@ -235,7 +239,9 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
       decoration: BoxDecoration(
         color: _cardBg,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 16), BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 3, offset: const Offset(0, 1))],
+        // The first shadow needs its 0 4px offset — the shared token already
+        // encodes 0 4px 16px / 0 1px 3px exactly.
+        boxShadow: _isDark ? VanixShadow.cardDark : VanixShadow.card,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -251,7 +257,8 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
           const SizedBox(height: 3),
           Text(item.sub, style: const TextStyle(fontSize: 12, color: VanixColors.textHint)),
           const SizedBox(height: 4),
-          Text(item.farm, style: const TextStyle(fontSize: 11, color: VanixColors.textHint)),
+          // The farm line is class="en" in the markup — Latin face.
+          Text(item.farm, style: const TextStyle(fontSize: 11, color: VanixColors.textHint, fontFamily: 'NotoSans')),
           if (showActions) ...[
             const SizedBox(height: 10),
             Row(children: [

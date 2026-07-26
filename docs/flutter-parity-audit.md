@@ -27,6 +27,12 @@ bash tools/parity/verify_01_login.sh
 | 01 Login / OTP | 70/71 — **98.6%** | ✅ |
 | 02 Owner Dashboard | 67/67 — **100%** | ✅ |
 | 03 Farmer Dashboard | 60/60 — **100%** | ✅ |
+| 04 Approvals | 61/61 — **100%** | ✅ |
+
+Second harness trap, after the vacuous-`\n` one: keep numeric patterns
+anchored. `letterSpacing: 0\.5` also matches `0.55`, so a "must not be 0.5"
+check passes off the back of a legitimate 0.55 elsewhere in the file. Anchor
+with a trailing `[^0-9]` or `,`.
 
 When writing a check script, negative-test it: a `grep -E` pattern containing
 `\n` silently never matches, so a naive "must not contain" check passes
