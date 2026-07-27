@@ -41,13 +41,31 @@ parity gap that is real but not expressible as a grep. Run e.g.:
 bash tools/parity/verify_01_login.sh
 ```
 
+Run every harness at once:
+
+```bash
+for s in tools/parity/verify_*.sh; do bash "$s" | grep -E '^──|^score'; done
+```
+
+**Remaining screens:** Account, Farm Detail, Cow Profile, Events. Plus two
+follow-ups: migrate screens onto the dark tokens, and the Farm Detail
+manager-edit test decision (see the section above).
+
 | Screen | Score | Pushed |
 |---|---|---|
 | 01 Login / OTP | 70/71 — **98.6%** | ✅ |
 | 02 Owner Dashboard | 67/67 — **100%** | ✅ |
 | 03 Farmer Dashboard | 60/60 — **100%** | ✅ |
 | 04 Approvals | 61/61 — **100%** | ✅ |
+| 05 Farms | 125/126 — **99.2%** | ✅ |
+| 06 Milk Log | **98.8%** | ✅ |
 | 07 Setup Farm | 67/70 — **95.7%** | ✅ |
+| 08 Cattle Groups | 101/106 — **95.3%** | ✅ |
+| 09 Heat Alert | 79/80 — **98.8%** | ✅ |
+| 10 Report Preview | 85/89 — **95.5%** | ✅ |
+| 11 Add Cattle | 139/144 — **96.5%** | ✅ |
+| 12 Add Milk Entry | 133/134 — **99.3%** | ✅ |
+| 13 Milk Summary | 176/177 — **99.4%** | ✅ |
 
 ### Screen 07 note — the old file had no prototype counterpart
 
@@ -76,12 +94,19 @@ integrator rather than done piecemeal:
    `farm_strings.dart`. Now orphaned there: `sfInviteTitle`, `sfInviteSub`,
    `sfAssignTitle`, `sfAssignSub`, `sfOrWord`, `sfDoneBtn`, `sfSendInvite`,
    `sfPendingNote`, `sfAssignedMsg`, `sfManagerNamePh`.
-2. **Dark tokens drift from the prototype** — `--bgcard` is `#1E1E1E` vs
-   `darkSecond #1C1C1C`; `--border` `#333333` vs `darkBorder #3A3A3A`;
-   `--bgwarm` `#121212` vs `darkPrimary #111111`; and dark `--text2 #9E988E`
-   has no token at all. Changing these touches every screen including ones
-   already scored and pushed, so it needs its own pass with a full re-verify —
-   not a drive-by edit.
+2. **Dark tokens — DONE at the token layer, migration still open.**
+   `#flow-root.dark` (prototype.html:244) now has exact tokens: `darkBgWarm
+   #121212`, `darkBgCard #1E1E1E`, `darkBorder #333333`, `darkTextHint
+   #9E988E`, `darkActiveBg #123024`, `darkWarningBg`, `darkDangerBg`, plus
+   `darkHairline #3A3A3A`.
+   Two corrections worth remembering: `#3A3A3A` is **not** wrong — it is the
+   `.m-stat-card` / `.m-tile` hairline, whose dark rule is `!important` and beats
+   `var(--border)`, so both it and `#333333` are real. And `--text2 #9E988E` is
+   deliberately *not* used on Milk Summary, where every muted label is
+   re-overridden back to the light `#8C8780`. Don't assume a dark variable
+   applies everywhere — measure per screen.
+   What remains: screens 01–11 still reference the old tokens in places, so
+   their dark-mode checks stay counted as failures until each is migrated.
 3. **A prototype bug we chose not to replicate**: `#fm-choose-sheet` and
    `#fm-mgrlist-sheet` are missing from the `#flow-root.dark` override list
    (prototype.html:262-264, which lists only `#fm-sheet`), so they stay white
