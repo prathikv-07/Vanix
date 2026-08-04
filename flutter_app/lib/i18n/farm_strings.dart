@@ -79,6 +79,11 @@ class FS {
       'vaccinationLogged': 'Vaccination logged', 'notesOptional': 'Notes (optional)',
       'wkYield8': 'Weekly yield — last 8 weeks', 'highestWeek': 'Highest Week', 'lowestWeek': 'Lowest Week',
       'milkLogHistory': 'Milk Log History', 'sessMorning': 'Morning', 'sessEvening': 'Evening', 'missingWord': 'Missing',
+      // Missed Milkings screen
+      'missedTitle': 'Missed Milkings', 'missedOf': 'of', 'missedSessionsNotLogged': 'sessions not logged',
+      'missedLoggedOnDay': 'logged', 'missedLogNow': 'Log now',
+      'missedLoggedLate': 'Logged late', 'missedLatePill': 'Late', 'beltWord': 'Belt',
+      'missedNone': 'All sessions logged', 'missedNoneSub': 'Every cow has a morning and evening entry for today.',
       'milkDataReadonly': 'Read-only — log or edit entries in the Milk tab.',
       'cowActions': 'Actions', 'changeStatus': 'Change status', 'reqVetVisit': 'Request a vet visit',
       'addVetLog': 'Add vet log', 'addDelivery': 'Add Delivery',
@@ -263,6 +268,11 @@ class FS {
       'vaccinationLogged': 'टीकाकरण दर्ज हुआ', 'notesOptional': 'नोट्स (वैकल्पिक)',
       'wkYield8': 'साप्ताहिक उपज — पिछले 8 सप्ताह', 'highestWeek': 'सर्वाधिक सप्ताह', 'lowestWeek': 'न्यूनतम सप्ताह',
       'milkLogHistory': 'दूध लॉग इतिहास', 'sessMorning': 'सुबह', 'sessEvening': 'शाम', 'missingWord': 'गायब',
+      // Missed Milkings screen — machine-drafted Hindi, needs a native review
+      'missedTitle': 'छूटी दूध दुहाई', 'missedOf': 'में से', 'missedSessionsNotLogged': 'सत्र दर्ज नहीं',
+      'missedLoggedOnDay': 'दर्ज', 'missedLogNow': 'अभी दर्ज करें',
+      'missedLoggedLate': 'देर से दर्ज', 'missedLatePill': 'देर', 'beltWord': 'बेल्ट',
+      'missedNone': 'सभी सत्र दर्ज हैं', 'missedNoneSub': 'आज हर गाय की सुबह और शाम की एंट्री दर्ज है।',
       'milkDataReadonly': 'केवल-पढ़ें — दूध टैब में लॉग या संपादित करें।',
       'cowActions': 'कार्रवाई', 'changeStatus': 'स्थिति बदलें', 'reqVetVisit': 'पशु चिकित्सक भेंट का अनुरोध',
       'addVetLog': 'पशु चिकित्सक लॉग जोड़ें', 'addDelivery': 'प्रसव जोड़ें',

@@ -27,7 +27,21 @@ class MilkAddEntryScreen extends StatefulWidget {
   final MilkEntry? editing;
   final DateTime today;
 
-  const MilkAddEntryScreen({super.key, required this.appState, required this.allEntries, required this.today, this.editing});
+  /// Preselected cow/session, used when arriving from Missed Milkings so the
+  /// farmer doesn't re-pick what the row they tapped already identified.
+  /// Ignored when [editing] is set — an edit's own values always win.
+  final Cow? prefillCow;
+  final MilkSession? prefillSession;
+
+  const MilkAddEntryScreen({
+    super.key,
+    required this.appState,
+    required this.allEntries,
+    required this.today,
+    this.editing,
+    this.prefillCow,
+    this.prefillSession,
+  });
 
   @override
   State<MilkAddEntryScreen> createState() => _MilkAddEntryScreenState();
@@ -72,9 +86,17 @@ class _MilkAddEntryScreenState extends State<MilkAddEntryScreen> {
     super.initState();
     final e = widget.editing;
     _farm = e?.farm ?? MilkSeed.farms.first;
-    _cow = e != null ? MilkSeed.cows.firstWhere((c) => c.name == e.cow, orElse: () => MilkSeed.cows.first) : MilkSeed.cows.first;
+    _cow = e != null
+        ? MilkSeed.cows.firstWhere((c) => c.name == e.cow, orElse: () => MilkSeed.cows.first)
+        : (widget.prefillCow ?? MilkSeed.cows.first);
     _date = e?.date ?? widget.today;
-    _session = e?.session ?? _currentSession;
+    // A prefilled session is NOT re-checked against `_eveningLocked`. The
+    // lock guards a user freely switching sessions on the current day;
+    // Missed Milkings only offers an Evening row once that session is
+    // already due (MissedMilkingsScreen.sessionIsDue), so the guard has
+    // effectively run upstream. Clamping here would show a Morning form for
+    // a row that plainly said Evening.
+    _session = e?.session ?? widget.prefillSession ?? _currentSession;
     _litresCtrl.text = e != null ? e.litres.toString() : '';
   }
 

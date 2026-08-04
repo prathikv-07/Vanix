@@ -14,6 +14,7 @@ import 'farms_screen.dart';
 import 'farm_detail_screen.dart';
 import 'account_screen.dart';
 import 'approvals_screen.dart';
+import 'missed_milkings_screen.dart';
 
 /// Home dashboard — Screen 03. Shared by Farm Owner, Manager (multi-farm)
 /// and Manager (single-farm) — mirrors #s1-dash / #dash-scroll in
@@ -41,6 +42,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int _navIndex = 0;
   // Farm selector — 'all' or a FarmModel.id; label updates on selection.
   String _farmSel = 'all';
+
+  /// Same fixed demo "today" as [MilkLogScreen] — the Needs Attention
+  /// missed-milking count is derived from this date's seed entries, so the
+  /// badge, the Missed Milkings screen and the Milk Log all agree.
+  static final DateTime _milkReferenceToday = DateTime(2026, 7, 3);
 
   String get _lang => widget.appState.languageCode;
   bool get _isDark => widget.appState.isDark;
@@ -348,7 +354,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
           padding: const EdgeInsetsDirectional.fromSTEB(16, 4, 16, 4),
           child: Column(children: [
             _needsAttentionRow('2', 'rowPendingApprovals', () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => ApprovalsScreen(appState: widget.appState)))),
-            _needsAttentionRow('3', 'rowMilkingMissed', () => _onNavTap(2), divider: true),
+            // Count is derived from the same helper the screen uses, so the
+            // badge and the list can never disagree. Destination is the
+            // Missed Milkings screen — a bare hop to the Milk Log showed
+            // logged entries, which by definition excludes the missed ones.
+            _needsAttentionRow('${MissedMilkingsScreen.countFor(_milkReferenceToday)}', 'rowMilkingMissed', () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(
+                      builder: (_) => MissedMilkingsScreen(appState: widget.appState, today: _milkReferenceToday)))
+                  .then((_) => setState(() {}));
+            }, divider: true),
             _needsAttentionRow('14', 'rowCriticalAlerts', () => _onNavTap(3), divider: false),
           ]),
         ),
